@@ -33,7 +33,6 @@ function EthProvider({ children }) {
           console.error(err);
           alert(err.message)
         }
- 
       }
     }, []);
 
