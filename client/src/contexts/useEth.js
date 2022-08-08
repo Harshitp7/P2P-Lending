@@ -1,5 +1,6 @@
 import { useContext } from "react";
-import EthContext from "./EthContext";
+import { EthContext } from ".";
+// import EthContext from "./index";
 
 const useEth = () => useContext(EthContext);
 

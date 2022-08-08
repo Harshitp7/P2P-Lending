@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useEth from "../../contexts/EthContext/useEth";
+import useEth from "../../contexts/useEth";
 import Title from "./Title";
 import Cta from "./Cta";
 import Contract from "./Contract";

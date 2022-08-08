@@ -18,6 +18,9 @@
   min-width: 60rem;
   max-width: 75rem;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 code {
