@@ -11,7 +11,7 @@ import NoticeWrongNetwork from "./NoticeWrongNetwork";
 function Demo() {
   const { state } = useEth();
   const [value, setValue] = useState("?");
-  console.log({state})
+  // console.log({ state })
 
   const demo =
     <>
@@ -24,14 +24,16 @@ function Demo() {
     </>;
 
   return (
-    <div className="demo">
-      <Title />
-      {
-        !state.contracts ? <NoticeNoArtifact /> :
-          !state.contracts ? <NoticeWrongNetwork /> :
-            demo
-      }
-    </div>
+    <>
+        <div className="demo">
+          <Title />
+          {
+            !state.contracts ? <NoticeNoArtifact /> :
+              !state.contracts ? <NoticeWrongNetwork /> :
+                demo
+          }
+        </div>
+    </>
   );
 }
 

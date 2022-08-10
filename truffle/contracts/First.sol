@@ -6,10 +6,20 @@ contract First {
     string public name2 = "Hello";
     uint public age = 10;
 
+    struct Test {
+        string name;
+        uint age;
+    }
+    Test [] public tests;
     constructor()  {
         name = "Hello World";
+        tests.push(Test({name: "Hello", age: 10}));
+        tests.push(Test({name: "Hello2", age: 20}));
     }
 
+    function getTests() public view returns (Test [] memory) {
+        return tests;
+    }
     function getName() public view returns(string memory) {
         return name;
     }

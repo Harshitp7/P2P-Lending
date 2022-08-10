@@ -12,9 +12,15 @@ function ContractBtns({ setValue }) {
   };
 
   const read = async () => {
-    const value = await contracts['SimpleStorage'].methods.read().call({ from: accounts[0] });
-    const anValue = await contracts['First'].methods.age().call();
-    setValue(value + ' ' +anValue);
+    try {
+      const value = await contracts['SimpleStorage'].methods.read().call({ from: accounts[0] });
+      const data = await contracts['First'].methods.getTests().call();
+      console.log({data});
+      console.log({name : data[0].name, age : data[0].age});
+      setValue(value);
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const write = async e => {

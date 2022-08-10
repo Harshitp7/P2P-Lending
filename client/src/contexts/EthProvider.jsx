@@ -41,7 +41,8 @@ function EthProvider({ children }) {
       try {
         const artifact1 = require("../contracts/SimpleStorage.json");
         const artifact2 = require("../contracts/First.json");
-        init([artifact1, artifact2]);
+        const artifact3 = require("../contracts/P2pLending.json");
+        init([artifact1, artifact2, artifact3]);
       } catch (err) {
         console.error(err);
       }
