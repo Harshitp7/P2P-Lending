@@ -1,29 +1,36 @@
 import { useEth } from "./contexts";
-import Demo from "./components/Demo";
+// import Demo from "./components/Demo";
 import "./App.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import SignIn from "client/src/components/Signin.js";
-import SignUp from "client/src/components/Signup.js";
-import Home from "client/src/components/Home.js";
+import UserLayout from "./layouts/UserLayout";
+import AuthLayout from "./layouts/AuthLayout";
 
 function App() {
-  const { state } = useEth();
-  const email = localStorage.getItem("email");
+  const { state  } = useEth();
   console.log({ state })
   return (
     <>
-       <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route exact path="/" element={<SignIn />} />
-          <Route path="/Signup" element={<SignUp />} />
-          <Route
-            path="/Home"
-            element={email ? <Home /> : <Navigate to="/" />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </div>
+      <div id="App" >
+        {
+          state?.accounts ? (
+            <div className="container">
+              {
+                state.user ? <UserLayout userType={state.user.userType} /> : <AuthLayout />
+              }
+            </div>
+          ) : (
+            <div className="container">
+              <div className="loading">
+                <div className="loading-text">
+                  <h1>Loading...</h1>
+                  <p>Please wait while we load the contract.</p>
+                </div>
+              </div>
+            </div>
+          )
+        }
+
+
+      </div>
     </>
   );
 }

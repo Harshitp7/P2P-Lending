@@ -1,13 +1,15 @@
 const actions = {
   init: "INIT",
-  setContract: "SET_CONTRACT"
+  setContract: "SET_CONTRACT",
+  setUser : "SET_USER"
 };
 
 const initialState = {
   web3: null,
   accounts: null,
   networkID: null,
-  contracts : {}
+  contracts : {},
+  user : null
 };
 
 const reducer = (state, action) => {
@@ -17,6 +19,8 @@ const reducer = (state, action) => {
       return { ...state, ...data };
     case actions.setContract:
       return { ...state, contracts: {...state.contracts, ...data} };
+    case actions.setUser:
+      return { ...state, user: data };
     default:
       throw new Error("Undefined reducer action type");
   }
