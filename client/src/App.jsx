@@ -3,9 +3,10 @@ import { useEth } from "./contexts";
 import "./App.css";
 import UserLayout from "./layouts/UserLayout";
 import AuthLayout from "./layouts/AuthLayout";
+import { Box, TextField } from "@mui/material";
 
 function App() {
-  const { state  } = useEth();
+  const { state } = useEth();
   console.log({ state })
   return (
     <>
@@ -14,7 +15,7 @@ function App() {
           state?.accounts ? (
             <div >
               {
-                state.user ? <UserLayout userType={state.user.userType} /> : <AuthLayout />
+                state?.user ? <UserLayout userType={state?.user?.userType} /> : <AuthLayout />
               }
             </div>
           ) : (
