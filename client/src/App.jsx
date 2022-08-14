@@ -9,10 +9,10 @@ function App() {
   console.log({ state })
   return (
     <>
-      <div id="App" >
+      <div>
         {
           state?.accounts ? (
-            <div className="container">
+            <div >
               {
                 state.user ? <UserLayout userType={state.user.userType} /> : <AuthLayout />
               }
@@ -28,8 +28,6 @@ function App() {
             </div>
           )
         }
-
-
       </div>
     </>
   );

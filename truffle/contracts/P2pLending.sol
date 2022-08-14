@@ -4,6 +4,7 @@ pragma solidity >=0.4.22 <0.9.0;
 contract P2pLending {
 
     struct Borrower {
+        string userType;
         string name;
         string image;
         address payable wallet;
@@ -12,6 +13,7 @@ contract P2pLending {
     }
 
     struct Lender {
+        string userType;
         string name;
         string image;
         address payable wallet;
