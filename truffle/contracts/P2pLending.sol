@@ -22,6 +22,14 @@ contract P2pLending {
         uint [] gotRequests;
     }
 
+    struct userDetails {
+        address Address;
+        string name;
+        string password;
+        string role;
+        bool LoggedInStatus;
+    }
+
     enum statuses  {
         PENDING,
         ACCEPTED,
@@ -39,10 +47,12 @@ contract P2pLending {
     }
 
     //  -----------------State variables-------------------------------
+
     mapping(address => Borrower) borrowers;
     Lender [] public lenders;
     mapping(address => uint) lenderIndex;
     Request [] public requests;
+    mapping(address => userDetails) user;
 
     // ------------------modifiers-----------------
 
@@ -56,6 +66,37 @@ contract P2pLending {
     }
 
     // ------------------functions-----------------
+
+    function registerUser(address _Address, string memory _name, string memory _password, string _role) public returns (bool) 
+    {
+        require(user[_address].addr != msg.sender);
+        user[_Address].Address = _address;
+        user[_Address].name = _name;
+        user[_Address].password = _password;
+        user[_Address].role = _role;
+        user[_Address].LoggedInStatus = false;
+        return true;
+    }
+
+    function loginUser(address _address, string memory _password) public returns (bool)
+    {
+        if (keccak256(abi.encodePacked(user[_address].password)) == keccak256(abi.encodePacked(_password))) 
+        {
+            user[_address].isUserLoggedIn = true;
+            return user[_address].isUserLoggedIn;
+        } 
+        else return false;
+    }
+
+    function checkUserLoggedInStatus(address _address) public view returns (bool)
+    {
+        return user[_Address].LoggedInStatus;
+    }
+
+    function logoutUser(address _address) public {
+        user[_Address].LoggedInStatus = false;
+    }
+
     function makeRequest (address _from, address _to, uint _money, uint _duration) public onlyBorrower
     {
         requests.push(Request({
