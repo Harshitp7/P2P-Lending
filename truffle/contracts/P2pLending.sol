@@ -67,10 +67,10 @@ contract P2pLending {
 
     // ------------------functions-----------------
 
-    function registerUser(address _Address, string memory _name, string memory _password, string _role) public returns (bool) 
+    function SignUpUser(address _Address, string memory _name, string memory _password, string _role) public returns (bool) 
     {
-        require(user[_address].addr != msg.sender);
-        user[_Address].Address = _address;
+        require(user[_Address].Address != msg.sender);
+        user[_Address].Address = _Address;
         user[_Address].name = _name;
         user[_Address].password = _password;
         user[_Address].role = _role;
@@ -78,22 +78,22 @@ contract P2pLending {
         return true;
     }
 
-    function loginUser(address _address, string memory _password) public returns (bool)
+    function logInUser(address _Address, string memory _password) public returns (bool)
     {
-        if (keccak256(abi.encodePacked(user[_address].password)) == keccak256(abi.encodePacked(_password))) 
+        if (keccak256(abi.encodePacked(user[_Address].password)) == keccak256(abi.encodePacked(_password))) 
         {
-            user[_address].isUserLoggedIn = true;
-            return user[_address].isUserLoggedIn;
+            user[_Address].LoggedInStatus = true;
+            return user[_Address].LoggedInStatus;
         } 
         else return false;
     }
 
-    function checkUserLoggedInStatus(address _address) public view returns (bool)
+    function checkUserLoggedInStatus(address _Address) public view returns (bool)
     {
         return user[_Address].LoggedInStatus;
     }
 
-    function logoutUser(address _address) public {
+    function logOutUser(address _Address) public {
         user[_Address].LoggedInStatus = false;
     }
 
