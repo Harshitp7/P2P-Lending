@@ -15,7 +15,7 @@ function App() {
           state?.accounts ? (
             <div >
               {
-                state?.user ? <UserLayout userType={state?.user?.userType} /> : <AuthLayout />
+                !state?.user ? <UserLayout userType={state?.user?.userType} /> : <AuthLayout />
               }
             </div>
           ) : (

@@ -12,7 +12,7 @@ const LenderCard = () => {
                         sx={{ width: 56, height: 56 }}
                      />
                 }
-                title="Lender's Name"
+                title={<Typography>Lender's Name</Typography>}
             />
             <CardContent>
                 <Typography>
@@ -21,6 +21,9 @@ const LenderCard = () => {
                 </Typography>
                 <Typography sx={{mt : 3}} fontWeight={'bold'}>
                     Interset Rate : 0.5%
+                </Typography>
+                <Typography  fontWeight={'bold'}>
+                    Max Principle : 100 ether
                 </Typography>
             </CardContent>
             <CardActions>
