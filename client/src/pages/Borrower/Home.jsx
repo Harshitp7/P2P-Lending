@@ -1,12 +1,19 @@
-import { Avatar, Box, Button, Grid, Paper, Stack, TableContainer, Typography } from '@mui/material'
+import { Avatar, Box, Button, Grid, Paper, TableContainer, Typography } from '@mui/material'
 import React from 'react'
 import LenderCard from '../../components/Cards/LenderCard'
 import DataTable from '../../components/DataTable'
 import Layout from '../../components/Layout'
 import Status from '../../components/Status'
+import { useEth } from '../../contexts'
 
 const Home = () => {
-
+  const { state } = useEth();
+  console.log({
+    name : state?.user?.name,
+    userType : state?.user?.userType,
+    address : state?.user?.wallet,
+    image : state?.user?.image,
+  })
   const rows = [
     {
       Lender: (

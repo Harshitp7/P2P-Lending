@@ -1,12 +1,22 @@
-import { useEth } from "./contexts";
+import { actions, useEth } from "./contexts";
 // import Demo from "./components/Demo";
 import "./App.css";
 import UserLayout from "./layouts/UserLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import { Box, TextField } from "@mui/material";
+import { useEffect } from "react";
 
 function App() {
-  const { state } = useEth();
+  const { state, dispatch } = useEth();
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      dispatch({
+        type: actions.setUser,
+        data: JSON.parse(userData)
+      });
+    }
+  }, [])
   console.log({ state })
   return (
     <>
@@ -15,7 +25,7 @@ function App() {
           state?.accounts ? (
             <div >
               {
-                !state?.user ? <UserLayout userType={state?.user?.userType} /> : <AuthLayout />
+                state?.user ? <UserLayout userType={state?.user?.userType} /> : <AuthLayout />
               }
             </div>
           ) : (

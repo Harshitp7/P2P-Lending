@@ -67,7 +67,7 @@ contract P2pLending {
 
     // ------------------functions-----------------
 
-    function SignUpUser(address _Address, string memory _name, string memory _password, string _role) public returns (bool) 
+    function SignUpUser(address _Address, string memory _name, string memory _password, string memory _role) public returns (bool) 
     {
         require(user[_Address].Address != msg.sender);
         user[_Address].Address = _Address;
