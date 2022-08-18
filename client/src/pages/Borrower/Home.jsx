@@ -14,6 +14,7 @@ const Home = () => {
     address : state?.user?.wallet,
     image : state?.user?.image,
   })
+
   const rows = [
     {
       Lender: (

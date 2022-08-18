@@ -6,11 +6,14 @@ const SignUp = () => {
 
   const handleClick = async () => {
     try {
-      const res = await contracts['First'].methods.signUpBorrower("Borrower1", "https://image.png", "pass", 10).send({ from: accounts[0] });
+      // const res = await contracts['First'].methods.signUpBorrower("Borrower1", "https://image.png", "pass", 10).send({ from: accounts[0] });
+      const res = await contracts['First'].methods.signUpLender("Lender1", "https://image.png", "pass", 10, 100).send({ from: accounts[0] });
       console.log({ res });
       let userData;
       if (res) {
-        userData = await contracts['First'].methods.borrowers(accounts[0]).call();
+        // userData = await contracts['First'].methods.signInBorrower("pass").call();
+        userData = await contracts['First'].methods.signInLender("pass").call();
+
       } else {
         throw new Error('Something went wrong');
       }
@@ -22,6 +25,7 @@ const SignUp = () => {
         });
       }
     } catch (error) {
+      console.log({ error });
       alert(error.message || "something went wrong")
     }
   }

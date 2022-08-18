@@ -5,7 +5,7 @@ import LenderLayout from './LenderLayout'
 const UserLayout = ({userType}) => {
   return (
     <>
-        {userType === 'lender' ? 
+        {userType === 'Lender' ? 
         <LenderLayout /> : 
         <BorrowerLayout />}
     </>

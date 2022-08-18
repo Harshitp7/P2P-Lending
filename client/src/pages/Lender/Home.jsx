@@ -1,6 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useEth } from '../../contexts';
 
 const Home = () => {
+  const { state } = useEth();
+
+  useEffect(() => {
+    const fun = async () => {
+      const lenders = await state.contracts['First'].methods.getLenders().call();
+      console.log({ lenders });
+    }
+    fun();
+  }, [])
+
   return (
     <div>Lender Home</div>
   )

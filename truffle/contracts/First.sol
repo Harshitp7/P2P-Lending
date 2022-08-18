@@ -36,8 +36,7 @@ contract First {
     }
 
     function signUpBorrower (string memory _name, string memory _image, string memory _password, uint _annualIncome) public {
-        require(keccak256(abi.encodePacked(borrowers[msg.sender].userType)) == keccak256(abi.encodePacked("")), 
-        "You are already registered as a borrower");
+        require(keccak256(abi.encodePacked(users[msg.sender])) == keccak256(abi.encodePacked("")), "This address is already registered");
 
         borrowers[msg.sender] = Borrower({
             userType: "Borrower",
@@ -52,8 +51,7 @@ contract First {
     }
 
     function signUpLender (string memory _name, string memory _image, string memory _password, uint _interestRate, uint _loanCapacity) public {
-        require(keccak256(abi.encodePacked(lenders[lenderIndex[msg.sender]].userType)) == keccak256(abi.encodePacked("")), 
-        "You are already registered as a lender");
+        require(keccak256(abi.encodePacked(users[msg.sender])) == keccak256(abi.encodePacked("")), "This address is already registered");
 
         lenders.push(Lender({
             userType: "Lender",
@@ -102,6 +100,10 @@ contract First {
             lenders[lenderIndex[msg.sender]].gotRequests
         );
         // return lenders[lenderIndex[msg.sender]];
+    }
+
+    function getLenders () public view returns (Lender[] memory) {
+        return lenders;
     }
 }
  
