@@ -42,7 +42,7 @@ contract P2pLending {
 
     //  -----------------State variables-------------------------------
 
-    mapping(address => Borrower) borrowers;
+    mapping(address => Borrower) public borrowers;
     Lender [] public lenders;
     mapping(address => uint) lenderIndex;
     Request [] public requests;
@@ -166,9 +166,9 @@ contract P2pLending {
         return myReqs;
     }
 
-    function payBack (address payable _to) public payable
-    {
-        (bool sent, bytes memory data) = _to.call{value: msg.value}("");
-        require(sent, "Failed to send Ether");
-    }
+    // function payBack (address payable _to) public payable
+    // {
+    //     (bool sent, bytes memory data) = _to.call{value: msg.value}("");
+    //     require(sent, "Failed to send Ether");
+    // }
 }

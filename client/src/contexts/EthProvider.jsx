@@ -27,7 +27,7 @@ function EthProvider({ children }) {
           })
           dispatch({
             type: actions.init,
-            data: {web3, accounts, networkID }
+            data: {web3, accounts, networkID, artifacts}
           });
         } catch (err) {
           console.error(err);
@@ -39,10 +39,9 @@ function EthProvider({ children }) {
   useEffect(() => {
     const tryInit = async () => {
       try {
-        const artifact1 = require("../contracts/SimpleStorage.json");
-        const artifact2 = require("../contracts/First.json");
-        const artifact3 = require("../contracts/P2pLending.json");
-        init([artifact1, artifact2, artifact3]);
+        const artifact1 = require("../contracts/First.json");
+        const artifact2 = require("../contracts/P2pLending.json");
+        init([artifact1, artifact2]);
       } catch (err) {
         console.error(err);
       }
@@ -54,7 +53,10 @@ function EthProvider({ children }) {
   useEffect(() => {
     const events = ["chainChanged", "accountsChanged"];
     const handleChange = () => {
-      init([state.artifact]);
+      init(state.artifacts);
+      dispatch({
+        type : actions.logout
+      })
       console.log("changed");
     };
 
