@@ -19,14 +19,18 @@ const reducer = (state, action) => {
   switch (type) {
     case actions.init:
       return { ...state, ...data };
+
     case actions.setContract:
       return { ...state, contracts: {...state.contracts, ...data} };
+
     case actions.setUser:
       localStorage.setItem('user', JSON.stringify(data));
       return { ...state, user: data };
+
     case actions.logout:
       localStorage.removeItem('user');
       return { ...state, user: null };
+      
     default:
       throw new Error("Undefined reducer action type");
   }

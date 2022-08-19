@@ -1,12 +1,14 @@
 import React from 'react'
 import {Routes, Route, Navigate} from "react-router"
 import Home from '../../pages/Borrower/Home'
+import Profile from '../../pages/Borrower/Profile'
 
 const BorrowerLayout = () => {
   return (
     <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path='*' element={<Navigate to='/' />} />
+        <Route path="/borrower" element={<Home />} />
+        <Route path="/borrower/profile" element={<Profile />} />
+        <Route path='*' element={<Navigate to='/borrower' />} />
     </Routes>
   )
 }

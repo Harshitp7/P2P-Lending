@@ -5,8 +5,8 @@ import Home from '../../pages/Lender/Home'
 const LenderLayout = () => {
   return (
     <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path='*' element={<Navigate to='/' />} />
+        <Route path="/lender" element={<Home />} />
+        <Route path='*' element={<Navigate to='/lender' />} />
     </Routes>
   )
 }
