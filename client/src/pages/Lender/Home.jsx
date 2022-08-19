@@ -6,7 +6,7 @@ const Home = () => {
 
   useEffect(() => {
     const fun = async () => {
-      const lenders = await state.contracts['First'].methods.getLenders().call();
+      const lenders = await state.contracts['P2pLending'].methods.getLenders().call();
       console.log({ lenders });
     }
     fun();

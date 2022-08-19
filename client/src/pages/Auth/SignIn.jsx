@@ -5,13 +5,13 @@ const SignIn = () => {
     const { state: { contracts }, dispatch } = useEth();
     const handleClick = async () => {
         try {
-            const role = await contracts['First'].methods.getRole().call();
+            const role = await contracts['P2pLending'].methods.getRole().call();
             console.log({ role });
             let userData;
             if (role === 'Borrower') {
-                userData = await contracts['First'].methods.signInBorrower("pass").call();
+                userData = await contracts['P2pLending'].methods.signInBorrower("pass").call();
             }else if (role === 'Lender') {
-                userData = await contracts['First'].methods.signInLender("pass").call();
+                userData = await contracts['P2pLending'].methods.signInLender("pass").call();
             }else {
                 throw new Error('User not found');
             }
