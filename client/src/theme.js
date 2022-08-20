@@ -18,6 +18,9 @@ const theme = createTheme({
                 main : grey[100],
                 dark : grey[200]
             },
+            disabled : {
+                main : '#e9ecef'
+            }
         }
     }
 })
