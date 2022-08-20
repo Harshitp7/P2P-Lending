@@ -7,7 +7,7 @@ const BorrowerLayout = () => {
   return (
     <Routes>
         <Route path="/borrower" element={<Home />} />
-        <Route path="/borrower/profile" element={<Profile />} />
+        <Route path="/borrower/profile/:borrowerAddress" element={<Profile />} />
         <Route path='*' element={<Navigate to='/borrower' />} />
     </Routes>
   )
