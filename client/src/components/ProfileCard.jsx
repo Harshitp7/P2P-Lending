@@ -5,7 +5,7 @@ import { Form, Card } from 'react-bootstrap';
 import { useEth } from '../contexts';
 import EditIcon from '@mui/icons-material/Edit';
 
-const ProfileCard = ({ children, setImgDetails, spamVotes = 0 }) => {
+const ProfileCard = ({ children, setImgDetails, walletAddress, spamVotes = 0 }) => {
     const { state: { accounts, user, web3 } } = useEth();
     const [loading, setLoading] = useState(true);
     const [previewImg, setPreviewImg] = useState('');
@@ -34,14 +34,16 @@ const ProfileCard = ({ children, setImgDetails, spamVotes = 0 }) => {
                         sx={{ width: 300, height: 300 }}
                         src={previewImg || "https://material-ui.com/static/images/avatar/1.jpg"}
                     />
+                    {walletAddress === accounts[0] && (
                     <Button
                         sx={{mt : 2}} 
                         variant="outlined"
                         onClick={() => ref.current.click()}
                     >
-                        Update Image
+                        Change Image&nbsp;
                         <EditIcon />
                     </Button>
+                    )}
                 </Grid>
                 <Grid item xs={12} md={8}>
                     {
