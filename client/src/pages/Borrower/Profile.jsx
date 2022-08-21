@@ -5,7 +5,7 @@ import { useEth } from '../../contexts';
 import { Form, } from 'react-bootstrap';
 import ProfileCard from '../../components/ProfileCard';
 import { useParams } from 'react-router';
-import uploadFile from '../../utils/uploadFile';
+import {uploadFile, deleteFile} from '../../utils/cloudinaryUtils';
 
 const Profile = () => {
     const { state: { accounts, user, web3, contracts } } = useEth();
@@ -44,6 +44,7 @@ const Profile = () => {
                     },
                 ])
                 setRestData(borrowerData || user);
+                await deleteFile("https://res.cloudinary.com/ddxohc53h/image/upload/v1661026815/P2pLending/gvmpkmb5iey6z4uji82w.jpg")
                 setLoading(false);
             } catch (error) {
                 alert(error.message);

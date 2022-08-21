@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useRef } from 'react';
 import { Form, Card } from 'react-bootstrap';
 import { useEth } from '../contexts';
+import EditIcon from '@mui/icons-material/Edit';
 
 const ProfileCard = ({ children, setImgDetails, spamVotes = 0 }) => {
     const { state: { accounts, user, web3 } } = useEth();
@@ -39,6 +40,7 @@ const ProfileCard = ({ children, setImgDetails, spamVotes = 0 }) => {
                         onClick={() => ref.current.click()}
                     >
                         Update Image
+                        <EditIcon />
                     </Button>
                 </Grid>
                 <Grid item xs={12} md={8}>
