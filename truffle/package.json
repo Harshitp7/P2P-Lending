@@ -4,7 +4,9 @@
   "description": "Truffle project with SimpleStorage contract",
   "main": "truffle-config.js",
   "dependencies": {
-    "@truffle/hdwallet-provider": "^2.0.10"
+    "@truffle/hdwallet-provider": "^2.0.10",
+    "bootstrap": "^5.2.0",
+    "react-bootstrap": "^2.5.0"
   },
   "scripts": {
     "test": "truffle test"
