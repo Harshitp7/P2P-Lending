@@ -1,0 +1,16 @@
+#role-card:hover{
+    transform :scale(1.1);
+    transition: 0.3s;
+}
+.urgent-link:hover{
+    transform: scale(1.5); 
+    transition: 0.3s;
+}
+
+.nav-link{
+    color: purple;
+    font-size: large;
+}
+.nav-link:hover{
+    color: darkcyan;
+}
