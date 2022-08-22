@@ -15,6 +15,7 @@ export const uploadFile =  async (file) => {
 }
 
 export const deleteFile = async (url) => {
+    console.log({urlToDelete : url});
     const folder = process.env.REACT_APP_CLOUDINARY_FOLDER;
     const public_id = folder +  url.split(folder)[1].split('.')[0];
     const timestamp = utcToUnixTimestamp(Date.now())

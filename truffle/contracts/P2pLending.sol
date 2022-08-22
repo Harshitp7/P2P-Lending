@@ -20,7 +20,7 @@ contract P2pLending {
         address payable wallet;
         bytes32 password;
         uint interestRate;
-        uint loanCapacity;
+        uint maxPrincipal;
         uint [] gotRequests;
     }
 
@@ -81,7 +81,7 @@ contract P2pLending {
         users[msg.sender] = "Borrower";
     }
 
-    function signUpLender (string memory _name, string memory _image, string memory _password, uint _interestRate, uint _loanCapacity) public {
+    function signUpLender (string memory _name, string memory _image, string memory _password, uint _interestRate, uint _maxPrincipal) public {
         require(keccak256(abi.encodePacked(users[msg.sender])) == keccak256(abi.encodePacked("")), "This address is already registered");
 
         lenders.push(Lender({
@@ -91,7 +91,7 @@ contract P2pLending {
             wallet: payable (msg.sender),
             password: keccak256(abi.encodePacked(_password)),
             interestRate: _interestRate,
-            loanCapacity: _loanCapacity,
+            maxPrincipal: _maxPrincipal,
             gotRequests: new uint[](0)
         }));
         lenderIndex[msg.sender] = lenders.length - 1;
@@ -117,7 +117,7 @@ contract P2pLending {
 
     // returns (Lender memory) {
     function signInLender (string memory _password) public view  
-    returns (string memory userType, string memory name, string memory image, address wallet, uint interestRate, uint loanCapacity, uint[] memory gotRequests) {
+    returns (string memory userType, string memory name, string memory image, address wallet, uint interestRate, uint maxPrincipal, uint[] memory gotRequests) {
         require(keccak256(abi.encodePacked(users[msg.sender])) == keccak256(abi.encodePacked("Lender")), "User not found");
         require (lenders[lenderIndex[msg.sender]].password == keccak256(abi.encodePacked(_password)), "Invalid password");
         
@@ -127,7 +127,7 @@ contract P2pLending {
             lenders[lenderIndex[msg.sender]].image,
             lenders[lenderIndex[msg.sender]].wallet,
             lenders[lenderIndex[msg.sender]].interestRate,
-            lenders[lenderIndex[msg.sender]].loanCapacity,
+            lenders[lenderIndex[msg.sender]].maxPrincipal,
             lenders[lenderIndex[msg.sender]].gotRequests
         );
         // return lenders[lenderIndex[msg.sender]];
@@ -139,6 +139,9 @@ contract P2pLending {
         return lenders;
     }
 
+    function getLender (address _wallet) public view returns (Lender memory) {
+        return lenders[lenderIndex[_wallet]];
+    }
 
     function makeRequest (address _from, address _to, uint _money, uint _duration) public onlyBorrower
     {
@@ -173,13 +176,13 @@ contract P2pLending {
          borrowers[msg.sender].annualIncome = _annualIncome;
     }
 
-    function updateLender (string memory _name, string memory _image, uint _interestRate, uint _loanCapacity) 
+    function updateLender (string memory _name, string memory _image, uint _interestRate, uint _maxPrincipal) 
     public 
     {
        lenders[lenderIndex[msg.sender]].name = _name;
        lenders[lenderIndex[msg.sender]].image = _image;
        lenders[lenderIndex[msg.sender]].interestRate = _interestRate;
-       lenders[lenderIndex[msg.sender]].loanCapacity = _loanCapacity;
+       lenders[lenderIndex[msg.sender]].maxPrincipal = _maxPrincipal;
     }
     
 

@@ -9,44 +9,29 @@ import { uploadFile, deleteFile } from '../../utils/cloudinaryUtils';
 import UpdateIcon from '@mui/icons-material/Update';
 
 const Profile = () => {
-    const { state: { accounts, user, web3, contracts }, dispatch } = useEth();
-    const [readOnlyData, setReadOnlyData] = useState([]);
-    const [restData, setRestData] = useState({});
+    const { state: { accounts, user, contracts }, dispatch } = useEth();
+    const [borrowerData, setBorrowerData] = useState({});
     const [loading, setLoading] = useState(true);
     const { borrowerAddress } = useParams()
 
     const [annualIncome, setAnnualIncome] = useState('');
+    const [name, setName] = useState('');
     const [imgDetails, setImgDetails] = useState();
 
-    console.log({ annualIncome })
     useEffect(() => {
         const getData = async () => {
             try {
-                let borrowerData;
+                let data;
                 if (borrowerAddress !== accounts[0]) {
-                    borrowerData = await contracts.P2pLending.methods.borrowers(borrowerAddress).call();
+                    data = await contracts.P2pLending.methods.borrowers(borrowerAddress).call();
                 }else{
-                    borrowerData = user;
+                    data = user;
                 }
-                console.log({ borrowerData })
-                const balance = await web3.eth.getBalance(borrowerData?.wallet);
-                const balanceInEth = web3.utils.fromWei(balance, 'ether');
-                console.log({ balanceInEth });
-                setReadOnlyData([
-                    {
-                        label: 'Name',
-                        value: borrowerData?.name
-                    },
-                    {
-                        label: 'Wallet Address',
-                        value: borrowerData?.wallet
-                    },
-                    {
-                        label: 'Wallet Balance (ETH)',
-                        value: balanceInEth
-                    },
-                ])
-                setRestData(borrowerData);
+                console.log({ data })
+                setBorrowerData(data);
+                setAnnualIncome(data?.annualIncome);
+                setName(data?.name);
+
                 setLoading(false);
             } catch (error) {
                 alert(error.message);
@@ -58,21 +43,23 @@ const Profile = () => {
     const updateProfile = async () => {
         try {
             console.log({ imgDetails })
-            let url = restData?.image;
+            let url = borrowerData?.image;
             if (imgDetails) {
-                const isDeleted = await deleteFile(restData?.image)
-                if (isDeleted) {
+                // const isDeleted = await deleteFile(borrowerData?.image)
+                    // await deleteFile(borrowerData?.image)
+                // if (isDeleted) {
                     url = await uploadFile(imgDetails);
-                }
+                // }
             }
 
-            const borrowerData = await contracts.P2pLending.methods.updateBorrower(
-                Number(annualIncome),
-                url
+            const data = await contracts.P2pLending.methods.updateBorrower(
+                name || borrowerData?.name,
+                url,
+                Number(annualIncome || borrowerData?.annualIncome),
             ).send({ from: accounts[0] })
 
-            console.log({ updateRes: borrowerData })
-            if (borrowerData) {
+            console.log({ updateRes: data })
+            if (data) {
                 const update = await contracts.P2pLending.methods.borrowers(accounts[0]).call()
                 dispatch({
                     type: actions.setUser,
@@ -88,15 +75,23 @@ const Profile = () => {
     return (
         <Layout>
             {loading ? <div>Loading...</div> : (
-                <ProfileCard spamVotes={restData?.spamVotes || 10} setImgDetails={setImgDetails} walletAddress={borrowerAddress}>
-                    {
-                        readOnlyData.map((item, i) => (
-                            <Form.Group key={i} className='mb-3'>
-                                <Form.Label className='text-muted mb-0' >{item.label}</Form.Label>
-                                <Form.Control className='fs-6' size='lg' type="name" readOnly value={item.value} />
-                            </Form.Group>
-                        ))
-                    }
+                <ProfileCard 
+                    spamVotes={borrowerData?.spamVotes || 10} 
+                    image={borrowerData?.image}
+                    setImgDetails={setImgDetails} 
+                    walletAddress={borrowerAddress}
+                >
+         
+                    <Form.Group className='mb-3'>
+                        <Form.Label className='text-muted mb-0' >Name</Form.Label>
+                        <Form.Control
+                            className='fs-6'
+                            size='lg'
+                            onChange={(e) => setName(e.target.value)}
+                            value={name}
+                        />
+                    </Form.Group>
+
                     <Form.Group className='mb-3'>
                         <Form.Label className='text-muted mb-0' >Annual Income</Form.Label>
                         <Form.Control
@@ -104,7 +99,7 @@ const Profile = () => {
                             size='lg'
                             type="number"
                             onChange={(e) => setAnnualIncome(e.target.value)}
-                            value={annualIncome || restData?.annualIncome}
+                            value={annualIncome}
                         />
                     </Form.Group>
                     {borrowerAddress === accounts[0] && (
