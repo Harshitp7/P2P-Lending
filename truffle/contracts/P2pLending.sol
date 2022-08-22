@@ -166,9 +166,27 @@ contract P2pLending {
         return myReqs;
     }
 
+    function updateBorrower (string memory _name, string memory _image, uint _annualIncome) public
+    {
+         borrowers[msg.sender].name = _name;
+         borrowers[msg.sender].image = _image;
+         borrowers[msg.sender].annualIncome = _annualIncome;
+    }
+
+    function updateLender (string memory _name, string memory _image, uint _interestRate, uint _loanCapacity) 
+    public 
+    {
+       lenders[lenderIndex[msg.sender]].name = _name;
+       lenders[lenderIndex[msg.sender]].image = _image;
+       lenders[lenderIndex[msg.sender]].interestRate = _interestRate;
+       lenders[lenderIndex[msg.sender]].loanCapacity = _loanCapacity;
+    }
+    
+
     // function payBack (address payable _to) public payable
     // {
     //     (bool sent, bytes memory data) = _to.call{value: msg.value}("");
     //     require(sent, "Failed to send Ether");
     // }
 }
+
