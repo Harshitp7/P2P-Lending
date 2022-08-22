@@ -166,6 +166,58 @@ contract P2pLending {
         return myReqs;
     }
 
+    function updateBorrower (string memory _name, string memory _image, bytes32 _password, uint _annualIncome) public
+    returns (string memory name, string memory image,address payable wallet, bytes32 password, uint annualIncome, uint [] memory madeReqests)
+    {
+        uint [] memory _madeRequests = borrowers[msg.sender].madeRequests; 
+        borrowers[msg.sender] = Borrower({
+            userType: "Borrower",
+            name: _name,
+            image: _image,
+            wallet: payable(msg.sender),
+            password: keccak256(abi.encodePacked(_password)),
+            annualIncome: _annualIncome,
+            madeRequests: _madeRequests
+        });
+
+        return 
+        (
+            borrowers[msg.sender].name,
+            borrowers[msg.sender].image,
+            borrowers[msg.sender].wallet,
+            borrowers[msg.sender].password,
+            borrowers[msg.sender].annualIncome,
+            borrowers[msg.sender].madeRequests
+        );
+    }
+
+    function updateLender (string memory _name, string memory _image, bytes32 _password, uint _interestRate, uint _loanCapacity) 
+    public returns (string memory name, string memory image, address payable wallet, bytes32 password, uint interestRate, uint loanCapacity, uint [] memory gotRequests)
+    {
+       uint [] memory _gotRequests = lenders[lenderIndex[msg.sender]].gotRequests; 
+       lenders[lenderIndex[msg.sender]] = Lender({
+            userType: "Lender",
+            name: _name,
+            image: _image,
+            wallet: payable(msg.sender),
+            password: keccak256(abi.encodePacked(_password)),
+            interestRate: _interestRate,
+            loanCapacity: _loanCapacity,
+            gotRequests: _gotRequests
+        });
+
+        return 
+        (
+            lenders[lenderIndex[msg.sender]].name,
+            lenders[lenderIndex[msg.sender]].image,
+            lenders[lenderIndex[msg.sender]].wallet,
+            lenders[lenderIndex[msg.sender]].password,
+            lenders[lenderIndex[msg.sender]].interestRate,
+            lenders[lenderIndex[msg.sender]].loanCapacity,
+            lenders[lenderIndex[msg.sender]].gotRequests
+        );
+    }
+
     // function payBack (address payable _to) public payable
     // {
     //     (bool sent, bytes memory data) = _to.call{value: msg.value}("");
