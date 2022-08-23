@@ -14,7 +14,7 @@ const DataTable = ({rows}) => {
                     <TableRow sx={({palette}) => ({backgroundColor : palette.primary.light})}>
                         {
                             Object.keys(rows[0]).map((col, index) => (
-                                <TableCell key={index} align={index == 0 ? 'left' : 'center'} >
+                                <TableCell key={index} align={index === 0 ? 'left' : 'center'} >
                                     <Typography 
                                         fontWeight={'medium'} 
                                         variant='button' 
@@ -37,7 +37,7 @@ const DataTable = ({rows}) => {
                                 {
                                     Object.keys(row).map((col, index) => (
                                         <TableCell 
-                                            align={index == 0 ? 'left' : 'center'}
+                                            align={index === 0 ? 'left' : 'center'}
                                             key={index}
                                         >{row[col]}
                                         </TableCell>
