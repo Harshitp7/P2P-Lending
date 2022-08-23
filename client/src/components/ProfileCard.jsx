@@ -45,8 +45,9 @@ const ProfileCard = ({ children, setImgDetails, walletAddress, image, spamVotes 
                 <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
                     <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
                     <Avatar
-                        sx={{ width: 300, height: 300 }}
+                        sx={{ width: 300, height: 300}}
                         src={previewImg || image}
+                        imgProps={{objectPosition: 'top'}}
                     />
                     {walletAddress === accounts[0] && (
                         <Button

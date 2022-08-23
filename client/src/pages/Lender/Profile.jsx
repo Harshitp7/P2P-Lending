@@ -16,7 +16,7 @@ const Profile = () => {
 
     const [name, setName] = useState('');
     const [interestRate, setInterestRate] = useState('');
-    const [maxPrinciplal, setMaxPrinciplal] = useState('');
+    const [maxPrincipal, setMaxPrincipal] = useState('');
     const [imgDetails, setImgDetails] = useState();
 
     useEffect(() => {
@@ -25,14 +25,14 @@ const Profile = () => {
                 let data;
                 if (lenderAddress !== accounts[0]) {
                     data = await contracts.P2pLending.methods.getLender(lenderAddress).call();
-                }else{
+                } else {
                     data = user;
                 }
                 console.log({ data })
                 setLenderData(data);
                 setName(data?.name);
                 setInterestRate(data?.interestRate);
-                setMaxPrinciplal(data?.maxPrinciplal);
+                setMaxPrincipal(data?.maxPrincipal);
 
                 setLoading(false);
             } catch (error) {
@@ -48,30 +48,30 @@ const Profile = () => {
             console.log({ imgDetails })
             let url = lenderData?.image;
             if (imgDetails) {
-                // const isDeleted = await deleteFile(lenderData?.image)
-                // if (isDeleted) {
-                    url = await uploadFile(imgDetails);
-                // }
+                await deleteFile(lenderData?.image)
+                url = await uploadFile(imgDetails);
             }
 
             const res = await contracts.P2pLending.methods.updateLender(
                 name || lenderData?.name,
                 url,
                 Number(interestRate || lenderData?.interestRate),
-                Number(maxPrinciplal || lenderData?.maxPrinciplal),
+                Number(maxPrincipal || lenderData?.maxPrincipal),
             ).send({ from: accounts[0] })
 
             console.log({ updateRes: res })
             if (res) {
                 const update = await contracts.P2pLending.methods.getLender(accounts[0]).call()
+                // cinvert array into object
+                const updateObj = Object.assign({}, update);
                 dispatch({
                     type: actions.setUser,
-                    data: JSON.parse(JSON.stringify(update))
+                    data: JSON.parse(JSON.stringify(updateObj))
                 });
             }
             console.log({ url })
         } catch (error) {
-            alert(error.message || "");
+            alert(error.message || "Something went wrong");
         }
     }
 
@@ -79,8 +79,8 @@ const Profile = () => {
     return (
         <Layout>
             {loading ? <div>Loading...</div> : (
-                <ProfileCard setImgDetails={setImgDetails} walletAddress={lenderAddress}>
-                  
+                <ProfileCard setImgDetails={setImgDetails} walletAddress={lenderAddress} image={lenderData?.image}>
+
                     <Form.Group className='mb-3'>
                         <Form.Label className='text-muted mb-0' >Name</Form.Label>
                         <Form.Control
@@ -107,8 +107,8 @@ const Profile = () => {
                             className='fs-6'
                             size='lg'
                             type="number"
-                            onChange={(e) => setMaxPrinciplal(e.target.value)}
-                            value={maxPrinciplal}
+                            onChange={(e) => setMaxPrincipal(e.target.value)}
+                            value={maxPrincipal}
                         />
                     </Form.Group>
 

@@ -24,7 +24,7 @@ const Profile = () => {
                 let data;
                 if (borrowerAddress !== accounts[0]) {
                     data = await contracts.P2pLending.methods.borrowers(borrowerAddress).call();
-                }else{
+                } else {
                     data = user;
                 }
                 console.log({ data })
@@ -45,11 +45,8 @@ const Profile = () => {
             console.log({ imgDetails })
             let url = borrowerData?.image;
             if (imgDetails) {
-                // const isDeleted = await deleteFile(borrowerData?.image)
-                    // await deleteFile(borrowerData?.image)
-                // if (isDeleted) {
-                    url = await uploadFile(imgDetails);
-                // }
+                await deleteFile(borrowerData?.image)
+                url = await uploadFile(imgDetails);
             }
 
             const data = await contracts.P2pLending.methods.updateBorrower(
@@ -61,9 +58,11 @@ const Profile = () => {
             console.log({ updateRes: data })
             if (data) {
                 const update = await contracts.P2pLending.methods.borrowers(accounts[0]).call()
+                const updateObj = Object.assign({}, update);
+                console.log({ updateObj, update })
                 dispatch({
                     type: actions.setUser,
-                    data: JSON.parse(JSON.stringify(update))
+                    data: JSON.parse(JSON.stringify(updateObj))
                 });
             }
             console.log({ url })
@@ -75,13 +74,13 @@ const Profile = () => {
     return (
         <Layout>
             {loading ? <div>Loading...</div> : (
-                <ProfileCard 
-                    spamVotes={borrowerData?.spamVotes || 10} 
+                <ProfileCard
+                    spamVotes={borrowerData?.spamVotes || 10}
                     image={borrowerData?.image}
-                    setImgDetails={setImgDetails} 
+                    setImgDetails={setImgDetails}
                     walletAddress={borrowerAddress}
                 >
-         
+
                     <Form.Group className='mb-3'>
                         <Form.Label className='text-muted mb-0' >Name</Form.Label>
                         <Form.Control
@@ -103,7 +102,7 @@ const Profile = () => {
                         />
                     </Form.Group>
                     {borrowerAddress === accounts[0] && (
-                        <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon/></Button>
+                        <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
                     )}
                     {borrowerAddress !== accounts[0] && (
                         <Button color="error" variant='contained' >Mark as Spam</Button>
