@@ -4,6 +4,13 @@ import "./App.css";
 import UserLayout from "./layouts/UserLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  
+  Route
+} from 'react-router-dom'
+import SignUpBorrower from "./pages/Auth/SignUpBorrower";
+import SignUpLender from "./pages/Auth/SignUpLender";
 
 function App() {
   const { state, dispatch } = useEth();
@@ -19,6 +26,7 @@ function App() {
   console.log({ state })
   return (
     <>
+   
       <div>
         {
           state?.accounts ? (
@@ -39,6 +47,8 @@ function App() {
           )
         }
       </div>
+     
+     
     </>
   );
 }

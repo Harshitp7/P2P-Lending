@@ -169,7 +169,7 @@ contract P2pLending {
         return myReqs;
     }
 
-    function updateBorrower (string memory _name, string memory _image, uint _annualIncome) public
+    function updateBorrower (string memory _name, string memory _image, uint _annualIncome) public onlyBorrower
     {
          borrowers[msg.sender].name = _name;
          borrowers[msg.sender].image = _image;
@@ -177,7 +177,7 @@ contract P2pLending {
     }
 
     function updateLender (string memory _name, string memory _image, uint _interestRate, uint _maxPrincipal) 
-    public 
+    public onlyLender
     {
        lenders[lenderIndex[msg.sender]].name = _name;
        lenders[lenderIndex[msg.sender]].image = _image;
