@@ -19,6 +19,7 @@ const Profile = () => {
     const [maxPrincipal, setMaxPrincipal] = useState('');
     const [imgDetails, setImgDetails] = useState();
 
+    console.log({lenderAddress})
     useEffect(() => {
         const getData = async () => {
             try {

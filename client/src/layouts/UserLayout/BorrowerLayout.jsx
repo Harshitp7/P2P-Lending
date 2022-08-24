@@ -1,14 +1,20 @@
 import React from 'react'
-import {Routes, Route, Navigate} from "react-router"
+import { Routes, Route, Navigate } from "react-router"
+import CreateRequest from '../../pages/Borrower/CreateRequest'
 import Home from '../../pages/Borrower/Home'
+import Lenders from '../../pages/Borrower/Lenders'
 import Profile from '../../pages/Borrower/Profile'
+import LenderProfile from '../../pages/Lender/Profile'
 
 const BorrowerLayout = () => {
   return (
     <Routes>
-        <Route path="/borrower" element={<Home />} />
-        <Route path="/borrower/profile/:borrowerAddress" element={<Profile />} />
-        <Route path='*' element={<Navigate to='/borrower' />} />
+      <Route path="/borrower" element={<Home />} />
+      <Route path="/borrower/profile/:borrowerAddress" element={<Profile />} />
+      <Route path="/borrower/lenders" element={<Lenders />} />
+      <Route path="/borrower/lenders/:lenderAddress" element={<LenderProfile />} />
+      <Route path="/borrower/lenders/create-request" element={<CreateRequest />} />
+      <Route path='*' element={<Navigate to='/borrower' />} />
     </Routes>
   )
 }
