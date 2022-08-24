@@ -3,7 +3,6 @@ import { actions, useEth } from "./contexts";
 import "./App.css";
 import UserLayout from "./layouts/UserLayout";
 import AuthLayout from "./layouts/AuthLayout";
-import { Box, TextField } from "@mui/material";
 import { useEffect } from "react";
 import {
   BrowserRouter as Router,
@@ -23,7 +22,7 @@ function App() {
         data: JSON.parse(userData)
       });
     }
-  }, [])
+  }, [dispatch])
   console.log({ state })
   return (
     <>

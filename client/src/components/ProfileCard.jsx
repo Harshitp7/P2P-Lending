@@ -24,7 +24,7 @@ const ProfileCard = ({ children, setImgDetails, walletAddress, image, spamVotes 
             }
         }
         getData();
-    }, [])
+    }, [web3, walletAddress])
     const handleImageChange = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
@@ -47,7 +47,6 @@ const ProfileCard = ({ children, setImgDetails, walletAddress, image, spamVotes 
                     <Avatar
                         sx={{ width: 300, height: 300}}
                         src={previewImg || image}
-                        imgProps={{objectPosition: 'top'}}
                     />
                     {walletAddress === accounts[0] && (
                         <Button

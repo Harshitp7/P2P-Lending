@@ -38,7 +38,7 @@ const Profile = () => {
             }
         }
         getData();
-    }, [])
+    }, [accounts, contracts, borrowerAddress, user])
 
     const updateProfile = async () => {
         try {
