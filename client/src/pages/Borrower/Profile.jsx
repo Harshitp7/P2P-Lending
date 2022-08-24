@@ -7,6 +7,7 @@ import ProfileCard from '../../components/ProfileCard';
 import { useParams } from 'react-router';
 import { uploadFile, deleteFile } from '../../utils/cloudinaryUtils';
 import UpdateIcon from '@mui/icons-material/Update';
+import InputField from '../../components/InputField';
 
 const Profile = () => {
     const { state: { accounts, user, contracts }, dispatch } = useEth();
@@ -80,27 +81,20 @@ const Profile = () => {
                     setImgDetails={setImgDetails}
                     walletAddress={borrowerAddress}
                 >
+                    <InputField
+                        className="mb-3"
+                        label="Name"
+                        onChange={(e) => setName(e.target.value)}
+                        value={name}
+                    />
 
-                    <Form.Group className='mb-3'>
-                        <Form.Label className='text-muted mb-0' >Name</Form.Label>
-                        <Form.Control
-                            className='fs-6'
-                            size='lg'
-                            onChange={(e) => setName(e.target.value)}
-                            value={name}
-                        />
-                    </Form.Group>
-
-                    <Form.Group className='mb-3'>
-                        <Form.Label className='text-muted mb-0' >Annual Income</Form.Label>
-                        <Form.Control
-                            className='fs-6'
-                            size='lg'
-                            type="number"
-                            onChange={(e) => setAnnualIncome(e.target.value)}
-                            value={annualIncome}
-                        />
-                    </Form.Group>
+                    <InputField
+                        className="mb-3"
+                        label="Annual Income"
+                        type="number"
+                        onChange={(e) => setAnnualIncome(e.target.value)}
+                        value={annualIncome}
+                    />
                     {borrowerAddress === accounts[0] && (
                         <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
                     )}

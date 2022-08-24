@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { Form, Card } from 'react-bootstrap';
 import { useEth } from '../contexts';
 import EditIcon from '@mui/icons-material/Edit';
+import InputField from './InputField';
 
 const ProfileCard = ({ children, setImgDetails, walletAddress, image, spamVotes = 0 }) => {
     const { state: { accounts, web3 } } = useEth();
@@ -68,14 +69,10 @@ const ProfileCard = ({ children, setImgDetails, walletAddress, image, spamVotes 
                             </Alert>
                         )
                     }
-                    <Form.Group  className='mb-3'>
-                        <Form.Label className='text-muted mb-0' >Wallet Address</Form.Label>
-                        <Form.Control className='fs-6' size='lg' type="name" readOnly value={walletAddress} />
-                    </Form.Group>
-                    <Form.Group className='mb-3'>
-                        <Form.Label className='text-muted mb-0' >Wallet Balance (ETH)</Form.Label>
-                        <Form.Control className='fs-6' size='lg' type="name" readOnly value={balance} />
-                    </Form.Group>
+
+                    <InputField className="mb-3"  label="Wallet Address" value={walletAddress} readOnly />
+                    <InputField className="mb-3"  label="Wallet Balance (ETH)" value={balance} readOnly />
+
                     {children}
                 </Grid>
             </Grid>

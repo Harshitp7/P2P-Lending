@@ -7,6 +7,7 @@ import ProfileCard from '../../components/ProfileCard';
 import UpdateIcon from '@mui/icons-material/Update';
 import { actions, useEth } from '../../contexts';
 import { deleteFile, uploadFile } from '../../utils/cloudinaryUtils';
+import InputField from '../../components/InputField';
 
 const Profile = () => {
     const { state: { accounts, user, contracts }, dispatch } = useEth();
@@ -82,36 +83,28 @@ const Profile = () => {
             {loading ? <div>Loading...</div> : (
                 <ProfileCard setImgDetails={setImgDetails} walletAddress={lenderAddress} image={lenderData?.image}>
 
-                    <Form.Group className='mb-3'>
-                        <Form.Label className='text-muted mb-0' >Name</Form.Label>
-                        <Form.Control
-                            className='fs-6'
-                            size='lg'
+                        <InputField
+                            className="mb-3"
+                            label="Name"
                             onChange={(e) => setName(e.target.value)}
                             value={name}
                         />
-                    </Form.Group>
-                    <Form.Group className='mb-3'>
-                        <Form.Label className='text-muted mb-0' >Interest Rate</Form.Label>
-                        <Form.Control
-                            className='fs-6'
-                            size='lg'
+                        
+                        <InputField
+                            className="mb-3"
                             type="number"
+                            label="Interest Rate"
                             onChange={(e) => setInterestRate(e.target.value)}
                             value={interestRate}
                         />
-                    </Form.Group>
 
-                    <Form.Group className='mb-3'>
-                        <Form.Label className='text-muted mb-0' >Max Principal</Form.Label>
-                        <Form.Control
-                            className='fs-6'
-                            size='lg'
+                        <InputField
+                            className="mb-3"
                             type="number"
+                            label="Max Principal"
                             onChange={(e) => setMaxPrincipal(e.target.value)}
                             value={maxPrincipal}
                         />
-                    </Form.Group>
 
                     {lenderAddress === accounts[0] && (
                         <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
