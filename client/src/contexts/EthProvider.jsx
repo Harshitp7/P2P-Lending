@@ -64,7 +64,7 @@ function EthProvider({ children }) {
     return () => {
       events.forEach(e => window.ethereum.removeListener(e, handleChange));
     };
-  }, [init, state.artifact]);
+  }, [init, state.artifacts]);
 
   return (
     <EthContext.Provider value={{

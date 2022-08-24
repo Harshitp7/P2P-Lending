@@ -29,7 +29,7 @@ const reducer = (state, action) => {
 
     case actions.logout:
       localStorage.removeItem('user');
-      return { ...state, user: null };
+      return { ...state, user: null, accounts: null };
       
     default:
       throw new Error("Undefined reducer action type");
