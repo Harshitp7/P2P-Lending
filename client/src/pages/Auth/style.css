@@ -8,7 +8,8 @@
 }
 
 .nav-link{
-    color: purple;
+    color: black;
+    font-weight: 500;
     font-size: large;
 }
 .nav-link:hover{

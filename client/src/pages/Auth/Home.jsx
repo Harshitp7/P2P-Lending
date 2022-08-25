@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import "./style.css";
 import lendLogo from "./icons8-lend-96.png";
 import borrowLogo from './icons8-borrow-64.png';
+import LandingImg from "../../Images/LandingImg.png";
 import { Link } from 'react-router-dom';
+import { Image } from 'react-bootstrap';
 
 export default function HomePage() {
     
@@ -45,6 +47,10 @@ export default function HomePage() {
                         </div>
                     </div>
                 </nav>
+                <Image
+                    src={LandingImg}
+                    style={{ width: '100%', height: '80vh' }}
+                />
                 <div className="container mt-5">
                     <div className="card" style={{ borderRadius: '25px', boxShadow: '5px 10px #888888' }}>
                         <div className="card-body">
