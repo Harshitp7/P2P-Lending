@@ -144,3 +144,7 @@ hr {
   display: inline-block;
   margin: 2rem 1rem 0 0;
 }
+
+.active{
+  font-weight: bold;
+}

@@ -5,9 +5,12 @@ import Home from '../../pages/Borrower/Home'
 import Lenders from '../../pages/Borrower/Lenders'
 import Profile from '../../pages/Borrower/Profile'
 import LenderProfile from '../../pages/Lender/Profile'
+import NavbarCommon from '../../components/NavbarCommon'
 
 const BorrowerLayout = () => {
   return (
+    <>
+    <NavbarCommon role="BorrowerLayout"/>
     <Routes>
       <Route path="/borrower" element={<Home />} />
       <Route path="/borrower/profile/:borrowerAddress" element={<Profile />} />
@@ -16,7 +19,8 @@ const BorrowerLayout = () => {
       <Route path="/borrower/lenders/create-request" element={<CreateRequest />} />
       <Route path='*' element={<Navigate to='/borrower' />} />
     </Routes>
+    </>
   )
 }
 
-export default BorrowerLayout
+export default BorrowerLayout;

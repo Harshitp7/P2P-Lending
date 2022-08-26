@@ -1,6 +1,10 @@
-import React from 'react'
+import { React, useState } from 'react'
+import { Box, Button } from '@mui/material';
+import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import { actions, useEth } from '../../contexts';
 import NavbarCommon from '../../components/NavbarCommon.js';
+import InputField from '../../components/InputField';
+
 const SignIn = () => {
 
     const { state: { contracts, accounts }, dispatch } = useEth();
@@ -29,51 +33,68 @@ const SignIn = () => {
             alert(error.message || "something went wrong")
         }
     }
+
+    const [password, setpassword] = useState('');
+
+
     return (
 
-<>
-      <div style={{ position: 'relative' }}>
-        <div style={{ paddingBottom: '4rem' }}>
-          <NavbarCommon role="signIn" />
-          
+        <>
+            <div style={{ position: 'relative' }}>
+                <div style={{ paddingBottom: '4rem' }}>
+                    <NavbarCommon role="signIn" />
 
-          <div className='container mt-5'>
-            <h1 style={{ padding: '0 45%' }}>SignIn</h1>
-          </div>
-          <div>
 
-            <div className="container mt-5" style={{ width: '50%' }}>
-              <button type="button" className="btn mb-5" style={{ backgroundColor: 'purple', borderRadius: '20px', color: 'white' }}>
-                Account: {accounts[0]}
-              </button>
+                    <div className='container mt-5'>
+                        <h1 style={{ padding: '0 45%' }}>SignIn</h1>
+                    </div>
+                    
 
-              
-              <div className="form-floating mb-3">
-                <input type="password" className="form-control" id="floatingPassword" placeholder="Password" />
-                <label htmlFor="floatingPassword">Enter your Password to sign-in</label>
-              </div>
-              
-              <div className="container my-5">
-                <button onClick={handleClick} style={{ transform: 'translateX(450%)', backgroundColor: 'purple', color: 'white', borderRadius: '20px', width: '10%' }}>Sign In</button>
-              </div>
+                        <div className="container mt-5" style={{ width: '50%' }}>
+                            <InputField
+                                label='Account'
+                                value={accounts[0]}
+                                readOnly
+                                className='mb-3'
+                            />
+                            <InputField
+                                label='Password'
+                                className='mb-3'
+                                value={password}
+                                required
+                                onChange={(e) => setpassword(e.target.value)}
+                            />
+
+
+                            <Box sx={{ display: "grid", placeItems: 'center' }}>
+                                <Button
+                                    type="submit"
+                                    sx={{ mt: 3, mb: 5}}
+                                    variant="contained"
+                                    endIcon={<LockOpenRoundedIcon />}
+                                >Sign In
+                                </Button>
+                            </Box>
+                        </div>
+
+                   
+                    <footer className="footer mt-6 mb-0 py-3 bg-warning" style={{
+                        position: 'absolute', bottom: '0', width: '100%', textAlign: 'center', transform:
+                            'translateY(280%)'
+                    }}>
+                        <div className="container">
+                            <span>&copy; 2022, All rights reserved.</span>
+                        </div>
+                    </footer>
+                </div>
             </div>
-            
-          </div>
-          <footer className="footer mt-6 mb-0 py-3 bg-warning" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center', transform:
-        'translateY(280%)'}}>
-            <div className="container">
-              <span>&copy; 2022, All rights reserved.</span>
-            </div>
-          </footer>
-        </div>
-      </div>
 
 
 
-    </>
+        </>
 
 
     )
 }
 
-export default SignIn
+export default SignIn;
