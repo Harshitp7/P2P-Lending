@@ -1,16 +1,15 @@
-
 import { React, useState } from 'react';
 import { useRef } from 'react';
 import { actions, useEth } from '../../contexts';
-import NavbarCommon from '../../components/NavbarCommon.js';
 import InputField from '../../components/InputField';
 import { Avatar, Grid, Box, Button } from '@mui/material';
 import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
-import { useParams } from 'react-router';
 import EditIcon from '@mui/icons-material/Edit';
+import sha1 from 'js-sha1'
 
-export default function SignUpBorrower({image}){
+
+export default function SignUpBorrower(){
 
   const { state: { contracts, accounts }, dispatch } = useEth();
   const [name, setname] = useState('');
@@ -24,7 +23,7 @@ export default function SignUpBorrower({image}){
   const handleClick = async () => {
     try {
       // const res = await contracts['P2pLending'].methods.SignUp("Borrower1", "https://image.png", "pass", 10).send({ from: accounts[0] });
-      const res = await contracts['P2pLending'].methods.signUpBorrower({ name }, ( {previewImg} || {image} ), { password },{annualIncome}).send({ from: accounts[0] });
+      const res = await contracts['P2pLending'].methods.signUpBorrower(name , previewImg, password , annualIncome).send({ from: accounts[0] });
       console.log({ res });
       let userData;
       if (res) {
@@ -46,40 +45,40 @@ export default function SignUpBorrower({image}){
       alert(error.message || "something went wrong")
     }
   }
+  const uploadFile =  async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'P2pLending')
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/auto/upload`, {
+        method: 'POST',
+        body: formData,
+    });
+    const json = await response.json();
+    console.log({uploadRes : json});
+    return json?.secure_url;
+}
+setPreviewImg(uploadFile);
 
-  const handleImageChange = (e) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    setImgDetails(file);
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file)
-    fileReader.onload = () => {
-        setPreviewImg(fileReader.result);
-    }
-    fileReader.onerror = (err) => {
-        console.log(err);
-    }
-  }
+  
+  
+ 
 
 
  return (
     <>
       <div style={{ position: 'relative' }}>
         <div style={{ paddingBottom: '4rem' }}>
-          <NavbarCommon role="Borrower" />
-
-
-          <div className='container my-5'>
+         <div className='container my-5'>
             <h1 style={{ padding: '0 35%',}}>Borrower SignUp</h1>
           </div>
           <div>
           <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)'}}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
-                    <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
+                    <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={uploadFile} />
                     <Avatar
                         sx={{ width: 300, height: 300}}
-                        src={previewImg || image}
+                        src={previewImg}
                     />
                    
                         <Button
@@ -121,8 +120,8 @@ export default function SignUpBorrower({image}){
 
                        <InputField
                          label='Annual Income (INR)'
-                         type='select'
-                         value={annualIncome}
+                         type='number'
+                         value= {Number(annualIncome)}
                          required
                          className='mb-3'
                          onChange={(e) => setAnnualIncome(e.target.value)}

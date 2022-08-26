@@ -35,9 +35,11 @@ contract P2pLending {
         address from;
         address to;
         uint money;
-        uint delayCost;
         statuses status;
         uint duration;
+        string purpose;
+        string bankStatement;
+        uint time;
     }
 
     //  -----------------State variables-------------------------------
@@ -185,11 +187,11 @@ contract P2pLending {
        lenders[lenderIndex[msg.sender]].maxPrincipal = _maxPrincipal;
     }
     
-
-    // function payBack (address payable _to) public payable
-    // {
+   
+    //  function payBack (address payable _to) public payable
+    
     //     (bool sent, bytes memory data) = _to.call{value: msg.value}("");
-    //     require(sent, "Failed to send Ether");
-    // }
+    //      require(sent, "Failed to send Ether");
+    //  }
 }
 

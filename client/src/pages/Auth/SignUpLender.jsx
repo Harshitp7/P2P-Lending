@@ -8,7 +8,7 @@ import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
 
-const SignUpLender = ({ image }) => {
+const SignUpLender = () => {
 
     const { state: { contracts, accounts }, dispatch } = useEth();
     const [name, setname] = useState('');
@@ -22,7 +22,7 @@ const SignUpLender = ({ image }) => {
     const handleClick = async () => {
         try {
             // const res = await contracts['P2pLending'].methods.SignUpLender("Borrower1", "https://image.png", "pass", 10).send({ from: accounts[0] });
-            const res = await contracts['P2pLending'].methods.signUpLender({ name }, ({ previewImg } || { image }), { password }, 10, 100).send({ from: accounts[0] });
+            const res = await contracts['P2pLending'].methods.signUpLender(name, previewImg, password , 10, 100).send({ from: accounts[0] });
             console.log({ res });
             let userData;
             if (res) {
@@ -64,7 +64,7 @@ const SignUpLender = ({ image }) => {
 
         <div style={{ position: 'relative' }}>
             <div style={{ paddingBottom: '4rem' }}>
-                <NavbarCommon role="Lender" />
+        
                 <div className='container my-5'>
                     <h1 style={{ padding: '0 38%' }}>Lender SignUp</h1>
                 </div>
@@ -75,7 +75,7 @@ const SignUpLender = ({ image }) => {
                             <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
                             <Avatar
                                 sx={{ width: 300, height: 300 }}
-                                src={previewImg || image}
+                                src={previewImg}
                             />
 
                             <Button
