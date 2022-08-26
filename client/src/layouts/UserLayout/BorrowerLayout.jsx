@@ -16,7 +16,7 @@ const BorrowerLayout = () => {
       <Route path="/borrower" element={<Home />} />
       <Route path="/borrower/profile/:borrowerAddress" element={<Profile />} />
       <Route path="/borrower/lenders" element={<Lenders />} />
-      <Route path="/borrower/request-details" element={<RequestDetails />} />
+      <Route path="/borrower/request-details/:requestId" element={<RequestDetails />} />
       <Route path="/borrower/lenders/:lenderAddress" element={<LenderProfile />} />
       <Route path="/borrower/lenders/create-request" element={<CreateRequest />} />
       <Route path='*' element={<Navigate to='/borrower' />} />

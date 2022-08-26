@@ -5,7 +5,6 @@ import DataTable from '../../components/DataTable'
 import Layout from '../../components/Layout'
 import Status from '../../components/Status'
 import { useEth } from '../../contexts'
-import NavbarCommon from '../../components/NavbarCommon';
 
 const Home = () => {
   const { state } = useEth();
@@ -122,7 +121,6 @@ const Home = () => {
   return (
     
     <Layout>
-      <NavbarCommon role='Borrower'/>
       <Typography align='center' sx={{ mb: 4 }}>Lenders</Typography>
       <Grid container spacing={3}>
         <Grid item md={6} lg={4}>

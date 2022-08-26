@@ -32,12 +32,18 @@ function NavbarCommon(props) {
   else if (role === 'LenderLayout') navArray = LenderLayout;
   else navArray = [];
 
+<<<<<<< HEAD
 
   const renderLinks = navArray.map((element) => {
     <li className="nav-item">
       <Link className="nav-link" aria-current="page" to={element.ref} key={element.id}>{element.name}</Link>
     </li>
   }
+=======
+  
+  const renderLinks = navArray.map((element) =>
+    <Nav.Link link={element.ref} key={element.id}>{element.name}</Nav.Link>
+>>>>>>> 8c4c64a092cfb5fea5586c2c72421a138bee8970
   );
   return (
     <>

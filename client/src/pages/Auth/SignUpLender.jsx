@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { actions, useEth } from '../../contexts';
 import NavbarCommon from '../../components/NavbarCommon.js';
 import InputField from '../../components/InputField';
-import { Avatar, Grid, Box, Button } from '@mui/material';
+import { Avatar, Grid, Box, Button, Stack } from '@mui/material';
 import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
@@ -70,6 +70,7 @@ const SignUpLender = () => {
                 </div>
 
                 <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
+<<<<<<< HEAD
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
                             <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
@@ -78,73 +79,79 @@ const SignUpLender = () => {
                                 src={previewImg}
                             />
 
+=======
+                    <Stack>
+                        <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
+                        <Avatar
+                            sx={{ width: 250, height: 250, mx : 'auto' }}
+                            src={previewImg || image}
+                        />
+                        <div className='d-flex w-100 justify-content-center align-items-center'>
+>>>>>>> 8c4c64a092cfb5fea5586c2c72421a138bee8970
                             <Button
                                 sx={{ mt: 2 }}
                                 variant="outlined"
                                 onClick={() => ref.current.click()}
                             >
-                                Change Image&nbsp;
+                                Select Image&nbsp;
                                 <EditIcon />
                             </Button>
+                        </div>
+                        <Form onSubmit={handleClick}>
+                            <InputField
+                                label='Account'
+                                value={accounts[0]}
+                                readOnly
+                                className='mb-3'
+                            />
 
-                        </Grid>
-                        <Grid item xs={12} md={8}>
+                            <InputField
+                                label='Name'
+                                value={name}
+                                required
+                                className='mb-3'
+                                onChange={(e) => setname(e.target.value)}
+                            />
 
-                            <Form onSubmit={handleClick}>
-                                <InputField
-                                    label='Account'
-                                    value={accounts[0]}
-                                    readOnly
-                                    className='mb-3'
-                                />
+                            <InputField
+                                label='Password (In Bytes32)'
+                                type='password'
+                                value={password}
+                                required
+                                className='mb-3'
+                                onChange={(e) => setpassword(e.target.value)}
+                            />
 
-                                <InputField
-                                    label='Name'
-                                    value={name}
-                                    required
-                                    className='mb-3'
-                                    onChange={(e) => setname(e.target.value)}
-                                />
+                            <InputField
+                                label='Rate of Interest (% per annum)'
+                                type='number'
+                                value={interestRate}
+                                required
+                                className='mb-3'
+                                onChange={(e) => setInterestRate(e.target.value)}
+                            />
 
-                                <InputField
-                                    label='Password (In Bytes32)'
-                                    type='password'
-                                    value={password}
-                                    required
-                                    className='mb-3'
-                                    onChange={(e) => setpassword(e.target.value)}
-                                />
+                            <InputField
+                                label='Maximum Principal Amount (INR)'
+                                type='number'
+                                value={maximumPrincipal}
+                                required
+                                className='mb-3'
+                                onChange={(e) => setMaximumPrincipal(e.target.value)}
+                            />
 
-                                <InputField
-                                    label='Rate of Interest (% per annum)'
-                                    type='number'
-                                    value={interestRate}
-                                    required
-                                    className='mb-3'
-                                    onChange={(e) => setInterestRate(e.target.value)}
-                                />
-
-                                <InputField
-                                    label='Maximum Principal Amount (INR)'
-                                    type='number'
-                                    value={maximumPrincipal}
-                                    required
-                                    className='mb-3'
-                                    onChange={(e) => setMaximumPrincipal(e.target.value)}
-                                />
-
-                                <Box sx={{ display: "grid", placeItems: 'center' }}>
-                                    <Button
-                                        type="submit"
-                                        sx={{ mt: 3, mb: 5 }}
-                                        variant="contained"
-                                        endIcon={<HowToRegRoundedIcon />}
-                                    >Sign Up
-                                    </Button>
-                                </Box>
-                            </Form>
-                        </Grid>
-                    </Grid>
+                            <Box sx={{ display: "grid", placeItems: 'center' }}>
+                                <Button
+                                    type="submit"
+                                    sx={{ mt: 3, mb: 5 }}
+                                    variant="contained"
+                                    endIcon={<HowToRegRoundedIcon />}
+                                >Sign Up
+                                </Button>
+                            </Box>
+                        </Form>
+                        {/* </Grid> */}
+                    </Stack>
                 </Card>
                 <br /> <br />
             </div>

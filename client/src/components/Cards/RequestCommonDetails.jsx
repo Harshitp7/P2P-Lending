@@ -1,58 +1,81 @@
-import { Avatar, Divider, Link, Typography } from '@mui/material'
-import React from 'react'
-import { Card, Row, Col } from 'react-bootstrap'
+import { Avatar, Button, Link, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Card } from 'react-bootstrap'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import Pair from '../Pair'
+import Status from '../Status';
+import { useEth } from '../../contexts';
 
-const RequestCommonDetails = () => {
+const RequestCommonDetails = ({children, details}) => {
+
+  const {state : {user, contracts}} = useEth()
+  const [person, setPerson] = useState({})
+
+  useEffect(() => {
+    (async () => {
+      const persn = await contracts.P2pLending.methods.borrowers(details?.from).call()
+      setPerson(persn)
+    })()
+  }, [details])
 
   return (
     <Card body className="shadow" style={{ borderRadius: '10px' }}>
+      <Status 
+        status={details?.status || "PENDING"}
+        style={{width : '100%', display : 'flex', justifyContent : 'center', borderRadius : 5, marginBottom : 10 }} 
+      />
       <Pair
-        left="Requested to"
+        left={user?.userType === "Borrower" ? "Requested to" : "Request from"}
         right={
           <div>
-            <Avatar sx={{ width: 75, height: 75 }} />
-            <Typography variant="subtitle1">John Doe</Typography>
+            <Avatar sx={{ width: 75, height: 75 }}  src={person?.image}  />
+            <Typography variant="subtitle1">{person?.name || "John Doe"}</Typography>
           </div>
         }
       />
 
       <Pair
         left="Amount"
-        right="1 year"
+        right={details?.amount || "0.1 ETH"}
       />
       <Pair
         left="Duration in years"
-        right="0.1 ETH"
+        right={`${details?.duration || "1"} years`}
       />
       <Pair
         left="Purpose"
-        right="lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem adf adf asdf sdf asdf sadfsdf sadf asdf sadf  asdf adsf asdf a sdf asdf sadf asdf asdf sadf asdfasdf"
+        right={details?.purpose || "Business"}
       />
       <Pair
         left="Recent 1 year bank statement"
+        border={false}
         right={
           <div className="d-flex w-100 flex-column justify-content-center align-items-center">
             <iframe
-              src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/20210101201653/PDF.pdf"
+              src={details?.bankStatement || "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20210101201653/PDF.pdf"}
               width="90%"
               height="500px"
-              allowfullscreen
             >
             </iframe>
-            <Link
-              href="https://media.geeksforgeeks.org/wp-content/cdn-uploads/20210101201653/PDF.pdf"
-              download
-              sx={{ mt: 2 }}
-              variant="body2"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Typography variant="subtitle1">Download</Typography>
-            </Link>
+            <Button variant="text" sx={{mt : 3}}>
+              <Link 
+                href={details?.bankStatement || "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20210101201653/PDF.pdf"}
+                target="_blank"
+                rel="noreferrer"
+                underline="none"
+                color="inherit"
+                variant="inherit"  
+              >
+                <Typography color="primary" variant="inherit">
+                Open in new tab
+                </Typography>
+              </Link>
+              <OpenInNewIcon />
+            </Button>
           </div>
         }
       />
+      {children}
     </Card>
   )
 }
