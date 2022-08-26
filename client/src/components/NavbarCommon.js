@@ -36,7 +36,7 @@ function NavbarCommon(props) {
 
   
   const renderLinks = navArray.map((element) =>
-    <Nav.Link Link={element.ref} key={element.id}>{element.name}</Nav.Link>
+    <Nav.Link link={element.ref} key={element.id}>{element.name}</Nav.Link>
   );
   return (
     <nav className="navbar navbar-expand-lg navbar-warning bg-warning" style={{ position: 'sticky', top: '0', zIndex: '1' }}>

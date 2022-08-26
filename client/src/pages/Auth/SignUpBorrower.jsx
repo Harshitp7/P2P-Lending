@@ -21,15 +21,18 @@ export default function SignUpBorrower({ image }) {
   const ref = useRef(null);
 
 
-  const handleClick = async () => {
+  const handleClick = async (e) => {
+    e.preventDefault();
     try {
       // const res = await contracts['P2pLending'].methods.SignUp("Borrower1", "https://image.png", "pass", 10).send({ from: accounts[0] });
-      const res = await contracts['P2pLending'].methods.signUpBorrower({ name }, ({ previewImg } || { image }), { password }, { annualIncome }).send({ from: accounts[0] });
+      const res = await contracts['P2pLending'].methods.signUpBorrower(
+        name, "https://image.png", password, Number(annualIncome))
+        .send({ from: accounts[0] });
       console.log({ res });
       let userData;
       if (res) {
         // userData = await contracts['P2pLending'].methods.signInBorrower("pass").call({from : accounts[0]});
-        userData = await contracts['P2pLending'].methods.signInBorrower("pass").call({ from: accounts[0] });
+        userData = await contracts['P2pLending'].methods.signInBorrower(password).call({ from: accounts[0] });
 
       } else {
         throw new Error('Something went wrong');
