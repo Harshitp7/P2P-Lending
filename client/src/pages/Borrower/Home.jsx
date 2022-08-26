@@ -122,7 +122,7 @@ const Home = () => {
     
     <Layout>
       <Typography align='center' sx={{ mb: 4 }}>Lenders</Typography>
-      <Grid container spacing={3}>
+      {/* <Grid container spacing={3}>
         <Grid item md={6} lg={4}>
           <LenderCard />
         </Grid>
@@ -132,7 +132,7 @@ const Home = () => {
         <Grid item md={6} lg={4}>
           <LenderCard />
         </Grid>
-      </Grid>
+      </Grid> */}
       <Typography align='center' sx={{ my: 4 }}>Requests</Typography>
 
       <TableContainer component={Paper} elevation={3} >

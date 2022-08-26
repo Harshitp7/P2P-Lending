@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { Form } from 'react-bootstrap';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import Layout from '../../components/Layout'
 import ProfileCard from '../../components/ProfileCard';
 import UpdateIcon from '@mui/icons-material/Update';
@@ -14,6 +14,7 @@ const Profile = () => {
     const [lenderData, setLenderData] = useState({});
     const [loading, setLoading] = useState(true);
     const { lenderAddress } = useParams()
+    const navigate = useNavigate();
 
     const [name, setName] = useState('');
     const [interestRate, setInterestRate] = useState('');
@@ -108,6 +109,13 @@ const Profile = () => {
 
                     {lenderAddress === accounts[0] && (
                         <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
+                    )}
+                    {lenderAddress !== accounts[0] && (
+                        <Button 
+                            variant="contained"
+                            onClick={() => navigate(`/borrower/lenders/create-request`, { state: { lenderAddress, lenderImage : lenderData?.image } })}
+                        >Request Loan
+                        </Button>
                     )}
                 </ProfileCard>
             )}

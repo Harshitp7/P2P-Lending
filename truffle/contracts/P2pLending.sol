@@ -9,6 +9,7 @@ contract P2pLending {
         string image;
         address payable wallet;
         bytes32 password;
+        uint spamVotes;
         uint annualIncome;
         uint [] madeRequests;
     }
@@ -47,6 +48,8 @@ contract P2pLending {
     mapping(address => uint) lenderIndex;
     Request [] public requests;
     mapping(address => string) public users;
+    mapping(address => bool) public hasVoted;
+
 
     // ------------------modifiers-----------------
 
@@ -76,6 +79,7 @@ contract P2pLending {
             wallet: payable(msg.sender),
             password: keccak256(abi.encodePacked(_password)),
             annualIncome: _annualIncome,
+            spamVotes: 0,
             madeRequests: new uint[](0)
         });
         users[msg.sender] = "Borrower";
@@ -185,6 +189,29 @@ contract P2pLending {
        lenders[lenderIndex[msg.sender]].maxPrincipal = _maxPrincipal;
     }
     
+    function acceptRequest(uint requestIndex) public onlyLender {
+        require(requests[requestIndex].status == statuses.PENDING, "Request is no more pending");
+        requests[requestIndex].status = statuses.ACCEPTED;
+    }
+
+    function rejectRequest(uint requestIndex) public onlyLender {
+        require(requests[requestIndex].status == statuses.PENDING, "Request is no more pending");
+        requests[requestIndex].status = statuses.REJECTED;
+    }
+    function markAsDelayed(uint requestIndex) public onlyLender {
+        require(requests[requestIndex].status == statuses.ACCEPTED, "Request is not yet accepted");
+        // require(requests[requestIndex].statuses == statuses.ACCEPTED, "Request is not yet accepted");
+        requests[requestIndex].status = statuses.DELAYED;
+    }
+
+    function markAsFraud(address _borrower, uint requestIndex) public onlyLender{
+        require(requests[requestIndex].status == statuses.DELAYED, "Request is not yet accepted");
+        require(!hasVoted[msg.sender], "You have already voted as fraud");
+        require(keccak256(abi.encodePacked(users[_borrower])) == keccak256(abi.encodePacked("Borrower")), "No user found with this address");
+        borrowers[_borrower].spamVotes++;
+        hasVoted[msg.sender] = true;
+    }
+
 
     // function payBack (address payable _to) public payable
     // {
