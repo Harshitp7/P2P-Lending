@@ -29,6 +29,7 @@ html {
 }
 
 
+/* Extension to bootstrap border class */
 @media (max-width: 575.98px) {
   .border-xs-left-0 {
     border-left: 0 !important; }

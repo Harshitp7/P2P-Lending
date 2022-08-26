@@ -4,13 +4,13 @@ import { useRef } from 'react';
 import { actions, useEth } from '../../contexts';
 import NavbarCommon from '../../components/NavbarCommon.js';
 import InputField from '../../components/InputField';
-import { Avatar, Grid, Box, Button } from '@mui/material';
+import { Avatar, Grid, Box, Button, Stack } from '@mui/material';
 import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import EditIcon from '@mui/icons-material/Edit';
 
-export default function SignUpBorrower({image}){
+export default function SignUpBorrower({ image }) {
 
   const { state: { contracts, accounts }, dispatch } = useEth();
   const [name, setname] = useState('');
@@ -19,12 +19,12 @@ export default function SignUpBorrower({image}){
   const [previewImg, setPreviewImg] = useState('');
   const [imgDetails, setImgDetails] = useState();
   const ref = useRef(null);
-  
+
 
   const handleClick = async () => {
     try {
       // const res = await contracts['P2pLending'].methods.SignUp("Borrower1", "https://image.png", "pass", 10).send({ from: accounts[0] });
-      const res = await contracts['P2pLending'].methods.signUpBorrower({ name }, ( {previewImg} || {image} ), { password },{annualIncome}).send({ from: accounts[0] });
+      const res = await contracts['P2pLending'].methods.signUpBorrower({ name }, ({ previewImg } || { image }), { password }, { annualIncome }).send({ from: accounts[0] });
       console.log({ res });
       let userData;
       if (res) {
@@ -54,15 +54,15 @@ export default function SignUpBorrower({image}){
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file)
     fileReader.onload = () => {
-        setPreviewImg(fileReader.result);
+      setPreviewImg(fileReader.result);
     }
     fileReader.onerror = (err) => {
-        console.log(err);
+      console.log(err);
     }
   }
 
 
- return (
+  return (
     <>
       <div style={{ position: 'relative' }}>
         <div style={{ paddingBottom: '4rem' }}>
@@ -70,80 +70,78 @@ export default function SignUpBorrower({image}){
 
 
           <div className='container my-5'>
-            <h1 style={{ padding: '0 35%',}}>Borrower SignUp</h1>
+            <h1 style={{ padding: '0 35%', }}>Borrower SignUp</h1>
           </div>
           <div>
-          <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)'}}>
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }} >
-                    <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
-                    <Avatar
-                        sx={{ width: 300, height: 300}}
-                        src={previewImg || image}
-                    />
-                   
-                        <Button
-                            sx={{ mt: 2 }}
-                            variant="outlined"
-                            onClick={() => ref.current.click()}
-                        >
-                            Change Image&nbsp;
-                            <EditIcon />
-                        </Button>
-                   
-                </Grid>
-                <Grid item xs={12} md={8}>
+            <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
+              <Stack>
+                <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
+                <Avatar
+                  sx={{ width: 250, height: 250, mx: 'auto' }}
+                  src={previewImg || image}
+                />
+
+                <div className='d-flex w-100 justify-content-center align-items-center'>
+                  <Button
+                    sx={{ mt: 2 }}
+                    variant="outlined"
+                    fullWidth={false}
+                    onClick={() => ref.current.click()}
+                  >
+                    Select Image&nbsp;
+                    <EditIcon />
+                  </Button>
+                </div>
 
                 <Form onSubmit={handleClick}>
-                        <InputField
-                         label='Account'
-                         value={accounts[0]}
-                         readOnly
-                         className='mb-3'
-                        />
+                  <InputField
+                    label='Account'
+                    value={accounts[0]}
+                    readOnly
+                    className='mb-3'
+                  />
 
-                       <InputField
-                         label='Name'
-                         value={name}
-                         required
-                         className='mb-3'
-                         onChange={(e) => setname(e.target.value)}
-                       />
+                  <InputField
+                    label='Name'
+                    value={name}
+                    required
+                    className='mb-3'
+                    onChange={(e) => setname(e.target.value)}
+                  />
 
-                       <InputField
-                         label='Password (In Bytes32)'
-                         type='password'
-                         value={password}
-                         required
-                         className='mb-3'
-                         onChange={(e) => setpassword(e.target.value)}
-                       />
+                  <InputField
+                    label='Password (In Bytes32)'
+                    type='password'
+                    value={password}
+                    required
+                    className='mb-3'
+                    onChange={(e) => setpassword(e.target.value)}
+                  />
 
-                       <InputField
-                         label='Annual Income (INR)'
-                         type='select'
-                         value={annualIncome}
-                         required
-                         className='mb-3'
-                         onChange={(e) => setAnnualIncome(e.target.value)}
-                       />
-         
-                       <Box sx={{ display: "grid", placeItems: 'center' }}>
-                         <Button
-                           type="submit"
-                           sx={{ mt: 3, mb: 5 }}
-                           variant="contained"
-                           endIcon={<HowToRegRoundedIcon />}
-                         >Sign Up
-                         </Button>
-                       </Box>
-                       </Form>
-                  </Grid>
-            </Grid>
-        </Card>
+                  <InputField
+                    label='Annual Income (INR)'
+                    type='select'
+                    value={annualIncome}
+                    required
+                    className='mb-3'
+                    onChange={(e) => setAnnualIncome(e.target.value)}
+                  />
+
+                  <Box sx={{ display: "grid", placeItems: 'center' }}>
+                    <Button
+                      type="submit"
+                      sx={{ mt: 3, mb: 5 }}
+                      variant="contained"
+                      endIcon={<HowToRegRoundedIcon />}
+                    >Sign Up
+                    </Button>
+                  </Box>
+                </Form>
+              </Stack>
+            </Card>
 
             <div className="container mt-5" style={{ width: '50%' }}>
-             
+
             </div>
             <br /> <br />
           </div>
@@ -154,9 +152,6 @@ export default function SignUpBorrower({image}){
           </footer>
         </div>
       </div>
-
-
-
     </>
   )
 
