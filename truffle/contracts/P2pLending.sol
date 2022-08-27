@@ -33,14 +33,15 @@ contract P2pLending {
         COMPLETED
     }
       struct Request {
+        uint id;
         address from;
         address to;
-        uint money;
+        uint amount;
         statuses status;
         uint duration;
         string purpose;
         string bankStatement;
-        uint time;
+        uint createdAt;
     }
 
     //  -----------------State variables-------------------------------
@@ -149,16 +150,17 @@ contract P2pLending {
         return lenders[lenderIndex[_wallet]];
     }
 
-    function makeRequest (address _from, address _to, uint _money, uint _duration, string memory _purpose, string memory _bankStatement) public onlyBorrower
+    function createRequest (address _from, address _to, uint amount, uint _duration, string memory _purpose, string memory _bankStatement) public onlyBorrower
     {
         requests.push(Request({
+            id: requests.length,
             from : _from,
             to : _to,
-            money : _money,
+            amount : amount,
             duration : _duration,
             status : statuses.PENDING,
             purpose : _purpose,
-            time : block.timestamp,
+            createdAt : block.timestamp,
             bankStatement : _bankStatement
         }));
         uint len = requests.length - 1;
@@ -166,13 +168,24 @@ contract P2pLending {
         lenders[lenderIndex[_to]].gotRequests.push(len);
     }
 
-    function getBorrowerRequests (address _borrower) public onlyBorrower view returns(Request [] memory) 
+    function getBorrowerRequests () public onlyBorrower view returns(Request [] memory) 
     {
-        uint len = borrowers[_borrower].madeRequests.length;
+        uint len = borrowers[msg.sender].madeRequests.length;
         Request [] memory myReqs = new Request [](len);
         for(uint i = 0; i <len; i++ )
         {
-            myReqs[i] = requests[borrowers[_borrower].madeRequests[i]];
+            myReqs[i] = requests[borrowers[msg.sender].madeRequests[i]];
+        }
+        return myReqs;
+    }
+
+    function getLenderRequests () public onlyLender view returns(Request [] memory) 
+    {
+        uint len = lenders[lenderIndex[msg.sender]].gotRequests.length;
+        Request [] memory myReqs = new Request [](len);
+        for(uint i = 0; i <len; i++ )
+        {
+            myReqs[i] = requests[borrowers[msg.sender].madeRequests[i]];
         }
         return myReqs;
     }
