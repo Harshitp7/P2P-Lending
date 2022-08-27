@@ -49,28 +49,38 @@ export default function SignUpBorrower({ image }) {
       alert(error.message || "something went wrong")
     }
   }
-
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     e.preventDefault();
     const file = e.target.files[0];
-    setImgDetails(file);
+    setImgDetails(file)
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file)
     fileReader.onload = () => {
-      setPreviewImg(fileReader.result);
+      setPreviewImg(fileReader.result)
     }
     fileReader.onerror = (err) => {
-      console.log(err);
+      console.log(err)
     }
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'P2pLending')
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/auto/upload`, {
+      method: 'POST',
+      body: formData,
+    });
+    const json = await response.json();
+    console.log({ uploadRes: json });
+    return json?.secure_url;
+
   }
+
+
 
 
   return (
     <>
       <div style={{ position: 'relative' }}>
         <div style={{ paddingBottom: '4rem' }}>
-
-
 
           <div className='container my-5'>
             <h1 style={{ padding: '0 35%', }}>Borrower SignUp</h1>
@@ -94,57 +104,58 @@ export default function SignUpBorrower({ image }) {
                 Select Image&nbsp;
                 <EditIcon />
               </Button>
-</div>
-              <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
-                <Form onSubmit={handleClick}>
-                  <InputField
-                    label='Account'
-                    value={accounts[0]}
-                    readOnly
-                    className='mb-3'
-                  />
+            </div>
 
-                  <InputField
-                    label='Name'
-                    value={name}
-                    required
-                    className='mb-3'
-                    onChange={(e) => setname(e.target.value)}
-                  />
+            <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
+              <Form onSubmit={handleClick}>
+                <InputField
+                  label='Account'
+                  value={accounts[0]}
+                  readOnly
+                  className='mb-3'
+                />
 
-                  <InputField
-                    label='Password (In Bytes32)'
-                    type='password'
-                    value={password}
-                    required
-                    className='mb-3'
-                    onChange={(e) => setpassword(e.target.value)}
-                  />
+                <InputField
+                  label='Name'
+                  value={name}
+                  required
+                  className='mb-3'
+                  onChange={(e) => setname(e.target.value)}
+                />
 
-                  <InputField
-                    label='Annual Income (INR)'
-                    type='select'
-                    value={annualIncome}
-                    required
-                    className='mb-3'
-                    onChange={(e) => setAnnualIncome(e.target.value)}
-                  />
+                <InputField
+                  label='Password (In Bytes32)'
+                  type='password'
+                  value={password}
+                  required
+                  className='mb-3'
+                  onChange={(e) => setpassword(e.target.value)}
+                />
 
-                  <Box sx={{ display: "grid", placeItems: 'center' }}>
-                    <Button
-                      type="submit"
-                      sx={{ mt: 3, mb: 5 }}
-                      variant="contained"
-                      endIcon={<HowToRegRoundedIcon />}
-                    >Sign Up
-                    </Button>
-                  </Box>
-                </Form>
-                </Card>
-              </Stack>
-           
-        
-        
+                <InputField
+                  label='Annual Income (INR)'
+                  type='select'
+                  value={annualIncome}
+                  required
+                  className='mb-3'
+                  onChange={(e) => setAnnualIncome(e.target.value)}
+                />
+
+                <Box sx={{ display: "grid", placeItems: 'center' }}>
+                  <Button
+                    type="submit"
+                    sx={{ mt: 3, mb: 5 }}
+                    variant="contained"
+                    endIcon={<HowToRegRoundedIcon />}
+                  >Sign Up
+                  </Button>
+                </Box>
+              </Form>
+            </Card>
+          </Stack>
+
+
+
 
 
           <br /> <br />
@@ -155,7 +166,7 @@ export default function SignUpBorrower({ image }) {
           </div>
         </footer>
       </div>
-   
+
     </>
   )
 

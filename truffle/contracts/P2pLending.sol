@@ -49,6 +49,7 @@ contract P2pLending {
     mapping(address => uint) lenderIndex;
     Request [] public requests;
     mapping(address => string) public users;
+    mapping(Borrower => mapping(Lender => Request)) public borrowRequests;
 
     // ------------------modifiers-----------------
 
@@ -147,14 +148,16 @@ contract P2pLending {
 
     function makeRequest (address _from, address _to, uint _money, uint _duration) public onlyBorrower
     {
-        requests.push(Request({
+        Request newRequest = Request({
             from : _from,
             to : _to,
             money : _money,
             duration : _duration,
             status : statuses.PENDING,
             delayCost : 0
-        }));
+    });
+        requests.push(newRequest);
+        borrowRequest[_from][_to] = newRequest;
         uint len = requests.length - 1;
         borrowers[_from].madeRequests.push(len);
         lenders[lenderIndex[_to]].gotRequests.push(len);
@@ -187,6 +190,20 @@ contract P2pLending {
        lenders[lenderIndex[msg.sender]].maxPrincipal = _maxPrincipal;
     }
     
+    function calculatePaybackCost (address _from, address _to, uint _delayTime) public 
+    returns (uint cost, uint delayCost, uint totalCost) 
+    {
+        uint principalAmount = borrowRequest[_from][_to].money;
+        uint rate = lenders[lenderIndex[_to]].interestRate;
+        uint time = borrowRequest[_from][_to].duration;
+
+        uint interest = (principalAmount*rate*time)/100;
+        cost = (principalAmount + interest);
+        delayCost = (_delayTime/time)*(principalAmount + interest)*1.25; 
+        totalCost = cost + delayCost;
+
+        return (cost, delayCost, totalCost);
+    }
    
     //  function payBack (address payable _to) public payable
     

@@ -41,9 +41,9 @@ export default function HomePage() {
                     <h1 className="mt-5 text-dark">Get Started...</h1>
                 </div>
                 <br />
-                <div className="container">
+                <div className="container px-4">
                     <div className="row">
-                        <div className="col-md-6 col-sm-12">
+                        <div className="col-sm-6 col-xs-12" id="role-cardAndicon1">
                             <Link to="/" className="role-link" style={{ textDecoration: 'none' }}>
                                 <div className="card" id="role-card" style={{ backgroundColor: 'purple', width: '90%', height: '80%', border: 'solid yellow 4px', borderRadius: '25px', padding: 'auto 20%' }}>
                                     <div className="card-body" style={{ textAlign: 'center', padding: '0', transform: 'translateY(35%)' }}>
@@ -53,13 +53,13 @@ export default function HomePage() {
                                     </div>
                                 </div>
                             </Link>
-                            <div className="container col-md-6 col-sm-12 mt-5" style={{ transform: 'translateY(-50%)' }}>
-                                <img src={borrowLogo} alt="" style={{ height: '20%', width: '30%', transform: 'translateY(100%)', transform: 'translateX(50%)' }} />
+                            <div className="container col-md-6 col-sm-12 mt-5 mb-5" id="role-icon" style={{ transform: 'translateY(-50%)' }}>
+                                <img src={borrowLogo} alt="" style={{ height: '10%', width: '30%', transform: 'translateY(100%)', transform: 'translateX(70%)' }} />
                             </div>
 
                         </div>
 
-                        <div className="col-md-6 col-sm-12">
+                        <div className="col-sm-6 col-xs-12" id="role-cardAndicon2">
                             <Link to="/" className="role-link" style={{ textDecoration: 'none' }}>
                                 <div className="card" id="role-card" style={{ backgroundColor: 'purple', width: '90%', height: '80%', border: 'solid yellow 4px', borderRadius: '25px', padding: 'auto 20%' }}>
                                     <div className="card-body" style={{ textAlign: 'center', padding: '0', transform: 'translateY(35%)' }}>
@@ -68,8 +68,8 @@ export default function HomePage() {
                                     </div>
                                 </div>
                             </Link>
-                            <div className="container col-md-6 col-sm-12 mt-5" style={{ transform: 'translateY(-50%)' }}>
-                                <img src={lendLogo} alt="" style={{ height: '10%', width: '30%', zIndex: '1', transform: 'translateY(-150%)', transform: 'translate(50%)' }} />
+                            <div className="container col-md-6 col-sm-12 mt-5" id="role-icon" style={{ transform: 'translateY(-50%)' }}>
+                                <img src={lendLogo} alt="" style={{ height: '10%', width: '30%', transform: 'translateY(-150%)', transform: 'translateX(70%)' }} />
                             </div>
                         </div>
                     </div>

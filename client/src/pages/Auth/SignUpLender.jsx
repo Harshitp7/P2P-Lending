@@ -45,33 +45,31 @@ const SignUpLender = () => {
         }
     }
 
-    const uploadFile =  async (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'p2pLending')
-        const response = await fetch(`https://api.cloudinary.com/v1_1/dtuxdyecw/image/upload`, {
-            method: 'POST',
-            body: formData,
-        });
-        const json = await response.json();
-        console.log({uploadRes : json});
-        return json?.secure_url;
-    }
-
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         e.preventDefault();
         const file = e.target.files[0];
-        setImgDetails(file);
+        setImgDetails(file)
         const fileReader = new FileReader();
         fileReader.readAsDataURL(file)
         fileReader.onload = () => {
-            setPreviewImg(fileReader.result);
+          setPreviewImg(fileReader.result)
         }
         fileReader.onerror = (err) => {
-            console.log(err);
+          console.log(err)
         }
-    }
-
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'P2pLending')
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/auto/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+        const json = await response.json();
+        console.log({ uploadRes: json });
+        return json?.secure_url;
+    
+      }
+    
 
     return (
 
@@ -84,7 +82,7 @@ const SignUpLender = () => {
 
              
                <Stack>
-                    <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={uploadFile} />
+                    <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
                     <Avatar
                         sx={{ width: 250, height: 250, mx: 'auto' }}
                         src={previewImg}
