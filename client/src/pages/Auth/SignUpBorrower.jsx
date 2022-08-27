@@ -70,8 +70,6 @@ export default function SignUpBorrower({ image }) {
   }
 
 
-
-
   return (
     <>
       <div style={{ position: 'relative' }}>
