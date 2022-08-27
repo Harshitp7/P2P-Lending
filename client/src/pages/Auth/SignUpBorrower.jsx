@@ -8,21 +8,26 @@ import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
 import { uploadFile } from '../../utils/cloudinaryUtils';
+import Loading from '../../components/Loading';
 
 export default function SignUpBorrower({ image }) {
 
   const { state: { contracts, accounts }, dispatch } = useEth();
+
   const [name, setname] = useState('');
   const [password, setpassword] = useState('');
   const [annualIncome, setAnnualIncome] = useState(0);
   const [previewImg, setPreviewImg] = useState('');
   const [imgDetails, setImgDetails] = useState();
+
+  const [loading, setLoading] = useState(false);
   const ref = useRef(null);
 
   const handleClick = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const imgUrl = uploadFile(imgDetails)
+      const imgUrl = await uploadFile(imgDetails)
       const res = await contracts['P2pLending'].methods.signUpBorrower(
             name,
             imgUrl,
@@ -33,6 +38,7 @@ export default function SignUpBorrower({ image }) {
       let userData;
       if (res) {
         userData = await contracts['P2pLending'].methods.signInBorrower(password).call({ from: accounts[0] });
+        setLoading(false);
       } else {
         throw new Error('Something went wrong');
       }
@@ -44,6 +50,7 @@ export default function SignUpBorrower({ image }) {
       }
     } catch (error) {
       console.log({ error });
+      setLoading(false);
       alert(error.message || "something went wrong")
     }
   }
@@ -66,6 +73,7 @@ export default function SignUpBorrower({ image }) {
   return (
     <>
       <div style={{ position: 'relative' }}>
+        {loading && <Loading backdrop />}
         <div style={{ paddingBottom: '4rem' }}>
 
           <div className='container my-5'>

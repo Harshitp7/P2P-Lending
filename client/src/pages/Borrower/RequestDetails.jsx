@@ -49,7 +49,8 @@ const RequestDetails = () => {
     <Layout>
       {loading ? <Loading /> : (
         <RequestCommonDetails details={reqDetails}>
-          {reqDetails?.status === "ACCEPTED" && (
+          {/* ACCEPTED */}
+          {reqDetails?.status === "1" && (
             <>
               <Divider>
                 <Chip label="Payment Details" />

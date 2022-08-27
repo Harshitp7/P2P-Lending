@@ -10,7 +10,6 @@ import { unixToUTCTimestamp } from '../../utils/dateTimeUtils';
 
 const Home = () => {
   const { state: { accounts, contracts } } = useEth();
-  const [requests, setRequests] = useState([]);
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,13 +44,16 @@ const Home = () => {
   const makeRows = (reqs) => reqs?.map((request) => {
     console.log({ request });
     return {
-      Lender: (
+      Borrower: (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Avatar
             src={request?.borrowerImg}
+            sx={{cursor : 'pointer'}}
+            onClick={() => navigate(`/lender/borrower-profile/${request?.from}`)}
           />
           <Typography
-            sx={{ ml: 3 }}
+            sx={{ ml: 3, cursor : 'pointer' }}
+            onClick={() => navigate(`/lender/borrower-profile/${request?.from}`)}
           >
             {request?.borrowerName}
           </Typography>
@@ -60,6 +62,7 @@ const Home = () => {
       Date: (
         <Typography>
           {new Date(unixToUTCTimestamp(request?.createdAt)).toDateString()}
+          {" at "} {new Date(unixToUTCTimestamp(request?.createdAt)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </Typography>
       ),
       Status: (

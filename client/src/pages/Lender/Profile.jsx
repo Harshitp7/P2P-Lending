@@ -8,6 +8,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 import { actions, useEth } from '../../contexts';
 import { deleteFile, uploadFile } from '../../utils/cloudinaryUtils';
 import InputField from '../../components/InputField';
+import Loading from '../../components/Loading';
 
 const Profile = () => {
     const { state: { accounts, user, contracts }, dispatch } = useEth();
@@ -20,6 +21,8 @@ const Profile = () => {
     const [interestRate, setInterestRate] = useState('');
     const [maxPrincipal, setMaxPrincipal] = useState('');
     const [imgDetails, setImgDetails] = useState();
+
+    const [backdropLoading, setBackdropLoading] = useState(false);
 
     console.log({lenderAddress})
     useEffect(() => {
@@ -47,6 +50,7 @@ const Profile = () => {
 
 
     const updateProfile = async () => {
+        setBackdropLoading(true);
         try {
             console.log({ imgDetails })
             let url = lenderData?.image;
@@ -67,6 +71,7 @@ const Profile = () => {
                 const update = await contracts.P2pLending.methods.getLender(accounts[0]).call()
                 // cinvert array into object
                 const updateObj = Object.assign({}, update);
+                setBackdropLoading(false);
                 dispatch({
                     type: actions.setUser,
                     data: JSON.parse(JSON.stringify(updateObj))
@@ -74,6 +79,7 @@ const Profile = () => {
             }
             console.log({ url })
         } catch (error) {
+            setBackdropLoading(false);
             alert(error.message || "Something went wrong");
         }
     }
@@ -81,14 +87,15 @@ const Profile = () => {
 
     return (
         <Layout>
-            {loading ? <div>Loading...</div> : (
+            {loading ? <Loading /> : (
                 <ProfileCard setImgDetails={setImgDetails} walletAddress={lenderAddress} image={lenderData?.image}>
-
+                        {backdropLoading && <Loading backdrop />}
                         <InputField
                             className="mb-3"
                             label="Name"
                             onChange={(e) => setName(e.target.value)}
                             value={name}
+                            readOnly={lenderAddress !== accounts[0]}
                         />
                         
                         <InputField
@@ -97,6 +104,7 @@ const Profile = () => {
                             label="Interest Rate"
                             onChange={(e) => setInterestRate(e.target.value)}
                             value={interestRate}
+                            readOnly={lenderAddress !== accounts[0]}
                         />
 
                         <InputField
@@ -105,6 +113,7 @@ const Profile = () => {
                             label="Max Principal"
                             onChange={(e) => setMaxPrincipal(e.target.value)}
                             value={maxPrincipal}
+                            readOnly={lenderAddress !== accounts[0]}
                         />
 
                     {lenderAddress === accounts[0] && (

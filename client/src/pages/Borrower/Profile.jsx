@@ -8,6 +8,7 @@ import { useParams } from 'react-router';
 import { uploadFile, deleteFile } from '../../utils/cloudinaryUtils';
 import UpdateIcon from '@mui/icons-material/Update';
 import InputField from '../../components/InputField';
+import Loading from '../../components/Loading';
 
 const Profile = () => {
     const { state: { accounts, user, contracts }, dispatch } = useEth();
@@ -18,6 +19,8 @@ const Profile = () => {
     const [annualIncome, setAnnualIncome] = useState('');
     const [name, setName] = useState('');
     const [imgDetails, setImgDetails] = useState();
+
+    const [backdropLoading, setBackdropLoading] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -42,6 +45,7 @@ const Profile = () => {
     }, [accounts, contracts, borrowerAddress, user])
 
     const updateProfile = async () => {
+        setBackdropLoading(true);
         try {
             console.log({ imgDetails })
             let url = borrowerData?.image;
@@ -61,6 +65,8 @@ const Profile = () => {
                 const update = await contracts.P2pLending.methods.borrowers(accounts[0]).call()
                 const updateObj = Object.assign({}, update);
                 console.log({ updateObj, update })
+
+                setBackdropLoading(false);
                 dispatch({
                     type: actions.setUser,
                     data: JSON.parse(JSON.stringify(updateObj))
@@ -68,24 +74,27 @@ const Profile = () => {
             }
             console.log({ url })
         } catch (error) {
+            setBackdropLoading(false);
             alert(error.message);
         }
     }
 
     return (
         <Layout>
-            {loading ? <div>Loading...</div> : (
+            {loading ? <Loading /> : (
                 <ProfileCard
                     spamVotes={borrowerData?.spamVotes || 10}
                     image={borrowerData?.image}
                     setImgDetails={setImgDetails}
                     walletAddress={borrowerAddress}
                 >
+                    {backdropLoading && <Loading backdrop />}
                     <InputField
                         className="mb-3"
                         label="Name"
                         onChange={(e) => setName(e.target.value)}
                         value={name}
+                        readOnly={borrowerAddress !== accounts[0]}
                     />
 
                     <InputField
@@ -94,12 +103,10 @@ const Profile = () => {
                         type="number"
                         onChange={(e) => setAnnualIncome(e.target.value)}
                         value={annualIncome}
+                        readOnly={borrowerAddress !== accounts[0]}
                     />
                     {borrowerAddress === accounts[0] && (
                         <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
-                    )}
-                    {borrowerAddress !== accounts[0] && (
-                        <Button color="error" variant='contained' >Mark as Spam</Button>
                     )}
                 </ProfileCard>
             )}

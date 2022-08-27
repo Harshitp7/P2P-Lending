@@ -4,11 +4,16 @@ import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import { actions, useEth } from '../../contexts';
 import InputField from '../../components/InputField';
 import {Form, Card} from 'react-bootstrap';
+import Loading from '../../components/Loading';
+
 const SignIn = () => {
 
     const { state: { contracts, accounts }, dispatch } = useEth();
+    const [loading, setLoading] = useState(false);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const role = await contracts['P2pLending'].methods.getRole().call({ from: accounts[0] });
             console.log({ role });
@@ -21,7 +26,7 @@ const SignIn = () => {
             } else {
                 throw new Error('User not found');
             }
-
+            setLoading(false);
             console.log({ userData: JSON.parse(JSON.stringify(userData)) });
             if (userData) {
                 dispatch({
@@ -30,6 +35,7 @@ const SignIn = () => {
                 });
             }
         } catch (error) {
+            setLoading(false);
             alert(error.message || "something went wrong")
         }
     }
@@ -41,6 +47,7 @@ const SignIn = () => {
 
         <>
             <div style={{ position: 'relative' }}>
+                {loading && <Loading backdrop />}
                 <div style={{ paddingBottom: '4rem' }}>
                    
                     <div className='container mt-5'>

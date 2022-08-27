@@ -118,6 +118,7 @@ contract P2pLending {
             borrowers[msg.sender].wallet,
             borrowers[msg.sender].annualIncome,
             borrowers[msg.sender].madeRequests
+            // add rest fields
         );
         // return borrowers[msg.sender];
     }

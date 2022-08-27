@@ -3,19 +3,30 @@ import { utcToUnixTimestamp } from './dateTimeUtils';
 
 export const uploadFile =  async (file) => {
     const formData = new FormData();
+    let resourceType;
     formData.append('file', file);
     formData.append('upload_preset', 'P2pLending')
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/auto/upload`, {
+
+    if(file.type === "application/pdf"){
+        formData.append('public_id', `${sha1(file.name)}-${utcToUnixTimestamp(Date.now())}`)
+        resourceType = "raw"
+    }else if(file.type === "image/jpeg" || file.type === "image/png"){
+        resourceType = "image"
+    }else{
+        resourceType = "auto"
+    }
+    
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/${resourceType}/upload`, {
         method: 'POST',
         body: formData,
     });
     const json = await response.json();
-    console.log({uploadRes : json});
     return json?.secure_url;
 }
 
 export const deleteFile = async (url) => {
-    console.log({urlToDelete : url});
+    if(!url) return;
+
     const folder = process.env.REACT_APP_CLOUDINARY_FOLDER;
     const public_id = folder +  url.split(folder)[1].split('.')[0];
     const timestamp = utcToUnixTimestamp(Date.now())

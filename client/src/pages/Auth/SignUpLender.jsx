@@ -7,6 +7,7 @@ import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
 import { uploadFile } from '../../utils/cloudinaryUtils';
+import Loading from '../../components/Loading';
 
 const SignUpLender = () => {
 
@@ -18,10 +19,12 @@ const SignUpLender = () => {
     const [interestRate, setInterestRate] = useState(0);
     const [maximumPrincipal, setMaximumPrincipal] = useState(0);
 
+    const [loading, setLoading] = useState(false);
     const ref = useRef(null);
 
     const handleClick = async (e) => {
         e.preventDefault()
+        setLoading(true)
         try {
             const imgUrl = await uploadFile(imgDetails)
             const res = await contracts['P2pLending'].methods.signUpLender(
@@ -35,6 +38,7 @@ const SignUpLender = () => {
             let userData;
             if (res) {
                 userData = await contracts['P2pLending'].methods.signInLender(password).call({ from: accounts[0] });
+                setLoading(false);
             } else {
                 throw new Error('Something went wrong');
             }
@@ -47,6 +51,7 @@ const SignUpLender = () => {
             }
         } catch (error) {
             console.log({ error });
+            setLoading(false);
             alert(error.message || "something went wrong")
         }
     }
@@ -69,6 +74,7 @@ const SignUpLender = () => {
     return (
 
         <div style={{ position: 'relative' }}>
+            {loading && <Loading backdrop />}
             <div style={{ paddingBottom: '4rem' }}>
 
                 <div className='container my-5'>
