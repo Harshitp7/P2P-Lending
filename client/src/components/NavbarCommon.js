@@ -52,7 +52,7 @@ function NavbarCommon(props) {
               <Link className="nav-link active" aria-current="page" to="/Home">Home</Link>
             </li>
             {renderLinks}
-            <li className="nav-item">
+            {(navArray.length===0) && (<><li className="nav-item">
               <Link className="nav-link" to="/Signin">Signin</Link>
             </li>
 
@@ -68,7 +68,7 @@ function NavbarCommon(props) {
                 </ul>
               </div>
 
-            </li>
+            </li></>)}
 
 
           </ul>

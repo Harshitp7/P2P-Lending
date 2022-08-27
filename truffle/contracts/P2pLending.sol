@@ -36,9 +36,11 @@ contract P2pLending {
         address from;
         address to;
         uint money;
-        uint delayCost;
         statuses status;
         uint duration;
+        string purpose;
+        string bankStatement;
+        uint time;
     }
 
     //  -----------------State variables-------------------------------
@@ -147,7 +149,7 @@ contract P2pLending {
         return lenders[lenderIndex[_wallet]];
     }
 
-    function makeRequest (address _from, address _to, uint _money, uint _duration) public onlyBorrower
+    function makeRequest (address _from, address _to, uint _money, uint _duration, string memory _purpose, string memory _bankStatement) public onlyBorrower
     {
         requests.push(Request({
             from : _from,
@@ -155,7 +157,9 @@ contract P2pLending {
             money : _money,
             duration : _duration,
             status : statuses.PENDING,
-            delayCost : 0
+            purpose : _purpose,
+            time : block.timestamp,
+            bankStatement : _bankStatement
         }));
         uint len = requests.length - 1;
         borrowers[_from].madeRequests.push(len);
@@ -216,7 +220,9 @@ contract P2pLending {
     // function payBack (address payable _to) public payable
     // {
     //     (bool sent, bytes memory data) = _to.call{value: msg.value}("");
-    //     require(sent, "Failed to send Ether");
-    // }
+    //      require(sent, "Failed to send Ether");
+    //  }
 }
+
+
 

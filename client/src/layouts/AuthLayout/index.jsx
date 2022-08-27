@@ -4,9 +4,12 @@ import Home from '../../pages/Auth/Home'
 import SignIn from '../../pages/Auth/SignIn'
 import SignUpBorrower from '../../pages/Auth/SignUpBorrower'
 import SignUpLender from '../../pages/Auth/SignUpLender'
+import NavbarCommon from '../../components/NavbarCommon'
 
 const AuthLayout = () => {
   return (
+    <>
+    <NavbarCommon /> 
     <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
@@ -14,6 +17,7 @@ const AuthLayout = () => {
         <Route path="/SignUpLender" element={<SignUpLender />} />
         <Route path='*' element={<Navigate to='/' />} />
     </Routes>
+    </>
   )
 }
 

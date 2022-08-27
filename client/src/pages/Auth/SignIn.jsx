@@ -2,9 +2,8 @@ import { React, useState } from 'react'
 import { Box, Button } from '@mui/material';
 import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import { actions, useEth } from '../../contexts';
-import NavbarCommon from '../../components/NavbarCommon.js';
 import InputField from '../../components/InputField';
-
+import {Form, Card} from 'react-bootstrap';
 const SignIn = () => {
 
     const { state: { contracts, accounts }, dispatch } = useEth();
@@ -43,15 +42,15 @@ const SignIn = () => {
         <>
             <div style={{ position: 'relative' }}>
                 <div style={{ paddingBottom: '4rem' }}>
-                    <NavbarCommon role="signIn" />
-
-
+                   
                     <div className='container mt-5'>
                         <h1 style={{ padding: '0 45%' }}>SignIn</h1>
                     </div>
                     
                         <form onSubmit={handleSubmit}>
                         <div className="container mt-5" style={{ width: '50%' }}>
+                        <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)'}}>
+                            
                             <InputField
                                 label='Account'
                                 value={accounts[0]}
@@ -76,6 +75,8 @@ const SignIn = () => {
                                 >Sign In
                                 </Button>
                             </Box>
+                          
+                            </Card>
                         </div>
                         </form>
 
