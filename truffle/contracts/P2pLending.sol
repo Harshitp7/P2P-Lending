@@ -32,14 +32,15 @@ contract P2pLending {
         COMPLETED
     }
       struct Request {
+        uint id;
         address from;
         address to;
-        uint money;
+        uint amount;
         statuses status;
         uint duration;
         string purpose;
         string bankStatement;
-        uint time;
+        uint createdAt;
     }
 
     //  -----------------State variables-------------------------------
@@ -49,7 +50,7 @@ contract P2pLending {
     mapping(address => uint) lenderIndex;
     Request [] public requests;
     mapping(address => string) public users;
-    mapping(Borrower => mapping(Lender => Request)) public borrowRequests;
+    mapping(address => mapping(address => Request)) public borrowRequests;
 
     // ------------------modifiers-----------------
 
@@ -146,30 +147,33 @@ contract P2pLending {
         return lenders[lenderIndex[_wallet]];
     }
 
-    function makeRequest (address _from, address _to, uint _money, uint _duration) public onlyBorrower
+    function createRequest (address _from, address _to, uint amount, uint _duration, string memory _purpose, string memory _bankStatement) public onlyBorrower
     {
-        Request newRequest = Request({
+        Request memory newRequest = Request({
+            id: requests.length,
             from : _from,
             to : _to,
-            money : _money,
+            amount : amount,
             duration : _duration,
             status : statuses.PENDING,
-            delayCost : 0
-    });
+            purpose : _purpose,
+            createdAt : block.timestamp,
+            bankStatement : _bankStatement
+        });
         requests.push(newRequest);
-        borrowRequest[_from][_to] = newRequest;
+        borrowRequests[_from][_to] = newRequest;
         uint len = requests.length - 1;
         borrowers[_from].madeRequests.push(len);
         lenders[lenderIndex[_to]].gotRequests.push(len);
     }
 
-    function getBorrowerRequests (address _borrower) public onlyBorrower view returns(Request [] memory) 
+    function getBorrowerRequests () public onlyBorrower view returns(Request [] memory) 
     {
-        uint len = borrowers[_borrower].madeRequests.length;
+        uint len = borrowers[msg.sender].madeRequests.length;
         Request [] memory myReqs = new Request [](len);
         for(uint i = 0; i <len; i++ )
         {
-            myReqs[i] = requests[borrowers[_borrower].madeRequests[i]];
+            myReqs[i] = requests[borrowers[msg.sender].madeRequests[i]];
         }
         return myReqs;
     }
@@ -190,19 +194,31 @@ contract P2pLending {
        lenders[lenderIndex[msg.sender]].maxPrincipal = _maxPrincipal;
     }
     
-    function calculatePaybackCost (address _from, address _to, uint _delayTime) public 
-    returns (uint cost, uint delayCost, uint totalCost) 
+    function calculatePaybackCost (address _from, address _to) public view
+    returns (uint originalAmount,uint totalAmount) 
     {
-        uint principalAmount = borrowRequest[_from][_to].money;
+        uint principalAmount = borrowRequests[_from][_to].amount;
         uint rate = lenders[lenderIndex[_to]].interestRate;
-        uint time = borrowRequest[_from][_to].duration;
+        uint time = borrowRequests[_from][_to].duration;
+        uint _createdAt = borrowRequests[_from][_to].createdAt;
 
-        uint interest = (principalAmount*rate*time)/100;
-        cost = (principalAmount + interest);
-        delayCost = (_delayTime/time)*(principalAmount + interest)*1.25; 
-        totalCost = cost + delayCost;
+        uint interest = (principalAmount*rate*time)/1200;
+        
+        originalAmount = (principalAmount + interest);
+        uint unitAmount = originalAmount/time;
+        if(block.timestamp > time + _createdAt)
+        {
+            uint delayTime = block.timestamp - (time + _createdAt);
+            uint delayAmount = ((unitAmount*(delayTime))*5)/4; 
+            totalAmount = originalAmount + delayAmount;
 
-        return (cost, delayCost, totalCost);
+            return (originalAmount, totalAmount);
+        }
+        else
+        {
+            totalAmount = originalAmount;
+            return (originalAmount, totalAmount);
+        }
     }
    
     //  function payBack (address payable _to) public payable

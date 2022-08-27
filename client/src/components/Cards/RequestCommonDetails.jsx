@@ -10,10 +10,18 @@ const RequestCommonDetails = ({children, details}) => {
 
   const {state : {user, contracts}} = useEth()
   const [person, setPerson] = useState({})
+  console.log({details, person});
 
   useEffect(() => {
     (async () => {
-      const persn = await contracts.P2pLending.methods.borrowers(details?.from).call()
+      let persn
+      if(user?.userType === 'Lender'){
+          persn = await contracts.P2pLending.methods.borrowers(details?.from).call()
+      console.log({persn})
+
+      }else{
+          persn = await contracts.P2pLending.methods.getLender(details?.to).call()
+      }
       setPerson(persn)
     })()
   }, [details])
@@ -21,7 +29,7 @@ const RequestCommonDetails = ({children, details}) => {
   return (
     <Card body className="shadow" style={{ borderRadius: '10px' }}>
       <Status 
-        status={details?.status || "PENDING"}
+        status={details?.status}
         style={{width : '100%', display : 'flex', justifyContent : 'center', borderRadius : 5, marginBottom : 10 }} 
       />
       <Pair
@@ -29,22 +37,22 @@ const RequestCommonDetails = ({children, details}) => {
         right={
           <div>
             <Avatar sx={{ width: 75, height: 75 }}  src={person?.image}  />
-            <Typography variant="subtitle1">{person?.name || "John Doe"}</Typography>
+            <Typography variant="subtitle1">{person?.name}</Typography>
           </div>
         }
       />
 
       <Pair
         left="Amount"
-        right={details?.amount || "0.1 ETH"}
+        right={details?.amount}
       />
       <Pair
         left="Duration in years"
-        right={`${details?.duration || "1"} years`}
+        right={`${details?.duration} years`}
       />
       <Pair
         left="Purpose"
-        right={details?.purpose || "Business"}
+        right={details?.purpose}
       />
       <Pair
         left="Recent 1 year bank statement"
@@ -52,14 +60,14 @@ const RequestCommonDetails = ({children, details}) => {
         right={
           <div className="d-flex w-100 flex-column justify-content-center align-items-center">
             <iframe
-              src={details?.bankStatement || "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20210101201653/PDF.pdf"}
+              src={details?.bankStatement}
               width="90%"
               height="500px"
             >
             </iframe>
             <Button variant="text" sx={{mt : 3}}>
               <Link 
-                href={details?.bankStatement || "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20210101201653/PDF.pdf"}
+                href={details?.bankStatement}
                 target="_blank"
                 rel="noreferrer"
                 underline="none"

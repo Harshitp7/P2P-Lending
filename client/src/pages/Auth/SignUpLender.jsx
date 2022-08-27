@@ -1,12 +1,12 @@
 import { React, useState } from 'react';
 import { useRef } from 'react';
 import { actions, useEth } from '../../contexts';
-import NavbarCommon from '../../components/NavbarCommon.js';
 import InputField from '../../components/InputField';
-import { Avatar, Grid, Box, Button, Stack } from '@mui/material';
+import { Avatar, Box, Button, Stack } from '@mui/material';
 import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
+import { uploadFile } from '../../utils/cloudinaryUtils';
 
 const SignUpLender = () => {
 
@@ -17,18 +17,24 @@ const SignUpLender = () => {
     const [imgDetails, setImgDetails] = useState();
     const [interestRate, setInterestRate] = useState(0);
     const [maximumPrincipal, setMaximumPrincipal] = useState(0);
+
     const ref = useRef(null);
 
-    const handleClick = async () => {
+    const handleClick = async (e) => {
+        e.preventDefault()
         try {
-            // const res = await contracts['P2pLending'].methods.SignUpLender("Borrower1", "https://image.png", "pass", 10).send({ from: accounts[0] });
-            const res = await contracts['P2pLending'].methods.signUpLender(name, previewImg, password, 10, 100).send({ from: accounts[0] });
+            const imgUrl = await uploadFile(imgDetails)
+            const res = await contracts['P2pLending'].methods.signUpLender(
+                name, 
+                imgUrl, 
+                password, 
+                Number(interestRate), 
+                Number(maximumPrincipal)
+            ).send({ from: accounts[0] });
             console.log({ res });
             let userData;
             if (res) {
-                // userData = await contracts['P2pLending'].methods.signInBorrower("pass").call({from : accounts[0]});
-                userData = await contracts['P2pLending'].methods.signInLender("pass").call({ from: accounts[0] });
-
+                userData = await contracts['P2pLending'].methods.signInLender(password).call({ from: accounts[0] });
             } else {
                 throw new Error('Something went wrong');
             }
@@ -45,31 +51,33 @@ const SignUpLender = () => {
         }
     }
 
-    const handleImageChange = async (e) => {
+    const uploadFile =  async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'p2pLending')
+        const response = await fetch(`https://api.cloudinary.com/v1_1/dtuxdyecw/image/upload`, {
+            method: 'POST',
+            body: formData,
+        });
+        const json = await response.json();
+        console.log({uploadRes : json});
+        return json?.secure_url;
+    }
+
+    const handleImageChange = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
-        setImgDetails(file)
+        setImgDetails(file);
         const fileReader = new FileReader();
         fileReader.readAsDataURL(file)
         fileReader.onload = () => {
-          setPreviewImg(fileReader.result)
+            setPreviewImg(fileReader.result);
         }
         fileReader.onerror = (err) => {
-          console.log(err)
+            console.log(err);
         }
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'P2pLending')
-        const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/auto/upload`, {
-          method: 'POST',
-          body: formData,
-        });
-        const json = await response.json();
-        console.log({ uploadRes: json });
-        return json?.secure_url;
-    
-      }
-    
+    }
+
 
     return (
 
@@ -80,7 +88,6 @@ const SignUpLender = () => {
                     <h1 style={{ padding: '0 38%' }}>Lender SignUp</h1>
                 </div>
 
-             
                <Stack>
                     <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
                     <Avatar

@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
       py: 5,
       minHeight: '100vh'
     })}>
-      <Container>
+      <Container sx={{width : '100%', height : '100%'}}>
         {children}
       </Container>
     </Container>

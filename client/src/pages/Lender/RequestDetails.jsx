@@ -14,64 +14,89 @@ const RequestDetails = () => {
     const { requestId } = useParams();
     const navigate = useNavigate();
 
-    // if(!requestId){
-    //     navigate('/lender');
-    // }
+    if(!requestId){
+        navigate('/lender');
+    }
 
     const [reqDetails, setReqDetails] = useState({});
     const { state: { contracts, accounts } } = useEth();
+    const [reload, setReload] = useState(false);
 
-    // useEffect(() => {
-    //     // fetch request details
-    //     (async () => {
-    //         try {
-    //             const details = await contracts.P2pLending.methods.requests(requestId).call();
-    //             setReqDetails(details);
+    useEffect(() => {
+        // fetch request details
+        (async () => {
+            try {
+                const details = await contracts.P2pLending.methods.requests(requestId).call();
+                if(details){
+                    setReqDetails(details);
+                }else{
+                    throw new Error('Request not found')
+                }
 
-    //         } catch (error) {
-    //             alert(error.message || "Something went wrong");
-    //         }
-    //     })()
-    // }, [])
+            } catch (error) {
+                alert(error.message || "Something went wrong");
+            }
+        })()
+    }, [reload])
 
 
     const acceptRequest = async () => {
-        // try {
-        //     await contracts.P2pLending.methods.acceptRequest(requestId).send({ from: accounts[0] });
-        //     alert("Request accepted");
-        // } catch (error) {
-        //     alert(error.message || "Something went wrong");
-        // }
+        try {
+            const res = await contracts.P2pLending.methods.acceptRequest(requestId).send({ from: accounts[0] });
+            if(res?.status){
+                alert('Request accepted successfully')
+                setReload(prev => !prev);
+            }else{
+                throw new Error('Request acceptance failed')
+            }
+        } catch (error) {
+            alert(error.message || "Something went wrong");
+        }
     }
 
     const rejectRequest = async () => {
-        // try {
-        //     await contracts.P2pLending.methods.rejectRequest(requestId).send({ from: accounts[0] });
-        //     alert("Request rejected");
-        // } catch (error) {
-        //     alert(error.message || "Something went wrong");
-        // }
+        try {
+            const res = await contracts.P2pLending.methods.rejectRequest(requestId).send({ from: accounts[0] });
+            if (res.status) {
+                alert("Request rejected successfully");
+                setReload(prev => !prev);
+            } else {
+                throw new Error('Request rejection failed')
+            }
+        } catch (error) {
+            alert(error.message || "Something went wrong");
+        }
     }
 
 
     const markAsDelayed = async () => {
-        // try {
-        //     await contracts.P2pLending.methods.markAsDelayed(requestId).send({ from: accounts[0] });
-        //     alert("Request marked as delayed");
-        // } catch (error) {
-        //     alert(error.message || "Something went wrong");
-        // }
+        try {
+            const res = await contracts.P2pLending.methods.markAsDelayed(requestId).send({ from: accounts[0] });
+            if (res.status) {
+                alert("Request marked as delayed successfully");
+                setReload(prev => !prev);
+            } else {
+                throw new Error('Request marking as delayed failed')
+            }
+        } catch (error) {
+            alert(error.message || "Something went wrong");
+        }
     }
 
     const markAsFraud = async () => {
-        // try {
-        //     await contracts.P2pLending.methods.markAsFraud(reqDetails?.from).send({ from: accounts[0] });
-        //     alert("Request marked as fraud");
-        // } catch (error) {
-        //     alert(error.message || "Something went wrong");
-        // }
+        try {
+            const res = await contracts.P2pLending.methods.markAsFraud(reqDetails?.from, requestId).send({ from: accounts[0] });
+            if (res.status) {
+                alert("Profile marked as fraud successfully");
+                setReload(prev => !prev);
+            } else {
+                throw new Error('Profile marking as fraud failed')
+            }
+        } catch (error) {
+            alert(error.message || "Something went wrong");
+        }
     }
-    
+
     return (
         <Layout>
             <RequestCommonDetails details={reqDetails}>
@@ -79,7 +104,8 @@ const RequestDetails = () => {
                     <Chip label="Take an action" />
                 </Divider>
                 
-                {reqDetails?.status === "PENDING" && (
+                {/* PENDING */}
+                {reqDetails?.status === "0" && (
                     <div className="d-flex justify-content-evenly align-items-center mt-5">
                         <Button
                             variant="contained"
@@ -102,7 +128,8 @@ const RequestDetails = () => {
                     </div>
                 )}
 
-                {reqDetails?.status === "ACCEPTED" && (
+                {/* ACCEPTED */}
+                {reqDetails?.status === "1" && (
                     <div className="d-flex justify-content-evenly align-items-center mt-5">
                         <Button
                             variant="contained"
@@ -115,8 +142,8 @@ const RequestDetails = () => {
                         </Button>
                     </div>
                 )}
-
-                {reqDetails?.status === "DELAYED" && (
+                {/* DELAYED */}
+                {reqDetails?.status === "3" && (
                     <div className="d-flex justify-content-evenly align-items-center mt-5">
                         <Button
                             variant="contained"

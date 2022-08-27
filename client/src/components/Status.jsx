@@ -1,21 +1,36 @@
 import { Alert, Box } from '@mui/material'
 import React from 'react'
 
-const Status = ({ status, style }) => {
-
-    const statusColors = {
-        PENDING: 'info',
-        ACCEPTED: 'success',
-        REJECTED: 'error',
-        DELAYED: 'warning',
-        COMPLETED: 'success',
-    }
+const Status = ({ status = 0, style }) => {
+    
+    const statusInfo = [
+        {
+            text : "Pending",
+            color : "info"
+        },
+        {
+            text : "Accepted",
+            color : "success"
+        },
+        {
+            text : "Rejected",
+            color : "error"
+        },
+        {
+            text : "Delayed",
+            color : "warning"
+        },
+        {
+            text : "Completed",
+            color : "success"
+        }
+    ]
 
     return (
         <Box sx={{ width: '100%', display: 'flex', justifyContent : 'center'}}>
             <Box sx={{ width: '100%', display: 'flex', justifyContent : 'center' }}>
-                <Alert severity={statusColors[status]} sx={{ borderRadius: 10 }} style={style}>
-                    {status[0].toUpperCase() + status.slice(1).toLowerCase()}
+                <Alert severity={statusInfo[status].color} sx={{ borderRadius: 10 }} style={style}>
+                    {statusInfo[status].text}
                 </Alert>
             </Box>
         </Box>

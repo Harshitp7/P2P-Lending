@@ -2,13 +2,12 @@
 import { React, useState } from 'react';
 import { useRef } from 'react';
 import { actions, useEth } from '../../contexts';
-import NavbarCommon from '../../components/NavbarCommon.js';
 import InputField from '../../components/InputField';
 import { Avatar, Grid, Box, Button, Stack } from '@mui/material';
 import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
-import { useParams } from 'react-router';
 import EditIcon from '@mui/icons-material/Edit';
+import { uploadFile } from '../../utils/cloudinaryUtils';
 
 export default function SignUpBorrower({ image }) {
 
@@ -20,24 +19,23 @@ export default function SignUpBorrower({ image }) {
   const [imgDetails, setImgDetails] = useState();
   const ref = useRef(null);
 
-
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      // const res = await contracts['P2pLending'].methods.SignUp("Borrower1", "https://image.png", "pass", 10).send({ from: accounts[0] });
+      const imgUrl = uploadFile(imgDetails)
       const res = await contracts['P2pLending'].methods.signUpBorrower(
-        name, "https://image.png", password, Number(annualIncome))
-        .send({ from: accounts[0] });
+            name,
+            imgUrl,
+            password,
+            Number(annualIncome)
+        ).send({ from: accounts[0] });
       console.log({ res });
       let userData;
       if (res) {
-        // userData = await contracts['P2pLending'].methods.signInBorrower("pass").call({from : accounts[0]});
         userData = await contracts['P2pLending'].methods.signInBorrower(password).call({ from: accounts[0] });
-
       } else {
         throw new Error('Something went wrong');
       }
-      console.log({ userData });
       if (userData) {
         dispatch({
           type: actions.setUser,
@@ -49,7 +47,8 @@ export default function SignUpBorrower({ image }) {
       alert(error.message || "something went wrong")
     }
   }
-  const handleImageChange = async (e) => {
+
+  const handleImageChange = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
     setImgDetails(file)
@@ -61,17 +60,6 @@ export default function SignUpBorrower({ image }) {
     fileReader.onerror = (err) => {
       console.log(err)
     }
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'P2pLending')
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/auto/upload`, {
-      method: 'POST',
-      body: formData,
-    });
-    const json = await response.json();
-    console.log({ uploadRes: json });
-    return json?.secure_url;
-
   }
 
 
@@ -153,6 +141,8 @@ export default function SignUpBorrower({ image }) {
               </Form>
             </Card>
           </Stack>
+
+
 
 
 
