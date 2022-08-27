@@ -58,16 +58,18 @@ export default function SignUpBorrower({ image }) {
   const handleImageChange = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
-    setImgDetails(file);
+    setImgDetails(file)
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file)
     fileReader.onload = () => {
-      setPreviewImg(fileReader.result);
+      setPreviewImg(fileReader.result)
     }
     fileReader.onerror = (err) => {
-      console.log(err);
+      console.log(err)
     }
   }
+
+
 
 
   return (
@@ -147,6 +149,12 @@ export default function SignUpBorrower({ image }) {
               </Form>
             </Card>
           </Stack>
+
+
+
+
+
+
 
           <br /> <br />
         </div>
