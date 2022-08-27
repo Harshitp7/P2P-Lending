@@ -13,7 +13,12 @@ const RequestCommonDetails = ({children, details}) => {
 
   useEffect(() => {
     (async () => {
-      const persn = await contracts.P2pLending.methods.borrowers(details?.from).call()
+      let persn
+      if(user?.userType === 'lender'){
+        persn = await contracts.P2pLending.methods.borrowers(details?.from).call()
+      }else{
+          persn = await contracts.P2pLending.methods.getLender(details?.to).call()
+      }
       setPerson(persn)
     })()
   }, [details])
@@ -21,7 +26,7 @@ const RequestCommonDetails = ({children, details}) => {
   return (
     <Card body className="shadow" style={{ borderRadius: '10px' }}>
       <Status 
-        status={details?.status || "PENDING"}
+        status={details?.status}
         style={{width : '100%', display : 'flex', justifyContent : 'center', borderRadius : 5, marginBottom : 10 }} 
       />
       <Pair

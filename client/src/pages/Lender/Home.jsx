@@ -1,19 +1,92 @@
-import React, { useEffect } from 'react'
+import { Avatar, Box, Button, Paper, TableContainer, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router';
+import DataTable from '../../components/DataTable';
+import Layout from '../../components/Layout';
+import Status from '../../components/Status';
 import { useEth } from '../../contexts';
+import { unixToUTCTimestamp } from '../../utils/dateTimeUtils';
 
 const Home = () => {
-  const { state } = useEth();
+  const { state : {accounts, contracts} } = useEth();
+  const [requests, setRequests] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fun = async () => {
-      const lenders = await state.contracts['P2pLending'].methods.getLenders().call();
-      console.log({ lenders });
-    }
-    fun();
+    // fetch lenders requests
+    (async () => {
+      try {
+        const reqDetails = await contracts['P2pLending'].methods.getLenderRequests().call({ from: accounts[0] });
+        console.log(reqDetails);
+        const arrObjs = reqDetails.map((req) => Object.assign({}, req));
+
+        const allReqs = arrObjs.map(async(request) => {
+          const borrower = await contracts['P2pLending'].methods.borrowers(request.from).call();
+          return {
+            ...request,
+            borrowerImg: borrower.image,
+            borrowerName: borrower.name,
+          }
+        })
+        setRequests(allReqs);
+      } catch (error) {
+        console.log(error);
+      }
+    })()
   }, [])
 
+  const rows = requests.map((request) => {
+    return {
+      Lender: (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Avatar
+            src={request?.borrowerImg}
+          />
+          <Typography
+            sx={{ ml: 3 }}
+          >
+            {request?.borrowerName}
+          </Typography>
+        </Box>
+      ),
+      Date: (
+        <Typography>
+          {new Date(unixToUTCTimestamp(request?.createdAt)).toDateString()}
+        </Typography>
+      ),
+      Status: (
+        <Status status={request?.status || "PENDING"} />
+      ),
+      Action: (
+        <Button 
+            variant='contained'
+            onClick={() => navigate(`/lender/request-details/${request?.id}`)}
+          >Details
+        </Button>
+      ),
+    }
+  })
+
   return (
-    <div>Lender Home</div>
+    <Layout>
+           {
+        rows && rows.length > 0 ? (
+          <>
+            <Typography align='center' sx={{ my: 4 }} variant="h5">Requests</Typography>
+
+            <TableContainer component={Paper} elevation={3} >
+              <DataTable rows={rows} />
+            </TableContainer>
+          </>
+        ) : (
+          <div className="d-flex w-100 h-100 justify-content-center align-items-center flex-column">
+            <Typography align='center' sx={{ my: 4 }} variant="h6">You haven't got any requests yet</Typography>
+            {/* <Typography align='center' variant="h6">Explore all Lenders and make a request</Typography>
+            <Button variant='contained' onClick={() => navigate('/borrower/lenders')}>Explore</Button> */}
+          </div>
+        )
+      }
+    </Layout>
   )
 }
 

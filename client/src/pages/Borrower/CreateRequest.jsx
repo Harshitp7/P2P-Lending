@@ -6,6 +6,7 @@ import Layout from '../../components/Layout'
 import { useEth } from '../../contexts'
 import SendIcon from '@mui/icons-material/Send';
 import { useLocation, useNavigate } from 'react-router'
+import {uploadFile} from '../../utils/cloudinaryUtils'
 
 const CreateRequest = () => {
 
@@ -13,9 +14,9 @@ const CreateRequest = () => {
     const navigate = useNavigate()
     const {state} = location
 
-    // if(!state || !state?.lenderAddress || !state?.lenderImage) {
-    //     navigate('/borrower')
-    // }
+    if(!state || !state?.lenderAddress || !state?.lenderImage) {
+        navigate('/borrower')
+    }
 
     const { state: { accounts, contracts, user } } = useEth();
     const [amount, setAmount] = useState('');
@@ -27,12 +28,22 @@ const CreateRequest = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const bankStatementUrl = await uploadFile(bankStatement);
             const res = await contracts.P2pLending.methods.createRequest(
-                amount,
+                accounts[0],
+                state?.lenderAddress,
+                Number(amount),
+                Number(duration),
                 purpose,
-                duration,
-                bankStatement
+                bankStatementUrl
             ).send({ from: accounts[0] });
+
+            if(res?.status){
+                alert('Request created successfully')
+                navigate('/borrower')
+            }else{
+                throw new Error('Request creation failed')
+            }
         } catch (error) {
             alert(error.message || "Something went wrong");
         }
