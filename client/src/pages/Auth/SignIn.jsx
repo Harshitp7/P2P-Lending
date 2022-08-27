@@ -50,7 +50,7 @@ const SignIn = () => {
                         <form onSubmit={handleSubmit}>
                         <div className="container mt-5" style={{ width: '50%' }}>
                         <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)'}}>
-                            <Form onSubmit={handleClick}>
+                            
                             <InputField
                                 label='Account'
                                 value={accounts[0]}
@@ -75,7 +75,7 @@ const SignIn = () => {
                                 >Sign In
                                 </Button>
                             </Box>
-                            </Form>
+                          
                             </Card>
                         </div>
                         </form>
