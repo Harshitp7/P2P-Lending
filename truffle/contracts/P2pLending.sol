@@ -185,7 +185,7 @@ contract P2pLending {
         Request [] memory myReqs = new Request [](len);
         for(uint i = 0; i <len; i++ )
         {
-            myReqs[i] = requests[borrowers[msg.sender].madeRequests[i]];
+            myReqs[i] = requests[lenders[lenderIndex[msg.sender]].gotRequests[i]];
         }
         return myReqs;
     }

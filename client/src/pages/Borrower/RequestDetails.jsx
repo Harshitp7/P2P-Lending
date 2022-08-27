@@ -7,6 +7,7 @@ import AddTaskIcon from '@mui/icons-material/AddTask';
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useEth } from '../../contexts'
+import Loading from '../../components/Loading'
 
 
 const RequestDetails = () => {
@@ -14,13 +15,14 @@ const RequestDetails = () => {
   const { requestId } = useParams();
   const navigate = useNavigate();
 
-  if(!requestId){
-      navigate('/borrower');
+  if (!requestId) {
+    navigate('/borrower');
   }
 
   const [reqDetails, setReqDetails] = useState({});
   const [paymentDetails, setPaymentDetails] = useState({});
   const { state: { contracts, accounts } } = useEth();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // fetch request details
@@ -28,12 +30,14 @@ const RequestDetails = () => {
 
     (async () => {
       try {
-          const details = await contracts['P2pLending'].methods.requests(requestId).call();
-          setReqDetails(details);
+        const details = await contracts['P2pLending'].methods.requests(requestId).call();
+        setReqDetails(details);
+        setLoading(false);
       } catch (error) {
-
+        alert(error.message || "Something went wrong");
+        setLoading(false);
       }
-  })()
+    })()
   }, [])
 
 
@@ -43,42 +47,44 @@ const RequestDetails = () => {
 
   return (
     <Layout>
-      <RequestCommonDetails details={reqDetails}>
-        {reqDetails?.status === "ACCEPTED" && (
-          <>
-            <Divider>
-              <Chip label="Payment Details" />
-            </Divider>
+      {loading ? <Loading /> : (
+        <RequestCommonDetails details={reqDetails}>
+          {reqDetails?.status === "ACCEPTED" && (
+            <>
+              <Divider>
+                <Chip label="Payment Details" />
+              </Divider>
 
-            <Pair
-              left="Amount calculated with interest"
-              right="1 ETH"
-            />
-            <Pair
-              left="Delay cost"
-              right="0.1 ETH"
-              border={false}
-            />
-            <Divider>
-              <Chip label="Total" />
-            </Divider>
-            <Pair
-              left="Total amount to be paid"
-              right="1.1 ETH"
-            />
-            <Box sx={{ mt: 3, display: 'grid', placeItems: 'center' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                endIcon={<AddTaskIcon />}
-                onClick={payBack}
-              >
-                Payback
-              </Button>
-            </Box>
-          </>
-        )}
-      </RequestCommonDetails>
+              <Pair
+                left="Amount calculated with interest"
+                right="1 ETH"
+              />
+              <Pair
+                left="Delay cost"
+                right="0.1 ETH"
+                border={false}
+              />
+              <Divider>
+                <Chip label="Total" />
+              </Divider>
+              <Pair
+                left="Total amount to be paid"
+                right="1.1 ETH"
+              />
+              <Box sx={{ mt: 3, display: 'grid', placeItems: 'center' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  endIcon={<AddTaskIcon />}
+                  onClick={payBack}
+                >
+                  Payback
+                </Button>
+              </Box>
+            </>
+          )}
+        </RequestCommonDetails>
+      )}
     </Layout>
   )
 }

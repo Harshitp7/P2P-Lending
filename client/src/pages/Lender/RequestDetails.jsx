@@ -103,8 +103,9 @@ const RequestDetails = () => {
                 <Divider>
                     <Chip label="Take an action" />
                 </Divider>
-
-                {reqDetails?.status === "PENDING" && (
+                
+                {/* PENDING */}
+                {reqDetails?.status === "0" && (
                     <div className="d-flex justify-content-evenly align-items-center mt-5">
                         <Button
                             variant="contained"
@@ -127,7 +128,8 @@ const RequestDetails = () => {
                     </div>
                 )}
 
-                {reqDetails?.status === "ACCEPTED" && (
+                {/* ACCEPTED */}
+                {reqDetails?.status === "1" && (
                     <div className="d-flex justify-content-evenly align-items-center mt-5">
                         <Button
                             variant="contained"
@@ -140,8 +142,8 @@ const RequestDetails = () => {
                         </Button>
                     </div>
                 )}
-
-                {reqDetails?.status === "DELAYED" && (
+                {/* DELAYED */}
+                {reqDetails?.status === "3" && (
                     <div className="d-flex justify-content-evenly align-items-center mt-5">
                         <Button
                             variant="contained"
