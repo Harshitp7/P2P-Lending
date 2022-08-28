@@ -18,14 +18,13 @@ function App() {
   console.log({ state })
   return (
     <>
-      <div>
         {
           state?.accounts ? (
-            <div >
+            <>
               {
                 state?.user ? <UserLayout userType={state?.user?.userType} /> : <AuthLayout />
               }
-            </div>
+            </>
           ) : (
             <div className="container">
               <div className="loading">
@@ -37,7 +36,6 @@ function App() {
             </div>
           )
         }
-      </div>
     </>
   );
 }

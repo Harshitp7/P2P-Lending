@@ -118,7 +118,7 @@ const Profile = () => {
                             readOnly={lenderAddress !== accounts[0]}
                         />
                         <InputField
-                            className="mb-2"
+                            className="mb-3"
                             as="textarea"
                             label="Bio"
                             onChange={(e) => setBio(e.target.value)}

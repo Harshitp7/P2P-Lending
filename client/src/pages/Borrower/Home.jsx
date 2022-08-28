@@ -88,7 +88,7 @@ const Home = () => {
         {
           rows && rows.length > 0 ? (
             <>
-              <Typography align='center' sx={{ my: 4 }} variant="h5">Requests</Typography>
+              <Typography align='center' sx={{ mb: 4 }} variant="h5">Requests</Typography>
   
               <TableContainer component={Paper} elevation={3} >
                 <DataTable rows={rows} />

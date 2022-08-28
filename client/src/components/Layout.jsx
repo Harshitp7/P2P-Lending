@@ -5,8 +5,8 @@ const Layout = ({ children }) => {
   return (
     <Container maxWidth='xl' sx={({ palette: { custom } }) => ({
       backgroundColor: custom.background.main,
+      flexGrow: 1,
       py: 5,
-      minHeight: '100vh'
     })}>
       <Container sx={{width : '100%', height : '100%'}}>
         {children}

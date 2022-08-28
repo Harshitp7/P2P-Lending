@@ -16,7 +16,7 @@ const Loading = ({ backdrop = false }) => {
                         </Backdrop>
                     </>
                     : (
-                        <div style={{ height: "100vh", width : '100%', display : 'grid', placeItems : 'center' }}>
+                        <div style={{ height: "100%", width : '100%', display : 'grid', placeItems : 'center' }}>
                             <CircularProgress color="primary" size={60}  />
                         </div>
                     )

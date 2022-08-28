@@ -10,8 +10,11 @@ import NavbarCommon from '../../components/NavbarCommon'
 
 const BorrowerLayout = () => {
   return (
-    <>
-    <NavbarCommon role="BorrowerLayout"/>
+    <div className='w-100 h-100 d-flex flex-column'>
+      <div style={{position : 'sticky', left : 0, top : 0, zIndex : 5}} className="shadow">
+        <NavbarCommon role="BorrowerLayout"/>
+      </div>
+        
     <Routes>
       <Route path="/borrower" element={<Home />} />
       <Route path="/borrower/profile/:borrowerAddress" element={<Profile />} />
@@ -21,7 +24,7 @@ const BorrowerLayout = () => {
       <Route path="/borrower/lenders/create-request" element={<CreateRequest />} />
       <Route path='*' element={<Navigate to='/borrower' />} />
     </Routes>
-    </>
+    </div>
   )
 }
 
