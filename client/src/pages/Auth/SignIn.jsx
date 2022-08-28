@@ -26,12 +26,14 @@ const SignIn = () => {
             } else {
                 throw new Error('User not found');
             }
+            const userObj = Object.assign({}, userData);
+            console.log({ userObj });
             setLoading(false);
-            console.log({ userData: JSON.parse(JSON.stringify(userData)) });
+            console.log({ userData: JSON.parse(JSON.stringify(userObj)) });
             if (userData) {
                 dispatch({
                     type: actions.setUser,
-                    data: JSON.parse(JSON.stringify(userData))
+                    data: JSON.parse(JSON.stringify(userObj))
                 });
             }
         } catch (error) {

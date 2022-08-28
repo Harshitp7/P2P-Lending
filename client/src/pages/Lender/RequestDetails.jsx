@@ -56,8 +56,6 @@ const RequestDetails = () => {
             const res = await contracts.P2pLending.methods.acceptRequest(requestId).send({ 
                 from: accounts[0], 
                 value: web3.utils.toWei(reqDetails.amount, 'ether'),
-                gas: 5000000, 
-                gasPrice: 10000000000 
             });
             if(res?.status){
                 setBackdropLoading(false);

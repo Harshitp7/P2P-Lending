@@ -38,14 +38,16 @@ export default function SignUpBorrower({ image }) {
       let userData;
       if (res) {
         userData = await contracts['P2pLending'].methods.signInBorrower(password).call({ from: accounts[0] });
-        setLoading(false);
       } else {
         throw new Error('Something went wrong');
       }
       if (userData) {
+        const userObj = Object.assign({}, userData);
+        setLoading(false);
+        console.log({ userObj });
         dispatch({
           type: actions.setUser,
-          data: JSON.parse(JSON.stringify(userData))
+          data: JSON.parse(JSON.stringify(userObj))
         });
       }
     } catch (error) {
