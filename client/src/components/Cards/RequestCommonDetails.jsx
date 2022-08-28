@@ -47,7 +47,7 @@ const RequestCommonDetails = ({children, details}) => {
 
       <Pair
         left="Amount"
-        right={details?.amount}
+        right={`${details?.amount} ETH`}
       />
       <Pair
         left="Duration in months"
