@@ -20,10 +20,11 @@ const RequestDetails = () => {
     }
 
     const [reqDetails, setReqDetails] = useState({});
-    const { state: { contracts, accounts } } = useEth();
+    const { state: { contracts, accounts, web3 } } = useEth();
     const [reload, setReload] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [backdropLoading, setBackdropLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [backdropLoading, setBackdropLoading] = useState(false);
+    const [isPaymentDelayed, setIsPaymentDelayed] = useState(false);
 
 
     useEffect(() => {
@@ -33,6 +34,9 @@ const RequestDetails = () => {
                 const details = await contracts.P2pLending.methods.requests(requestId).call();
                 if(details){
                     setReqDetails(details);
+                    const delayRes = await contracts.P2pLending.methods.isRequestDelayed(requestId).call();
+                    console.log({delayRes});
+                    setIsPaymentDelayed(delayRes);
                     setLoading(false);
                 }else{
                     throw new Error('Request not found')
@@ -49,7 +53,12 @@ const RequestDetails = () => {
     const acceptRequest = async () => {
         try {
             setBackdropLoading(true);
-            const res = await contracts.P2pLending.methods.acceptRequest(requestId).send({ from: accounts[0] });
+            const res = await contracts.P2pLending.methods.acceptRequest(requestId).send({ 
+                from: accounts[0], 
+                value: web3.utils.toWei(reqDetails.amount, 'ether'),
+                gas: 5000000, 
+                gasPrice: 10000000000 
+            });
             if(res?.status){
                 setBackdropLoading(false);
                 alert('Request accepted successfully')
@@ -149,7 +158,7 @@ const RequestDetails = () => {
                     )}
 
                     {/* ACCEPTED */}
-                    {reqDetails?.status === "1" && (
+                    {(reqDetails?.status === "1" && isPaymentDelayed) && (
                         <div className="d-flex justify-content-evenly align-items-center mt-5">
                             <Button
                                 variant="contained"
@@ -163,7 +172,7 @@ const RequestDetails = () => {
                         </div>
                     )}
                     {/* DELAYED */}
-                    {reqDetails?.status === "3" && (
+                    {(reqDetails?.status === "3" && isPaymentDelayed) && (
                         <div className="d-flex justify-content-evenly align-items-center mt-5">
                             <Button
                                 variant="contained"

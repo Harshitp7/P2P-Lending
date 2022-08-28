@@ -4,14 +4,18 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract P2pLending {
 
+    // add bio in both borrower and lender
+
    struct Borrower {
         string userType;
         string name;
         string image;
+        uint approvedLoans;
         address payable wallet;
         bytes32 password;
         uint spamVotes;
         uint annualIncome;
+        string bio;
         uint [] madeRequests;
     }
 
@@ -22,6 +26,7 @@ contract P2pLending {
         address payable wallet;
         bytes32 password;
         uint interestRate;
+        string bio;
         uint maxPrincipal;
         uint [] gotRequests;
     }
@@ -39,7 +44,7 @@ contract P2pLending {
         address to;
         uint amount;
         statuses status;
-        uint duration;
+        uint durationInMonths;
         string purpose;
         string bankStatement;
         uint createdAt;
@@ -80,6 +85,8 @@ contract P2pLending {
             userType: "Borrower",
             name: _name,
             image: _image,
+            approvedLoans : 0,
+            bio : "Hi I am...",
             wallet: payable(msg.sender),
             password: keccak256(abi.encodePacked(_password)),
             annualIncome: _annualIncome,
@@ -91,11 +98,12 @@ contract P2pLending {
 
     function signUpLender (string memory _name, string memory _image, string memory _password, uint _interestRate, uint _maxPrincipal) public {
         require(keccak256(abi.encodePacked(users[msg.sender])) == keccak256(abi.encodePacked("")), "This address is already registered");
-
+      
         lenders.push(Lender({
             userType: "Lender",
             name: _name,
             image: _image,
+            bio : "Hi I am...",
             wallet: payable (msg.sender),
             password: keccak256(abi.encodePacked(_password)),
             interestRate: _interestRate,
@@ -106,40 +114,19 @@ contract P2pLending {
         users[msg.sender] = "Lender";
     }
 
-    // returns (Borrower memory) { 
-    function signInBorrower (string memory _password) public view 
-    returns (string memory userType, string memory name, string memory image, address wallet, uint annualIncome, uint[] memory madeReqests, uint spamVotes) {
+    function signInBorrower (string memory _password) public view returns (Borrower memory) {
         require(keccak256(abi.encodePacked(users[msg.sender])) == keccak256(abi.encodePacked("Borrower")), "User not found");
         require (borrowers[msg.sender].password == keccak256(abi.encodePacked(_password)), "Invalid password");
         
-        return (
-            borrowers[msg.sender].userType,
-            borrowers[msg.sender].name,
-            borrowers[msg.sender].image,
-            borrowers[msg.sender].wallet,
-            borrowers[msg.sender].annualIncome,
-            borrowers[msg.sender].madeRequests,
-            borrowers[msg.sender].spamVotes
-        );
-        // return borrowers[msg.sender];
+        return borrowers[msg.sender];
     }
 
-    // returns (Lender memory) {
-    function signInLender (string memory _password) public view  
-    returns (string memory userType, string memory name, string memory image, address wallet, uint interestRate, uint maxPrincipal, uint[] memory gotRequests) {
+    function signInLender (string memory _password) public view returns(Lender memory)
+    {
         require(keccak256(abi.encodePacked(users[msg.sender])) == keccak256(abi.encodePacked("Lender")), "User not found");
         require (lenders[lenderIndex[msg.sender]].password == keccak256(abi.encodePacked(_password)), "Invalid password");
         
-        return (
-            lenders[lenderIndex[msg.sender]].userType,
-            lenders[lenderIndex[msg.sender]].name,
-            lenders[lenderIndex[msg.sender]].image,
-            lenders[lenderIndex[msg.sender]].wallet,
-            lenders[lenderIndex[msg.sender]].interestRate,
-            lenders[lenderIndex[msg.sender]].maxPrincipal,
-            lenders[lenderIndex[msg.sender]].gotRequests
-        );
-        // return lenders[lenderIndex[msg.sender]];
+        return lenders[lenderIndex[msg.sender]];
     }
 
 
@@ -152,14 +139,14 @@ contract P2pLending {
         return lenders[lenderIndex[_wallet]];
     }
 
-    function createRequest (address _from, address _to, uint amount, uint _duration, string memory _purpose, string memory _bankStatement) public onlyBorrower
+    function createRequest (address _from, address _to, uint amount, uint _durationInMonths, string memory _purpose, string memory _bankStatement) public onlyBorrower
     {
         requests.push(Request({
             id: requests.length,
             from : _from,
             to : _to,
             amount : amount,
-            duration : _duration,
+            durationInMonths : _durationInMonths,
             status : statuses.PENDING,
             purpose : _purpose,
             createdAt : block.timestamp,
@@ -192,25 +179,40 @@ contract P2pLending {
         return myReqs;
     }
 
-    function updateBorrower (string memory _name, string memory _image, uint _annualIncome) public onlyBorrower
+    function updateBorrower (string memory _name, string memory _image, uint _annualIncome, string memory _bio) public onlyBorrower
     {
          borrowers[msg.sender].name = _name;
+         borrowers[msg.sender].bio = _bio;
          borrowers[msg.sender].image = _image;
          borrowers[msg.sender].annualIncome = _annualIncome;
     }
 
-    function updateLender (string memory _name, string memory _image, uint _interestRate, uint _maxPrincipal) 
+    function updateLender (string memory _name, string memory _image, uint _interestRate, uint _maxPrincipal, string memory _bio) 
     public onlyLender
     {
        lenders[lenderIndex[msg.sender]].name = _name;
+       lenders[lenderIndex[msg.sender]].bio = _bio;
        lenders[lenderIndex[msg.sender]].image = _image;
        lenders[lenderIndex[msg.sender]].interestRate = _interestRate;
        lenders[lenderIndex[msg.sender]].maxPrincipal = _maxPrincipal;
     }
+
     
-    function acceptRequest(uint requestIndex) public onlyLender {
+    function isRequestDelayed(uint requestId) public view returns (bool) {
+            // convert durationInMonths in months to seconds
+            uint durationInSec = requests[requestId].durationInMonths * 30 * 24 * 60 * 60;
+            uint _createdAt = requests[requestId].createdAt;
+
+            return (block.timestamp > _createdAt + durationInSec);
+    }
+    
+    function acceptRequest(uint requestIndex) public payable onlyLender  {
         require(requests[requestIndex].status == statuses.PENDING, "Request is no more pending");
+        uint amount = requests[requestIndex].amount;
+        require(msg.value == amount*(10 ** 18), "Required ethers not given either it is lesser or higher than required");
         requests[requestIndex].status = statuses.ACCEPTED;
+        // transfer amount from lender to borrower
+        borrowers[requests[requestIndex].from].wallet.transfer(amount*(10 ** 18));
     }
 
     function rejectRequest(uint requestIndex) public onlyLender {
@@ -219,33 +221,35 @@ contract P2pLending {
     }
     function markAsDelayed(uint requestIndex) public onlyLender {
         require(requests[requestIndex].status == statuses.ACCEPTED, "Request is not yet accepted");
+        require(isRequestDelayed(requestIndex), "Request is not delayed yet");
         // require(requests[requestIndex].statuses == statuses.ACCEPTED, "Request is not yet accepted");
         requests[requestIndex].status = statuses.DELAYED;
     }
 
     function markAsFraud(address _borrower, uint requestIndex) public onlyLender{
-        require(requests[requestIndex].status == statuses.DELAYED, "Request is not yet accepted");
+        require(requests[requestIndex].status == statuses.DELAYED, "Request is not yet delayed");
         require(!hasVoted[msg.sender], "You have already voted as fraud");
         require(keccak256(abi.encodePacked(users[_borrower])) == keccak256(abi.encodePacked("Borrower")), "No user found with this address");
         borrowers[_borrower].spamVotes++;
         hasVoted[msg.sender] = true;
     }
 
+
  function calculatePaybackCost (uint requestId) public view
     returns (uint originalAmount,uint totalAmount) 
     {
         uint principalAmount = requests[requestId].amount;
         uint rate = lenders[lenderIndex[requests[requestId].to]].interestRate;
-        uint time = requests[requestId].duration;
+        uint time = requests[requestId].durationInMonths;
         uint _createdAt = requests[requestId].createdAt;
 
         uint interest = (principalAmount*rate*time)/1200;
         
         originalAmount = (principalAmount + interest);
         uint unitAmount = originalAmount/time;
-        if(block.timestamp > time + _createdAt)
+        if(block.timestamp > (time*30*24*60*60) + _createdAt)
         {
-            uint delayTime = block.timestamp - (time + _createdAt);
+            uint delayTime = block.timestamp - ((time*30*24*60*60) + _createdAt);
             uint delayAmount = ((unitAmount*(delayTime))*5)/4; 
             totalAmount = originalAmount + delayAmount;
 
@@ -259,9 +263,11 @@ contract P2pLending {
     }
 
 
-    // function payBack (address payable _to) public payable
-    // {
-    //     (bool sent, bytes memory data) = _to.call{value: msg.value}("");
-    //      require(sent, "Failed to send Ether");
-    //  }
+    function payBack (address payable _to) public payable
+    {
+        (bool sent, bytes memory data) = _to.call{value: msg.value}("");
+         require(sent, "Failed to send Ether");
+        //  change status to completed
+        // increment approvedLoans count 
+     }
 }

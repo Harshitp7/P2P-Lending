@@ -33,7 +33,7 @@ const RequestCommonDetails = ({children, details}) => {
     <Card body className="shadow" style={{ borderRadius: '10px' }}>
       <Status 
         status={details?.status}
-        style={{width : '100%', display : 'flex', justifyContent : 'center', borderRadius : 5, marginBottom : 10 }} 
+        style={{width : '70%', display : 'flex', justifyContent : 'center', marginBottom : 10 }} 
       />
       <Pair
         left={user?.userType === "Borrower" ? "Requested to" : "Request from"}
@@ -51,7 +51,7 @@ const RequestCommonDetails = ({children, details}) => {
       />
       <Pair
         left="Duration in months"
-        right={`${details?.duration} months`}
+        right={`${details?.durationInMonths} months`}
       />
       <Pair
         left="Purpose"

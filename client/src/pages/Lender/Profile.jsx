@@ -1,6 +1,5 @@
 import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react'
-import { Form } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router';
 import Layout from '../../components/Layout'
 import ProfileCard from '../../components/ProfileCard';
@@ -21,6 +20,7 @@ const Profile = () => {
     const [interestRate, setInterestRate] = useState('');
     const [maxPrincipal, setMaxPrincipal] = useState('');
     const [imgDetails, setImgDetails] = useState();
+    const [bio, setBio] = useState('');
 
     const [backdropLoading, setBackdropLoading] = useState(false);
 
@@ -39,6 +39,7 @@ const Profile = () => {
                 setName(data?.name);
                 setInterestRate(data?.interestRate);
                 setMaxPrincipal(data?.maxPrincipal);
+                setBio(data?.bio);
 
                 setLoading(false);
             } catch (error) {
@@ -60,10 +61,11 @@ const Profile = () => {
             }
 
             const res = await contracts.P2pLending.methods.updateLender(
-                name || lenderData?.name,
+                name,
                 url,
-                Number(interestRate || lenderData?.interestRate),
-                Number(maxPrincipal || lenderData?.maxPrincipal),
+                Number(interestRate),
+                Number(maxPrincipal),
+                bio
             ).send({ from: accounts[0] })
 
             console.log({ updateRes: res })
@@ -91,7 +93,7 @@ const Profile = () => {
                 <ProfileCard setImgDetails={setImgDetails} walletAddress={lenderAddress} image={lenderData?.image}>
                         {backdropLoading && <Loading backdrop />}
                         <InputField
-                            className="mb-3"
+                            className="mb-2"
                             label="Name"
                             onChange={(e) => setName(e.target.value)}
                             value={name}
@@ -99,7 +101,7 @@ const Profile = () => {
                         />
                         
                         <InputField
-                            className="mb-3"
+                            className="mb-2"
                             type="number"
                             label="Interest Rate"
                             onChange={(e) => setInterestRate(e.target.value)}
@@ -108,11 +110,19 @@ const Profile = () => {
                         />
 
                         <InputField
-                            className="mb-3"
+                            className="mb-2"
                             type="number"
                             label="Max Principal"
                             onChange={(e) => setMaxPrincipal(e.target.value)}
                             value={maxPrincipal}
+                            readOnly={lenderAddress !== accounts[0]}
+                        />
+                        <InputField
+                            className="mb-2"
+                            as="textarea"
+                            label="Bio"
+                            onChange={(e) => setBio(e.target.value)}
+                            value={bio}
                             readOnly={lenderAddress !== accounts[0]}
                         />
 

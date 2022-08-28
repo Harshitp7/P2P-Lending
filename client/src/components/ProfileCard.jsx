@@ -70,8 +70,8 @@ const ProfileCard = ({ children, setImgDetails, walletAddress, image, spamVotes 
                         )
                     }
 
-                    <InputField className="mb-3"  label="Wallet Address" value={walletAddress} readOnly />
-                    <InputField className="mb-3"  label="Wallet Balance (ETH)" value={balance} readOnly />
+                    <InputField className="mb-2"  label="Wallet Address" value={walletAddress} readOnly />
+                    <InputField className="mb-2"  label="Wallet Balance (ETH)" value={balance} readOnly />
 
                     {children}
                 </Grid>
