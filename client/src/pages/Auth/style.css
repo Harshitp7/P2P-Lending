@@ -16,6 +16,54 @@
     color: darkcyan;
 }
 
+/*  linear-gradient(rgba(0, 0, 0, 0.288), rgba(0, 0, 0, 0.274)), */
+.heroSection{
+    background-color: #662c7a;
+    height: 90vh;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: white;
+    font-size: 2rem;
+    font-weight: 500;
+    overflow: hidden;
+}
+.imgContainer{
+    width: 60%;
+    background-image: url('../../Images/Landing2.png'); 
+    height: 100%;
+    z-index: 2;
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: contain; 
+}
+
+
+/* left : #452585  top : #662c7a */
+.imgTopContent{
+    width: 40%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background-color: #662c7a;
+    padding: 0 25px;
+}
+
+.heroTitle{
+    font-size: 4rem;
+    font-weight: 700;
+    color: #fed25d;
+}
+.heroText{
+    font-size: 1.2rem;
+    line-height: 1.4;
+    color: white;
+}
+.bg-warning{
+    background-color: #fed25d !important;
+}
+
 @media screen and (max-width: 576px) {
     #role-card {
       height: 30%;

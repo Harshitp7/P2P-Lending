@@ -4,7 +4,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 function NavbarCommon(props) {
   let { role } = props;
-  const { state: { contracts, accounts }, dispatch } = useEth();
+  const { state: { accounts }, dispatch } = useEth();
 
   const BorrowerLayout = [
     {
@@ -22,11 +22,6 @@ function NavbarCommon(props) {
       name: 'Profile',
       ref: `/borrower/profile/${accounts[0]}`
     },
-    // {
-    //   id: 2,
-    //   name: <LogoutIcon />,
-    //   ref: '/'
-    // }
   ];
 
   const LenderLayout = [
@@ -40,11 +35,6 @@ function NavbarCommon(props) {
       name: 'Profile',
       ref: `/lender/profile/${accounts[0]}`
     },
-    // {
-    //   id: 1,
-    //   name: <LogoutIcon />,
-    //   ref: '/'
-    // }
   ];
 
 
@@ -61,7 +51,7 @@ function NavbarCommon(props) {
     </li>
   );
   return (
-    <nav className="navbar navbar-expand-lg navbar-warning bg-warning" style={{ position: 'sticky', top: '0', zIndex: '1' }}>
+    <nav className="navbar navbar-expand-lg navbar-warning bg-warning" style={{ position: 'sticky', top: '0', zIndex: '5' }}>
       <div className="container-fluid">
         <img src="https://cdn.vectorstock.com/i/1000x1000/05/91/blockchain-cube-colorful-line-icon-or-logo-vector-22330591.webp" alt="" style={{ width: '4%', height: '4%', marginRight: '1%' }} />
         <Link className="navbar-brand" to="/" style={{ fontSize: 'large', color: 'black', fontWeight: 'bold' }}>LendDefi</Link>

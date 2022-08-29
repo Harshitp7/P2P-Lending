@@ -15,11 +15,22 @@ export default function HomePage() {
     return (
         <div style={{ position: 'relative' }}>
             <div style={{ paddingBottom: '5rem' }}>
-               
-                <Image
+               <div className='heroSection' >
+                <div className='imgTopContent'>
+                    <div className='textContainer'>
+                        <h1 className='heroTitle'>P2P Lending</h1>
+                        <p className='heroText'>Lend and Borrow is a decentralized lending platform that allows users to lend and borrow money without the need for a middleman.</p>
+                    </div>
+                </div>
+
+                <div className="imgContainer">
+                {/* <Image
                     src={LandingImg}
-                    style={{ width: '100%', height: '90vh' }}
-                />
+                    style={{ width: '100%', height: '100%' }}
+                /> */}
+                </div>
+               </div>
+
                 <div className="container mt-5">
                     <div className="card" style={{ borderRadius: '25px', boxShadow: '5px 10px #888888' }}>
                         <div className="container card-body" style={{textAlign: 'center'}}>
