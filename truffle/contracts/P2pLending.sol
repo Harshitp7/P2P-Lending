@@ -168,6 +168,18 @@ contract P2pLending {
         return myReqs;
     }
 
+    function getLenderRequests () public onlyLender view returns(Request [] memory) 
+    {
+        uint len = lenders[lenderIndex[msg.sender]].gotRequests.length;
+        Request [] memory myReqs = new Request [](len);
+        for(uint i = 0; i <len; i++ )
+        {
+            myReqs[i] = requests[lenders[lenderIndex[msg.sender]].gotRequests[i]];
+        }
+        return myReqs;
+    }
+
+
     function updateBorrower (string memory _name, string memory _image, uint _annualIncome) public onlyBorrower
     {
          borrowers[msg.sender].name = _name;
@@ -185,8 +197,31 @@ contract P2pLending {
        lenders[lenderIndex[msg.sender]].interestRate = _interestRate;
        lenders[lenderIndex[msg.sender]].maxPrincipal = _maxPrincipal;
     }
+
+    function acceptRequest(uint requestIndex) public onlyLender {
+        require(requests[requestIndex].status == statuses.PENDING, "Request is no more pending");
+        requests[requestIndex].status = statuses.ACCEPTED;
+    }
+
+    function rejectRequest(uint requestIndex) public onlyLender {
+        require(requests[requestIndex].status == statuses.PENDING, "Request is no more pending");
+        requests[requestIndex].status = statuses.REJECTED;
+    }
+    function markAsDelayed(uint requestIndex) public onlyLender {
+        require(requests[requestIndex].status == statuses.ACCEPTED, "Request is not yet accepted");
+        // require(requests[requestIndex].statuses == statuses.ACCEPTED, "Request is not yet accepted");
+        requests[requestIndex].status = statuses.DELAYED;
+    }
+
+    function markAsFraud(address _borrower, uint requestIndex) public onlyLender{
+        require(requests[requestIndex].status == statuses.DELAYED, "Request is not yet accepted");
+        require(!hasVoted[msg.sender], "You have already voted as fraud");
+        require(keccak256(abi.encodePacked(users[_borrower])) == keccak256(abi.encodePacked("Borrower")), "No user found with this address");
+        borrowers[_borrower].spamVotes++;
+        hasVoted[msg.sender] = true;
+    }
     
-    function calculatePaybackCost (address _from, address _to) public view
+    function calculatePaybackCost (uint requestId) public view
     returns (uint originalAmount,uint totalAmount) 
     {
         uint principalAmount = requests[requestId].amount;
@@ -213,10 +248,21 @@ contract P2pLending {
         }
     }
    
-    //  function payBack (address payable _to) public payable
-    
-    //     (bool sent, bytes memory data) = _to.call{value: msg.value}("");
-    //      require(sent, "Failed to send Ether");
-    //  }
+    function payBack (uint requestId) public payable
+    {
+       Request memory request = requests[requestId];
+       (uint amount, uint totalAmount) = calculatePaybackCost(requestId);
+       (bool sent, bytes memory data) = (request.to).call{value: (totalAmount/121950)}("");   //convert to ether
+       require(sent, "Failed to send money");
+       request.status = statuses.COMPLETED;
+       borrowers[msg.sender].approvedLoans++;
+    }
 }
 
+contract ReceiveEther{
+    // Function to receive Ether. msg.data must be empty
+   receive() external payable {}
+
+   // Fallback function is called when msg.data is not empty
+   fallback() external payable {}
+}
