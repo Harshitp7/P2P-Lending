@@ -6,12 +6,11 @@ import Lenders from '../../pages/Borrower/Lenders'
 import Profile from '../../pages/Borrower/Profile'
 import RequestDetails from '../../pages/Borrower/RequestDetails'
 import LenderProfile from '../../pages/Lender/Profile'
-import NavbarCommon from '../../components/NavbarCommon'
 import HomeMain from '../../pages/Auth/Home'
+
 const BorrowerLayout = () => {
   return (
     <>
-    
     <Routes>
       <Route path="/" element={<HomeMain />} />
       <Route path="/borrower" element={<Home />} />

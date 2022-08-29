@@ -51,9 +51,12 @@ const Home = () => {
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Avatar
             src={request?.lenderImg}
+            sx={{cursor : 'pointer'}}
+            onClick={() => navigate(`/borrower/lenders/${request?.to}`)}
           />
           <Typography
-            sx={{ ml: 3 }}
+            sx={{ ml: 3, cursor : 'pointer' }}
+            onClick={() => navigate(`/borrower/lenders/${request?.to}`)}
           >
             {request?.lenderName}
           </Typography>
@@ -62,6 +65,7 @@ const Home = () => {
       Date: (
         <Typography>
           {new Date(unixToUTCTimestamp(request?.createdAt)).toDateString()}
+          {" at "} {new Date(unixToUTCTimestamp(request?.createdAt)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </Typography>
       ),
       Status: (
@@ -88,7 +92,7 @@ const Home = () => {
         {
           rows && rows.length > 0 ? (
             <>
-              <Typography align='center' sx={{ my: 4 }} variant="h5">Requests</Typography>
+              <Typography align='center' sx={{ mb: 4 }} variant="h5">Requests</Typography>
   
               <TableContainer component={Paper} elevation={3} >
                 <DataTable rows={rows} />

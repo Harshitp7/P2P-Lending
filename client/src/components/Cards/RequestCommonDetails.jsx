@@ -5,22 +5,25 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import Pair from '../Pair'
 import Status from '../Status';
 import { useEth } from '../../contexts';
+import { useNavigate } from 'react-router';
 
 const RequestCommonDetails = ({children, details}) => {
 
   const {state : {user, contracts}} = useEth()
   const [person, setPerson] = useState({})
   console.log({details, person});
+  const navigate = useNavigate()
+  const [navigateRoute, setNavigateRoute] = useState('')
 
   useEffect(() => {
     (async () => {
       let persn
       if(user?.userType === 'Lender'){
           persn = await contracts.P2pLending.methods.borrowers(details?.from).call()
-      console.log({persn})
-
+          setNavigateRoute(`/lender/borrower-profile/${details?.from}`)
       }else{
           persn = await contracts.P2pLending.methods.getLender(details?.to).call()
+          setNavigateRoute(`/borrower/lenders/${details?.to}`)
       }
       setPerson(persn)
     })()
@@ -30,25 +33,25 @@ const RequestCommonDetails = ({children, details}) => {
     <Card body className="shadow" style={{ borderRadius: '10px' }}>
       <Status 
         status={details?.status}
-        style={{width : '100%', display : 'flex', justifyContent : 'center', borderRadius : 5, marginBottom : 10 }} 
+        style={{width : '70%', display : 'flex', justifyContent : 'center', marginBottom : 10 }} 
       />
       <Pair
         left={user?.userType === "Borrower" ? "Requested to" : "Request from"}
         right={
           <div>
-            <Avatar sx={{ width: 75, height: 75 }}  src={person?.image}  />
-            <Typography variant="subtitle1">{person?.name}</Typography>
+            <Avatar sx={{ width: 75, height: 75, cursor : 'pointer' }}  src={person?.image} onClick={()=>navigate(navigateRoute)}  />
+            <Typography align="center" variant="subtitle1" sx={{cursor : 'pointer'}} onClick={()=>navigate(navigateRoute)}>{person?.name}</Typography>
           </div>
         }
       />
 
       <Pair
         left="Amount"
-        right={details?.amount}
+        right={`${details?.amount} ETH`}
       />
       <Pair
-        left="Duration in years"
-        right={`${details?.duration} years`}
+        left="Duration in months"
+        right={`${details?.durationInMonths} months`}
       />
       <Pair
         left="Purpose"

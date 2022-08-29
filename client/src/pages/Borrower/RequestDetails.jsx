@@ -23,14 +23,16 @@ const RequestDetails = () => {
   const [paymentDetails, setPaymentDetails] = useState({});
   const { state: { contracts, accounts } } = useEth();
   const [loading, setLoading] = useState(true);
+  console.log({paymentDetails})
 
   useEffect(() => {
     // fetch request details
     // fetch payment details
-
     (async () => {
       try {
         const details = await contracts['P2pLending'].methods.requests(requestId).call();
+        const paymentInfo = await contracts['P2pLending'].methods.calculatePaybackCost(requestId).call();
+        setPaymentDetails(paymentInfo);
         setReqDetails(details);
         setLoading(false);
       } catch (error) {
@@ -42,7 +44,15 @@ const RequestDetails = () => {
 
 
   const payBack = async () => {
-
+    // try {
+    //   await contracts['P2pLending'].methods.payback(requestId).send({ 
+    //     from: accounts[0], 
+    //     value : paymentDetails.totalAmount 
+    //   });
+    //   alert("Payment sent successfully");
+    // } catch (error) {
+    //   alert(error.message || "Something went wrong");
+    // }
   }
 
   return (
@@ -51,7 +61,8 @@ const RequestDetails = () => {
     <Layout>
       {loading ? <Loading /> : (
         <RequestCommonDetails details={reqDetails}>
-          {reqDetails?.status === "ACCEPTED" && (
+          {/* ACCEPTED */}
+          {reqDetails?.status === "1" && (
             <>
               <Divider>
                 <Chip label="Payment Details" />
@@ -59,11 +70,11 @@ const RequestDetails = () => {
 
               <Pair
                 left="Amount calculated with interest"
-                right="1 ETH"
+                right={`${paymentDetails?.originalAmount} ETH`}
               />
               <Pair
                 left="Delay cost"
-                right="0.1 ETH"
+                right={`${paymentDetails?.totalAmount - paymentDetails?.originalAmount} ETH`}
                 border={false}
               />
               <Divider>
@@ -71,7 +82,7 @@ const RequestDetails = () => {
               </Divider>
               <Pair
                 left="Total amount to be paid"
-                right="1.1 ETH"
+                right={`${paymentDetails?.totalAmount} ETH`}
               />
               <Box sx={{ mt: 3, display: 'grid', placeItems: 'center' }}>
                 <Button

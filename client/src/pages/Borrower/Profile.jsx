@@ -2,7 +2,6 @@ import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
 import { actions, useEth } from '../../contexts';
-import { Form, } from 'react-bootstrap';
 import ProfileCard from '../../components/ProfileCard';
 import { useParams } from 'react-router';
 import { uploadFile, deleteFile } from '../../utils/cloudinaryUtils';
@@ -19,6 +18,9 @@ const Profile = () => {
     const [annualIncome, setAnnualIncome] = useState('');
     const [name, setName] = useState('');
     const [imgDetails, setImgDetails] = useState();
+    const [bio, setBio] = useState('');
+
+    const [backdropLoading, setBackdropLoading] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -33,6 +35,7 @@ const Profile = () => {
                 setBorrowerData(data);
                 setAnnualIncome(data?.annualIncome);
                 setName(data?.name);
+                setBio(data?.bio);
 
                 setLoading(false);
             } catch (error) {
@@ -43,6 +46,7 @@ const Profile = () => {
     }, [accounts, contracts, borrowerAddress, user])
 
     const updateProfile = async () => {
+        setBackdropLoading(true);
         try {
             console.log({ imgDetails })
             let url = borrowerData?.image;
@@ -52,9 +56,10 @@ const Profile = () => {
             }
 
             const data = await contracts.P2pLending.methods.updateBorrower(
-                name || borrowerData?.name,
+                name,
                 url,
-                Number(annualIncome || borrowerData?.annualIncome),
+                Number(annualIncome),
+                bio
             ).send({ from: accounts[0] })
 
             console.log({ updateRes: data })
@@ -62,6 +67,8 @@ const Profile = () => {
                 const update = await contracts.P2pLending.methods.borrowers(accounts[0]).call()
                 const updateObj = Object.assign({}, update);
                 console.log({ updateObj, update })
+
+                setBackdropLoading(false);
                 dispatch({
                     type: actions.setUser,
                     data: JSON.parse(JSON.stringify(updateObj))
@@ -69,44 +76,63 @@ const Profile = () => {
             }
             console.log({ url })
         } catch (error) {
+            setBackdropLoading(false);
             alert(error.message);
         }
     }
 
     return (
         <>
-        <NavbarCommon role="BorrowerLayout"/>
-        <Layout>
-            {loading ? <div>Loading...</div> : (
-                <ProfileCard
-                    spamVotes={borrowerData?.spamVotes || 10}
-                    image={borrowerData?.image}
-                    setImgDetails={setImgDetails}
-                    walletAddress={borrowerAddress}
-                >
-                    <InputField
-                        className="mb-3"
-                        label="Name"
-                        onChange={(e) => setName(e.target.value)}
-                        value={name}
-                    />
+            <div className='w-100 h-100 d-flex flex-column'>
+                <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }} className="shadow">
+                    <NavbarCommon role='BorrowerLayout' />
+                </div>
+                <Layout>
+                    {loading ? <Loading /> : (
+                        <ProfileCard
+                            spamVotes={borrowerData?.spamVotes || 10}
+                            image={borrowerData?.image}
+                            setImgDetails={setImgDetails}
+                            walletAddress={borrowerAddress}
+                        >
+                            {backdropLoading && <Loading backdrop />}
+                            <InputField
+                                className="mb-2"
+                                label="Approved Loans"
+                                value={borrowerData?.approvedLoans}
+                                readOnly
+                            />
+                            <InputField
+                                className="mb-2"
+                                label="Name"
+                                onChange={(e) => setName(e.target.value)}
+                                value={name}
+                                readOnly={borrowerAddress !== accounts[0]}
+                            />
 
-                    <InputField
-                        className="mb-3"
-                        label="Annual Income"
-                        type="number"
-                        onChange={(e) => setAnnualIncome(e.target.value)}
-                        value={annualIncome}
-                    />
-                    {borrowerAddress === accounts[0] && (
-                        <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
+                            <InputField
+                                className="mb-2"
+                                label="Annual Income"
+                                type="number"
+                                onChange={(e) => setAnnualIncome(e.target.value)}
+                                value={annualIncome}
+                                readOnly={borrowerAddress !== accounts[0]}
+                            />
+                            <InputField
+                                className="mb-3"
+                                label="Bio"
+                                as="textarea"
+                                onChange={(e) => setBio(e.target.value)}
+                                value={bio}
+                                readOnly={borrowerAddress !== accounts[0]}
+                            />
+                            {borrowerAddress === accounts[0] && (
+                                <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
+                            )}
+                        </ProfileCard>
                     )}
-                    {borrowerAddress !== accounts[0] && (
-                        <Button color="error" variant='contained' >Mark as Spam</Button>
-                    )}
-                </ProfileCard>
-            )}
-        </Layout>
+                </Layout>
+            </div>
         </>
     )
 }

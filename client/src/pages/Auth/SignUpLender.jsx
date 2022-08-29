@@ -19,17 +19,19 @@ const SignUpLender = () => {
     const [interestRate, setInterestRate] = useState(0);
     const [maximumPrincipal, setMaximumPrincipal] = useState(0);
 
+    const [loading, setLoading] = useState(false);
     const ref = useRef(null);
 
     const handleClick = async (e) => {
         e.preventDefault()
+        setLoading(true)
         try {
             const imgUrl = await uploadFile(imgDetails)
             const res = await contracts['P2pLending'].methods.signUpLender(
-                name, 
-                imgUrl, 
-                password, 
-                Number(interestRate), 
+                name,
+                imgUrl,
+                password,
+                Number(interestRate),
                 Number(maximumPrincipal)
             ).send({ from: accounts[0] });
             console.log({ res });
@@ -41,28 +43,19 @@ const SignUpLender = () => {
             }
             console.log({ userData });
             if (userData) {
+                const userObj = Object.assign({}, userData);
+                setLoading(false);
+                console.log({ userObj });
                 dispatch({
                     type: actions.setUser,
-                    data: JSON.parse(JSON.stringify(userData))
+                    data: JSON.parse(JSON.stringify(userObj))
                 });
             }
         } catch (error) {
             console.log({ error });
+            setLoading(false);
             alert(error.message || "something went wrong")
         }
-    }
-
-    const uploadFile =  async (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'p2pLending')
-        const response = await fetch(`https://api.cloudinary.com/v1_1/dtuxdyecw/image/upload`, {
-            method: 'POST',
-            body: formData,
-        });
-        const json = await response.json();
-        console.log({uploadRes : json});
-        return json?.secure_url;
     }
 
     const handleImageChange = (e) => {
@@ -83,97 +76,101 @@ const SignUpLender = () => {
     return (
 
         <div style={{ position: 'relative' }}>
+            {loading && <Loading backdrop />}
             <div style={{ paddingBottom: '4rem' }}>
-                <NavbarCommon />
-                <div className='container my-5'>
-                    <h1 style={{ padding: '0 38%' }}>Lender SignUp</h1>
-                </div>
-
-               <Stack>
-                    <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
-                    <Avatar
-                        sx={{ width: 250, height: 250, mx: 'auto' }}
-                        src={previewImg}
-                    />
-                    <div className='d-flex w-100 justify-content-center align-items-center mb-5'>
-
-                        <Button
-                            sx={{ mt: 2 }}
-                            variant="outlined"
-                            onClick={() => ref.current.click()}
-                        >
-                            Select Image&nbsp;
-                            <EditIcon />
-                        </Button>
+                <div className='w-100 h-100 d-flex flex-column'>
+                    <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }} className="shadow">
+                        <NavbarCommon />
                     </div>
-                    <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '50%', transform: 'translateX(50%)' }}>
-                    <Form onSubmit={handleClick}>
-                        <InputField
-                            label='Account'
-                            value={accounts[0]}
-                            readOnly
-                            className='mb-3'
-                        />
+                    <div className='container my-5'>
+                        <h1 style={{ padding: '0 38%' }}>Lender SignUp</h1>
+                    </div>
 
-                        <InputField
-                            label='Name'
-                            value={name}
-                            required
-                            className='mb-3'
-                            onChange={(e) => setname(e.target.value)}
+                    <Stack>
+                        <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
+                        <Avatar
+                            sx={{ width: 250, height: 250, mx: 'auto' }}
+                            src={previewImg}
                         />
+                        <div className='d-flex w-100 justify-content-center align-items-center mb-5'>
 
-                        <InputField
-                            label='Password (In Bytes32)'
-                            type='password'
-                            value={password}
-                            required
-                            className='mb-3'
-                            onChange={(e) => setpassword(e.target.value)}
-                        />
-
-                        <InputField
-                            label='Rate of Interest (% per annum)'
-                            type='number'
-                            value={interestRate}
-                            required
-                            className='mb-3'
-                            onChange={(e) => setInterestRate(e.target.value)}
-                        />
-
-                        <InputField
-                            label='Maximum Principal Amount (INR)'
-                            type='number'
-                            value={maximumPrincipal}
-                            required
-                            className='mb-3'
-                            onChange={(e) => setMaximumPrincipal(e.target.value)}
-                        />
-
-                        <Box sx={{ display: "grid", placeItems: 'center' }}>
                             <Button
-                                type="submit"
-                                sx={{ mt: 3, mb: 5 }}
-                                variant="contained"
-                                endIcon={<HowToRegRoundedIcon />}
-                            >Sign Up
+                                sx={{ mt: 2 }}
+                                variant="outlined"
+                                onClick={() => ref.current.click()}
+                            >
+                                Select Image&nbsp;
+                                <EditIcon />
                             </Button>
-                        </Box>
-                    </Form>
-                    </Card>
-                    {/* </Grid> */}
-                </Stack>
-                
+                        </div>
+                        <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '50%', transform: 'translateX(50%)' }}>
+                            <Form onSubmit={handleClick}>
+                                <InputField
+                                    label='Account'
+                                    value={accounts[0]}
+                                    readOnly
+                                    className='mb-3'
+                                />
 
-                <br /> <br />
-            </div>
-            <footer className="footer mt-5 mb-0 py-3 bg-warning" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
-                <div className="container">
-                    <span>&copy; 2022, All rights reserved.</span>
+                                <InputField
+                                    label='Name'
+                                    value={name}
+                                    required
+                                    className='mb-3'
+                                    onChange={(e) => setname(e.target.value)}
+                                />
+
+                                <InputField
+                                    label='Password (In Bytes32)'
+                                    type='password'
+                                    value={password}
+                                    required
+                                    className='mb-3'
+                                    onChange={(e) => setpassword(e.target.value)}
+                                />
+
+                                <InputField
+                                    label='Rate of Interest (% per annum)'
+                                    type='number'
+                                    value={interestRate}
+                                    required
+                                    className='mb-3'
+                                    onChange={(e) => setInterestRate(e.target.value)}
+                                />
+
+                                <InputField
+                                    label='Maximum Principal Amount (INR)'
+                                    type='number'
+                                    value={maximumPrincipal}
+                                    required
+                                    className='mb-3'
+                                    onChange={(e) => setMaximumPrincipal(e.target.value)}
+                                />
+
+                                <Box sx={{ display: "grid", placeItems: 'center' }}>
+                                    <Button
+                                        type="submit"
+                                        sx={{ mt: 3, mb: 5 }}
+                                        variant="contained"
+                                        endIcon={<HowToRegRoundedIcon />}
+                                    >Sign Up
+                                    </Button>
+                                </Box>
+                            </Form>
+                        </Card>
+                        {/* </Grid> */}
+                    </Stack>
+
+
+                    <br /> <br />
                 </div>
-            </footer>
+                <footer className="footer mt-5 mb-0 py-3 bg-warning" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
+                    <div className="container">
+                        <span>&copy; 2022, All rights reserved.</span>
+                    </div>
+                </footer>
+            </div>
         </div>
-
     )
 }
 

@@ -12,23 +12,27 @@ import NavbarCommon from '../../components/NavbarCommon';
 export default function SignUpBorrower({ image }) {
 
   const { state: { contracts, accounts }, dispatch } = useEth();
+
   const [name, setname] = useState('');
   const [password, setpassword] = useState('');
   const [annualIncome, setAnnualIncome] = useState(0);
   const [previewImg, setPreviewImg] = useState('');
   const [imgDetails, setImgDetails] = useState();
+
+  const [loading, setLoading] = useState(false);
   const ref = useRef(null);
 
   const handleClick = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const imgUrl = uploadFile(imgDetails)
+      const imgUrl = await uploadFile(imgDetails)
       const res = await contracts['P2pLending'].methods.signUpBorrower(
-            name,
-            imgUrl,
-            password,
-            Number(annualIncome)
-        ).send({ from: accounts[0] });
+        name,
+        imgUrl,
+        password,
+        Number(annualIncome)
+      ).send({ from: accounts[0] });
       console.log({ res });
       let userData;
       if (res) {
@@ -37,13 +41,17 @@ export default function SignUpBorrower({ image }) {
         throw new Error('Something went wrong');
       }
       if (userData) {
+        const userObj = Object.assign({}, userData);
+        setLoading(false);
+        console.log({ userObj });
         dispatch({
           type: actions.setUser,
-          data: JSON.parse(JSON.stringify(userData))
+          data: JSON.parse(JSON.stringify(userObj))
         });
       }
     } catch (error) {
       console.log({ error });
+      setLoading(false);
       alert(error.message || "something went wrong")
     }
   }
@@ -66,96 +74,96 @@ export default function SignUpBorrower({ image }) {
   return (
     <>
       <div style={{ position: 'relative' }}>
+        {loading && <Loading backdrop />}
         <div style={{ paddingBottom: '4rem' }}>
-         <NavbarCommon />
-          <div className='container my-5'>
-            <h1 style={{ padding: '0 35%', }}>Borrower SignUp</h1>
-          </div>
-
-
-          <Stack>
-            <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
-            <Avatar
-              sx={{ width: 250, height: 250, mx: 'auto' }}
-              src={previewImg || image}
-            />
-
-            <div className='d-flex w-100 justify-content-center align-items-center'>
-              <Button
-                sx={{ mt: 2, mb: 5 }}
-                variant="outlined"
-                fullWidth={false}
-                onClick={() => ref.current.click()}
-              >
-                Select Image&nbsp;
-                <EditIcon />
-              </Button>
+          <div className='w-100 h-100 d-flex flex-column'>
+            <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }} className="shadow">
+                <NavbarCommon />
+            </div>
+           
+            <div className='container my-5'>
+              <h1 style={{ padding: '0 35%', }}>Borrower SignUp</h1>
             </div>
 
-            <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
-              <Form onSubmit={handleClick}>
-                <InputField
-                  label='Account'
-                  value={accounts[0]}
-                  readOnly
-                  className='mb-3'
-                />
 
-                <InputField
-                  label='Name'
-                  value={name}
-                  required
-                  className='mb-3'
-                  onChange={(e) => setname(e.target.value)}
-                />
+            <Stack>
+              <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
+              <Avatar
+                sx={{ width: 250, height: 250, mx: 'auto' }}
+                src={previewImg || image}
+              />
 
-                <InputField
-                  label='Password (In Bytes32)'
-                  type='password'
-                  value={password}
-                  required
-                  className='mb-3'
-                  onChange={(e) => setpassword(e.target.value)}
-                />
+              <div className='d-flex w-100 justify-content-center align-items-center'>
+                <Button
+                  sx={{ mt: 2, mb: 5 }}
+                  variant="outlined"
+                  fullWidth={false}
+                  onClick={() => ref.current.click()}
+                >
+                  Select Image&nbsp;
+                  <EditIcon />
+                </Button>
+              </div>
 
-                <InputField
-                  label='Annual Income (INR)'
-                  type='select'
-                  value={annualIncome}
-                  required
-                  className='mb-3'
-                  onChange={(e) => setAnnualIncome(e.target.value)}
-                />
+              <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
+                <Form onSubmit={handleClick}>
+                  <InputField
+                    label='Account'
+                    value={accounts[0]}
+                    readOnly
+                    className='mb-3'
+                  />
 
-                <Box sx={{ display: "grid", placeItems: 'center' }}>
-                  <Button
-                    type="submit"
-                    sx={{ mt: 3, mb: 5 }}
-                    variant="contained"
-                    endIcon={<HowToRegRoundedIcon />}
-                  >Sign Up
-                  </Button>
-                </Box>
-              </Form>
-            </Card>
-          </Stack>
+                  <InputField
+                    label='Name'
+                    value={name}
+                    required
+                    className='mb-3'
+                    onChange={(e) => setname(e.target.value)}
+                  />
 
+                  <InputField
+                    label='Password (In Bytes32)'
+                    type='password'
+                    value={password}
+                    required
+                    className='mb-3'
+                    onChange={(e) => setpassword(e.target.value)}
+                  />
 
+                  <InputField
+                    label='Annual Income (INR)'
+                    type='select'
+                    value={annualIncome}
+                    required
+                    className='mb-3'
+                    onChange={(e) => setAnnualIncome(e.target.value)}
+                  />
 
+                  <Box sx={{ display: "grid", placeItems: 'center' }}>
+                    <Button
+                      type="submit"
+                      sx={{ mt: 3, mb: 5 }}
+                      variant="contained"
+                      endIcon={<HowToRegRoundedIcon />}
+                    >Sign Up
+                    </Button>
+                  </Box>
+                </Form>
+              </Card>
+            </Stack>
 
-
-
-
-          <br /> <br />
-        </div>
-        <footer className="footer mt-5 mb-0 py-3 bg-warning" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
-          <div className="container">
-            <span>&copy; 2022, All rights reserved.</span>
+            <br /> <br />
           </div>
-        </footer>
+          <footer className="footer mt-5 mb-0 py-3 bg-warning" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
+            <div className="container">
+              <span>&copy; 2022, All rights reserved.</span>
+            </div>
+          </footer>
+        </div>
       </div>
-
     </>
+
   )
 
 

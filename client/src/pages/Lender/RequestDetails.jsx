@@ -15,26 +15,35 @@ const RequestDetails = () => {
     const { requestId } = useParams();
     const navigate = useNavigate();
 
-    if(!requestId){
+    if (!requestId) {
         navigate('/lender');
     }
 
     const [reqDetails, setReqDetails] = useState({});
-    const { state: { contracts, accounts } } = useEth();
+    const { state: { contracts, accounts, web3 } } = useEth();
     const [reload, setReload] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [backdropLoading, setBackdropLoading] = useState(false);
+    const [isPaymentDelayed, setIsPaymentDelayed] = useState(false);
+
 
     useEffect(() => {
         // fetch request details
         (async () => {
             try {
                 const details = await contracts.P2pLending.methods.requests(requestId).call();
-                if(details){
+                if (details) {
                     setReqDetails(details);
-                }else{
+                    const delayRes = await contracts.P2pLending.methods.isRequestDelayed(requestId).call();
+                    console.log({ delayRes });
+                    setIsPaymentDelayed(delayRes);
+                    setLoading(false);
+                } else {
                     throw new Error('Request not found')
                 }
 
             } catch (error) {
+                setLoading(false);
                 alert(error.message || "Something went wrong");
             }
         })()
@@ -43,28 +52,37 @@ const RequestDetails = () => {
 
     const acceptRequest = async () => {
         try {
-            const res = await contracts.P2pLending.methods.acceptRequest(requestId).send({ from: accounts[0] });
-            if(res?.status){
+            setBackdropLoading(true);
+            const res = await contracts.P2pLending.methods.acceptRequest(requestId).send({
+                from: accounts[0],
+                value: web3.utils.toWei(reqDetails.amount, 'ether'),
+            });
+            if (res?.status) {
+                setBackdropLoading(false);
                 alert('Request accepted successfully')
                 setReload(prev => !prev);
-            }else{
+            } else {
                 throw new Error('Request acceptance failed')
             }
         } catch (error) {
+            setBackdropLoading(false);
             alert(error.message || "Something went wrong");
         }
     }
 
     const rejectRequest = async () => {
         try {
+            setBackdropLoading(true);
             const res = await contracts.P2pLending.methods.rejectRequest(requestId).send({ from: accounts[0] });
             if (res.status) {
+                setBackdropLoading(false);
                 alert("Request rejected successfully");
                 setReload(prev => !prev);
             } else {
                 throw new Error('Request rejection failed')
             }
         } catch (error) {
+            setBackdropLoading(false);
             alert(error.message || "Something went wrong");
         }
     }
@@ -72,96 +90,109 @@ const RequestDetails = () => {
 
     const markAsDelayed = async () => {
         try {
+            setBackdropLoading(true);
             const res = await contracts.P2pLending.methods.markAsDelayed(requestId).send({ from: accounts[0] });
             if (res.status) {
+                setBackdropLoading(false);
                 alert("Request marked as delayed successfully");
                 setReload(prev => !prev);
             } else {
                 throw new Error('Request marking as delayed failed')
             }
         } catch (error) {
+            setBackdropLoading(false);
             alert(error.message || "Something went wrong");
         }
     }
 
     const markAsFraud = async () => {
         try {
+            setBackdropLoading(true);
             const res = await contracts.P2pLending.methods.markAsFraud(reqDetails?.from, requestId).send({ from: accounts[0] });
             if (res.status) {
+                setBackdropLoading(false);
                 alert("Profile marked as fraud successfully");
                 setReload(prev => !prev);
             } else {
                 throw new Error('Profile marking as fraud failed')
             }
         } catch (error) {
+            setBackdropLoading(false);
             alert(error.message || "Something went wrong");
         }
     }
 
     return (
         <>
-        <NavbarCommon role="LenderLayout"/>
-        <Layout>
-            <RequestCommonDetails details={reqDetails}>
-                <Divider>
-                    <Chip label="Take an action" />
-                </Divider>
-                
-                {/* PENDING */}
-                {reqDetails?.status === "0" && (
-                    <div className="d-flex justify-content-evenly align-items-center mt-5">
-                        <Button
-                            variant="contained"
-                            size="large"
-                            color="success"
-                            onClick={acceptRequest}
-                            endIcon={<CheckCircleIcon />}
-                        >
-                            Accept
-                        </Button>
-                        <Button
-                            variant="contained"
-                            size="large"
-                            color="error"
-                            onClick={rejectRequest}
-                            endIcon={<CancelIcon />}
-                        >
-                            Reject
-                        </Button>
-                    </div>
-                )}
+            <div className='w-100 h-100 d-flex flex-column'>
+                <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }} className="shadow">
+                    <NavbarCommon role="LenderLayout" />
+                </div>
+                <Layout>
+                    {loading ? <Loading /> : (
+                        <RequestCommonDetails details={reqDetails}>
+                            {backdropLoading && <Loading backdrop />}
+                            <Divider>
+                                <Chip label="Take an action" />
+                            </Divider>
 
-                {/* ACCEPTED */}
-                {reqDetails?.status === "1" && (
-                    <div className="d-flex justify-content-evenly align-items-center mt-5">
-                        <Button
-                            variant="contained"
-                            size="large"
-                            color="warning"
-                            onClick={markAsDelayed}
-                            endIcon={<WarningIcon />}
-                        >
-                            Mark as Delayed
-                        </Button>
-                    </div>
-                )}
-                {/* DELAYED */}
-                {reqDetails?.status === "3" && (
-                    <div className="d-flex justify-content-evenly align-items-center mt-5">
-                        <Button
-                            variant="contained"
-                            size="large"
-                            color="error"
-                            onClick={markAsFraud}
-                            endIcon={<ReportIcon />}
-                        >
-                            Mark as Fraud
-                        </Button>
-                    </div>
-                )}
+                            {/* PENDING */}
+                            {reqDetails?.status === "0" && (
+                                <div className="d-flex justify-content-evenly align-items-center mt-5">
+                                    <Button
+                                        variant="contained"
+                                        size="large"
+                                        color="success"
+                                        onClick={acceptRequest}
+                                        endIcon={<CheckCircleIcon />}
+                                    >
+                                        Accept
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        size="large"
+                                        color="error"
+                                        onClick={rejectRequest}
+                                        endIcon={<CancelIcon />}
+                                    >
+                                        Reject
+                                    </Button>
+                                </div>
+                            )}
 
-            </RequestCommonDetails>
-        </Layout>
+                            {/* ACCEPTED */}
+                            {(reqDetails?.status === "1" && isPaymentDelayed) && (
+                                <div className="d-flex justify-content-evenly align-items-center mt-5">
+                                    <Button
+                                        variant="contained"
+                                        size="large"
+                                        color="warning"
+                                        onClick={markAsDelayed}
+                                        endIcon={<WarningIcon />}
+                                    >
+                                        Mark as Delayed
+                                    </Button>
+                                </div>
+                            )}
+                            {/* DELAYED */}
+                            {(reqDetails?.status === "3" && isPaymentDelayed) && (
+                                <div className="d-flex justify-content-evenly align-items-center mt-5">
+                                    <Button
+                                        variant="contained"
+                                        size="large"
+                                        color="error"
+                                        onClick={markAsFraud}
+                                        endIcon={<ReportIcon />}
+                                    >
+                                        Mark as Fraud
+                                    </Button>
+                                </div>
+                            )}
+
+                        </RequestCommonDetails>
+                    )}
+                </Layout>
+            </div>
         </>
     )
 }

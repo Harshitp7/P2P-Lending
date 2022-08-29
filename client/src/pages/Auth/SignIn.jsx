@@ -5,12 +5,16 @@ import { actions, useEth } from '../../contexts';
 import InputField from '../../components/InputField';
 import {Form, Card} from 'react-bootstrap';
 import NavbarCommon from '../../components/NavbarCommon';
+import Loading from '../../components/Loading';
 
 const SignIn = () => {
 
     const { state: { contracts, accounts }, dispatch } = useEth();
+    const [loading, setLoading] = useState(false);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const role = await contracts['P2pLending'].methods.getRole().call({ from: accounts[0] });
             console.log({ role });
@@ -23,15 +27,18 @@ const SignIn = () => {
             } else {
                 throw new Error('User not found');
             }
-
-            console.log({ userData: JSON.parse(JSON.stringify(userData)) });
+            const userObj = Object.assign({}, userData);
+            console.log({ userObj });
+            setLoading(false);
+            console.log({ userData: JSON.parse(JSON.stringify(userObj)) });
             if (userData) {
                 dispatch({
                     type: actions.setUser,
-                    data: JSON.parse(JSON.stringify(userData))
+                    data: JSON.parse(JSON.stringify(userObj))
                 });
             }
         } catch (error) {
+            setLoading(false);
             alert(error.message || "something went wrong")
         }
     }
@@ -43,6 +50,7 @@ const SignIn = () => {
 
         <>
             <div style={{ position: 'relative' }}>
+                {loading && <Loading backdrop />}
                 <div style={{ paddingBottom: '4rem' }}>
                    <NavbarCommon />
                     <div className='container mt-5'>

@@ -8,6 +8,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { useLocation, useNavigate } from 'react-router'
 import {uploadFile} from '../../utils/cloudinaryUtils'
 import NavbarCommon from '../../components/NavbarCommon'
+
 const CreateRequest = () => {
 
     const location = useLocation()
@@ -23,12 +24,15 @@ const CreateRequest = () => {
     const [purpose, setPurpose] = useState('');
     const [duration, setDuration] = useState('');
     const [bankStatement, setBankStatement] = useState('');
+    const [loading, setLoading] = useState(false);
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const bankStatementUrl = await uploadFile(bankStatement);
+            console.log({bankStatementUrl})
             const res = await contracts.P2pLending.methods.createRequest(
                 accounts[0],
                 state?.lenderAddress,
@@ -39,12 +43,15 @@ const CreateRequest = () => {
             ).send({ from: accounts[0] });
 
             if(res?.status){
+                setLoading(false);
                 alert('Request created successfully')
                 navigate('/borrower')
             }else{
                 throw new Error('Request creation failed')
             }
         } catch (error) {
+            console.log({ error });
+            setLoading(false);
             alert(error.message || "Something went wrong");
         }
     }
@@ -52,8 +59,12 @@ const CreateRequest = () => {
     console.log({ purpose, bankStatement, location })
     return (
         <>
-        <NavbarCommon role="BorrowerLayout"/>
+        <div className='w-100 h-100 d-flex flex-column'>
+            <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }} className="shadow">
+                <NavbarCommon role = 'BorrowerLayout' />
+            </div>
         <Layout>
+            {loading && <Loading backdrop />}
             <Typography align='center' sx={{ mb: 4 }}>Create Request</Typography>
             <Card body={true} className="shadow px-2" style={{ borderRadius: '10px' }}>
                 <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center' }}>
@@ -82,7 +93,7 @@ const CreateRequest = () => {
                         <Col lg={6}>
                             <InputField
                                 label='sending request to Address'
-                                value={state?.lenderAddress || accounts[0]}
+                                value={state?.lenderAddress}
                                 readOnly
                                 className='mb-3'
                             />
@@ -102,7 +113,7 @@ const CreateRequest = () => {
                         </Col>
                         <Col lg={6}>
                             <InputField
-                                label='Duration'
+                                label='Duration in months'
                                 type='number'
                                 className='mb-3'
                                 value={duration}
@@ -144,6 +155,7 @@ const CreateRequest = () => {
                 </form>
             </Card>
         </Layout>
+        </div>
         </>
     )
 }

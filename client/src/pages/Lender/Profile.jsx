@@ -1,6 +1,5 @@
 import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react'
-import { Form } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router';
 import Layout from '../../components/Layout'
 import ProfileCard from '../../components/ProfileCard';
@@ -21,8 +20,11 @@ const Profile = () => {
     const [interestRate, setInterestRate] = useState('');
     const [maxPrincipal, setMaxPrincipal] = useState('');
     const [imgDetails, setImgDetails] = useState();
+    const [bio, setBio] = useState('');
 
-    console.log({lenderAddress})
+    const [backdropLoading, setBackdropLoading] = useState(false);
+
+    console.log({ lenderAddress })
     useEffect(() => {
         const getData = async () => {
             try {
@@ -37,6 +39,7 @@ const Profile = () => {
                 setName(data?.name);
                 setInterestRate(data?.interestRate);
                 setMaxPrincipal(data?.maxPrincipal);
+                setBio(data?.bio);
 
                 setLoading(false);
             } catch (error) {
@@ -48,6 +51,7 @@ const Profile = () => {
 
 
     const updateProfile = async () => {
+        setBackdropLoading(true);
         try {
             console.log({ imgDetails })
             let url = lenderData?.image;
@@ -57,10 +61,11 @@ const Profile = () => {
             }
 
             const res = await contracts.P2pLending.methods.updateLender(
-                name || lenderData?.name,
+                name,
                 url,
-                Number(interestRate || lenderData?.interestRate),
-                Number(maxPrincipal || lenderData?.maxPrincipal),
+                Number(interestRate),
+                Number(maxPrincipal),
+                bio
             ).send({ from: accounts[0] })
 
             console.log({ updateRes: res })
@@ -68,6 +73,7 @@ const Profile = () => {
                 const update = await contracts.P2pLending.methods.getLender(accounts[0]).call()
                 // cinvert array into object
                 const updateObj = Object.assign({}, update);
+                setBackdropLoading(false);
                 dispatch({
                     type: actions.setUser,
                     data: JSON.parse(JSON.stringify(updateObj))
@@ -75,55 +81,70 @@ const Profile = () => {
             }
             console.log({ url })
         } catch (error) {
+            setBackdropLoading(false);
             alert(error.message || "Something went wrong");
         }
     }
 
 
     return (
-        <>
-        <NavbarCommon role="LenderLayout"/>
-        <Layout>
-            {loading ? <div>Loading...</div> : (
-                <ProfileCard setImgDetails={setImgDetails} walletAddress={lenderAddress} image={lenderData?.image}>
+        <div className='w-100 h-100 d-flex flex-column'>
+            <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }} className="shadow">
+                <NavbarCommon role="LenderLayout" />
+            </div>
 
+            <Layout>
+                {loading ? <Loading /> : (
+                    <ProfileCard setImgDetails={setImgDetails} walletAddress={lenderAddress} image={lenderData?.image}>
+                        {backdropLoading && <Loading backdrop />}
                         <InputField
-                            className="mb-3"
+                            className="mb-2"
                             label="Name"
                             onChange={(e) => setName(e.target.value)}
                             value={name}
+                            readOnly={lenderAddress !== accounts[0]}
                         />
-                        
+
                         <InputField
-                            className="mb-3"
+                            className="mb-2"
                             type="number"
                             label="Interest Rate"
                             onChange={(e) => setInterestRate(e.target.value)}
                             value={interestRate}
+                            readOnly={lenderAddress !== accounts[0]}
                         />
 
                         <InputField
-                            className="mb-3"
+                            className="mb-2"
                             type="number"
                             label="Max Principal"
                             onChange={(e) => setMaxPrincipal(e.target.value)}
                             value={maxPrincipal}
+                            readOnly={lenderAddress !== accounts[0]}
+                        />
+                        <InputField
+                            className="mb-3"
+                            as="textarea"
+                            label="Bio"
+                            onChange={(e) => setBio(e.target.value)}
+                            value={bio}
+                            readOnly={lenderAddress !== accounts[0]}
                         />
 
-                    {lenderAddress === accounts[0] && (
-                        <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
-                    )}
-                    {lenderAddress !== accounts[0] && (
-                        <Button 
-                            variant="contained"
-                            onClick={() => navigate(`/borrower/lenders/create-request`, { state: { lenderAddress, lenderImage : lenderData?.image } })}
-                        >Request Loan
-                        </Button>
-                    )}
-                </ProfileCard>
-            )}
-        </Layout>
-        </>
+                        {lenderAddress === accounts[0] && (
+                            <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
+                        )}
+                        {lenderAddress !== accounts[0] && (
+                            <Button
+                                variant="contained"
+                                onClick={() => navigate(`/borrower/lenders/create-request`, { state: { lenderAddress, lenderImage: lenderData?.image } })}
+                            >Request Loan
+                            </Button>
+                        )}
+                    </ProfileCard>
+                )}
+            </Layout>
+        </div>
     )
 }
 
