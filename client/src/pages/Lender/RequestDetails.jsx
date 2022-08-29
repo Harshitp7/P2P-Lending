@@ -9,6 +9,7 @@ import ReportIcon from '@mui/icons-material/Report';
 import { useEffect } from 'react';
 import { useEth } from '../../contexts';
 import { useNavigate, useParams } from 'react-router';
+import NavbarCommon from '../../components/NavbarCommon';
 
 const RequestDetails = () => {
     const { requestId } = useParams();
@@ -98,6 +99,8 @@ const RequestDetails = () => {
     }
 
     return (
+        <>
+        <NavbarCommon role="LenderLayout"/>
         <Layout>
             <RequestCommonDetails details={reqDetails}>
                 <Divider>
@@ -159,6 +162,7 @@ const RequestDetails = () => {
 
             </RequestCommonDetails>
         </Layout>
+        </>
     )
 }
 

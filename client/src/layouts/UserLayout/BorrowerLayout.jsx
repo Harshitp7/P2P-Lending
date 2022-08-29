@@ -7,12 +7,13 @@ import Profile from '../../pages/Borrower/Profile'
 import RequestDetails from '../../pages/Borrower/RequestDetails'
 import LenderProfile from '../../pages/Lender/Profile'
 import NavbarCommon from '../../components/NavbarCommon'
-
+import HomeMain from '../../pages/Auth/Home'
 const BorrowerLayout = () => {
   return (
     <>
-    <NavbarCommon role="BorrowerLayout"/>
+    
     <Routes>
+      <Route path="/" element={<HomeMain />} />
       <Route path="/borrower" element={<Home />} />
       <Route path="/borrower/profile/:borrowerAddress" element={<Profile />} />
       <Route path="/borrower/lenders" element={<Lenders />} />

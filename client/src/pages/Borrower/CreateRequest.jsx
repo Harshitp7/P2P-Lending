@@ -7,7 +7,7 @@ import { useEth } from '../../contexts'
 import SendIcon from '@mui/icons-material/Send';
 import { useLocation, useNavigate } from 'react-router'
 import {uploadFile} from '../../utils/cloudinaryUtils'
-
+import NavbarCommon from '../../components/NavbarCommon'
 const CreateRequest = () => {
 
     const location = useLocation()
@@ -51,6 +51,8 @@ const CreateRequest = () => {
 
     console.log({ purpose, bankStatement, location })
     return (
+        <>
+        <NavbarCommon role="BorrowerLayout"/>
         <Layout>
             <Typography align='center' sx={{ mb: 4 }}>Create Request</Typography>
             <Card body={true} className="shadow px-2" style={{ borderRadius: '10px' }}>
@@ -142,6 +144,7 @@ const CreateRequest = () => {
                 </form>
             </Card>
         </Layout>
+        </>
     )
 }
 

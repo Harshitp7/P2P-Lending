@@ -8,6 +8,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 import { actions, useEth } from '../../contexts';
 import { deleteFile, uploadFile } from '../../utils/cloudinaryUtils';
 import InputField from '../../components/InputField';
+import NavbarCommon from '../../components/NavbarCommon';
 
 const Profile = () => {
     const { state: { accounts, user, contracts }, dispatch } = useEth();
@@ -80,6 +81,8 @@ const Profile = () => {
 
 
     return (
+        <>
+        <NavbarCommon role="LenderLayout"/>
         <Layout>
             {loading ? <div>Loading...</div> : (
                 <ProfileCard setImgDetails={setImgDetails} walletAddress={lenderAddress} image={lenderData?.image}>
@@ -120,6 +123,7 @@ const Profile = () => {
                 </ProfileCard>
             )}
         </Layout>
+        </>
     )
 }
 

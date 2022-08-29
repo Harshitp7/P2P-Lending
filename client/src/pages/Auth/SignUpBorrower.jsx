@@ -1,4 +1,3 @@
-
 import { React, useState } from 'react';
 import { useRef } from 'react';
 import { actions, useEth } from '../../contexts';
@@ -8,6 +7,7 @@ import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
 import { uploadFile } from '../../utils/cloudinaryUtils';
+import NavbarCommon from '../../components/NavbarCommon';
 
 export default function SignUpBorrower({ image }) {
 
@@ -63,13 +63,11 @@ export default function SignUpBorrower({ image }) {
   }
 
 
-
-
   return (
     <>
       <div style={{ position: 'relative' }}>
         <div style={{ paddingBottom: '4rem' }}>
-
+         <NavbarCommon />
           <div className='container my-5'>
             <h1 style={{ padding: '0 35%', }}>Borrower SignUp</h1>
           </div>

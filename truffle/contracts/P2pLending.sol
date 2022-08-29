@@ -9,6 +9,7 @@ contract P2pLending {
         string image;
         address payable wallet;
         bytes32 password;
+        uint spamVotes;
         uint annualIncome;
         uint [] madeRequests;
     }
@@ -80,6 +81,7 @@ contract P2pLending {
             wallet: payable(msg.sender),
             password: keccak256(abi.encodePacked(_password)),
             annualIncome: _annualIncome,
+            spamVotes: 0,
             madeRequests: new uint[](0)
         });
         users[msg.sender] = "Borrower";
@@ -149,7 +151,7 @@ contract P2pLending {
 
     function createRequest (address _from, address _to, uint amount, uint _duration, string memory _purpose, string memory _bankStatement) public onlyBorrower
     {
-        Request memory newRequest = Request({
+        requests.push(Request({
             id: requests.length,
             from : _from,
             to : _to,
@@ -159,9 +161,7 @@ contract P2pLending {
             purpose : _purpose,
             createdAt : block.timestamp,
             bankStatement : _bankStatement
-        });
-        requests.push(newRequest);
-        borrowRequests[_from][_to] = newRequest;
+        }));
         uint len = requests.length - 1;
         borrowers[_from].madeRequests.push(len);
         lenders[lenderIndex[_to]].gotRequests.push(len);
@@ -174,6 +174,17 @@ contract P2pLending {
         for(uint i = 0; i <len; i++ )
         {
             myReqs[i] = requests[borrowers[msg.sender].madeRequests[i]];
+        }
+        return myReqs;
+    }
+
+    function getLenderRequests () public onlyLender view returns(Request [] memory) 
+    {
+        uint len = lenders[lenderIndex[msg.sender]].gotRequests.length;
+        Request [] memory myReqs = new Request [](len);
+        for(uint i = 0; i <len; i++ )
+        {
+            myReqs[i] = requests[lenders[lenderIndex[msg.sender]].gotRequests[i]];
         }
         return myReqs;
     }
@@ -194,21 +205,21 @@ contract P2pLending {
        lenders[lenderIndex[msg.sender]].maxPrincipal = _maxPrincipal;
     }
     
-    function calculatePaybackCost (address _from, address _to) public view
+    function calculatePaybackCost (uint requestId) public view
     returns (uint originalAmount,uint totalAmount) 
     {
-        uint principalAmount = borrowRequests[_from][_to].amount;
-        uint rate = lenders[lenderIndex[_to]].interestRate;
-        uint time = borrowRequests[_from][_to].duration;
-        uint _createdAt = borrowRequests[_from][_to].createdAt;
+        uint principalAmount = requests[requestId].amount;
+        uint rate = lenders[lenderIndex[requests[requestId].to]].interestRate;
+        uint time = requests[requestId].durationInMonths;
+        uint _createdAt = requests[requestId].createdAt;
 
         uint interest = (principalAmount*rate*time)/1200;
         
         originalAmount = (principalAmount + interest);
         uint unitAmount = originalAmount/time;
-        if(block.timestamp > time + _createdAt)
+        if(block.timestamp > (time*30*24*60*60) + _createdAt)
         {
-            uint delayTime = block.timestamp - (time + _createdAt);
+            uint delayTime = block.timestamp - ((time*30*24*60*60) + _createdAt);
             uint delayAmount = ((unitAmount*(delayTime))*5)/4; 
             totalAmount = originalAmount + delayAmount;
 
@@ -220,11 +231,18 @@ contract P2pLending {
             return (originalAmount, totalAmount);
         }
     }
+
    
-    //  function payBack (address payable _to) public payable
-    
+    //  function payBack (uint requestId) public payable
+    //  {
+    //     Request memory request = requests[requestId];
     //     (bool sent, bytes memory data) = _to.call{value: msg.value}("");
-    //      require(sent, "Failed to send Ether");
+    //     require(sent, "Failed to send Ether");
     //  }
+    
+       
+    
 }
+
+
 

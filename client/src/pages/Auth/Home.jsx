@@ -7,15 +7,15 @@ import bankImg from "../../Images/bankImg.jpg";
 import howItWorks from "../../Images/howItWorks.png";
 import { Link } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
+import NavbarCommon from '../../components/NavbarCommon';
 
 
 export default function HomePage() {
     
-   
     return (
         <div style={{ position: 'relative' }}>
             <div style={{ paddingBottom: '5rem' }}>
-               
+              <NavbarCommon />
                 <Image
                     src={LandingImg}
                     style={{ width: '100%', height: '80vh' }}

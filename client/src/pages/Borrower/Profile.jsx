@@ -8,6 +8,7 @@ import { useParams } from 'react-router';
 import { uploadFile, deleteFile } from '../../utils/cloudinaryUtils';
 import UpdateIcon from '@mui/icons-material/Update';
 import InputField from '../../components/InputField';
+import NavbarCommon from '../../components/NavbarCommon';
 
 const Profile = () => {
     const { state: { accounts, user, contracts }, dispatch } = useEth();
@@ -73,6 +74,8 @@ const Profile = () => {
     }
 
     return (
+        <>
+        <NavbarCommon role="BorrowerLayout"/>
         <Layout>
             {loading ? <div>Loading...</div> : (
                 <ProfileCard
@@ -104,6 +107,7 @@ const Profile = () => {
                 </ProfileCard>
             )}
         </Layout>
+        </>
     )
 }
 

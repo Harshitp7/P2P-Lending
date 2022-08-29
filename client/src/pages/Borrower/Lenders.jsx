@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import LenderCard from '../../components/Cards/LenderCard'
 import Layout from '../../components/Layout'
 import { useEth } from '../../contexts'
-
+import NavbarCommon from '../../components/NavbarCommon'
 const Lenders = () => {
 
     const [lenders, setLenders] = useState([]);
@@ -26,6 +26,8 @@ const Lenders = () => {
     }, [])
 
     return (
+        <>
+        <NavbarCommon role="BorrowerLayout"/>
         <Layout>
             <Typography align='center' sx={{ mb: 4 }}>Lenders</Typography>
             <Grid container spacing={3}>
@@ -36,6 +38,7 @@ const Lenders = () => {
                 ))}
             </Grid>
         </Layout>
+        </>
     )
 }
 

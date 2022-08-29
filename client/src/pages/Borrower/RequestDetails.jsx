@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useEth } from '../../contexts'
 import Loading from '../../components/Loading'
-
+import NavbarCommon from '../../components/NavbarCommon'
 
 const RequestDetails = () => {
 
@@ -46,6 +46,8 @@ const RequestDetails = () => {
   }
 
   return (
+    <>
+    <NavbarCommon role="BorrowerLayout"/>
     <Layout>
       {loading ? <Loading /> : (
         <RequestCommonDetails details={reqDetails}>
@@ -86,6 +88,7 @@ const RequestDetails = () => {
         </RequestCommonDetails>
       )}
     </Layout>
+    </>
   )
 }
 

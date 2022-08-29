@@ -4,6 +4,8 @@ import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import { actions, useEth } from '../../contexts';
 import InputField from '../../components/InputField';
 import {Form, Card} from 'react-bootstrap';
+import NavbarCommon from '../../components/NavbarCommon';
+
 const SignIn = () => {
 
     const { state: { contracts, accounts }, dispatch } = useEth();
@@ -42,7 +44,7 @@ const SignIn = () => {
         <>
             <div style={{ position: 'relative' }}>
                 <div style={{ paddingBottom: '4rem' }}>
-                   
+                   <NavbarCommon />
                     <div className='container mt-5'>
                         <h1 style={{ padding: '0 45%' }}>SignIn</h1>
                     </div>
