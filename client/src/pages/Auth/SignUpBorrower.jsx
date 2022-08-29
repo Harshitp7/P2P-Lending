@@ -3,7 +3,7 @@ import { React, useState } from 'react';
 import { useRef } from 'react';
 import { actions, useEth } from '../../contexts';
 import InputField from '../../components/InputField';
-import { Avatar, Grid, Box, Button, Stack } from '@mui/material';
+import { Avatar, Box, Button, Stack } from '@mui/material';
 import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';

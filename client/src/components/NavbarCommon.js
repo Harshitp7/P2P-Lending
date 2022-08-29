@@ -1,9 +1,10 @@
-import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
-
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useEth, actions } from '../contexts';
 
 function NavbarCommon(props) {
+  const { state: {  accounts }, dispatch } = useEth();
   let { role } = props;
   
   const BorrowerLayout = [
@@ -15,7 +16,7 @@ function NavbarCommon(props) {
     {
       id: 1,
       name: 'Profile',
-      ref: "/borrower/profile/:borrowerAddress"
+      ref:  `/borrower/profile/${accounts[0]}`
     }
   ];
 
@@ -23,7 +24,7 @@ function NavbarCommon(props) {
     {
       id: 0,
       name: 'Profile',
-      ref: '/lender/profile/:lenderAddress'
+      ref: `/lender/profile/${accounts[0]}`
     }
   ];
 
@@ -52,6 +53,7 @@ function NavbarCommon(props) {
               <Link className="nav-link active" aria-current="page" to="/Home">Home</Link>
             </li>
             {renderLinks}
+            {navArray.length !== 0 && <li onClick={() => dispatch({type : actions.logout})} ><Nav.Link><LogoutIcon /></Nav.Link></li>}
             {(navArray.length===0) && (<><li className="nav-item">
               <Link className="nav-link" to="/Signin">Signin</Link>
             </li>

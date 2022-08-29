@@ -8,7 +8,7 @@ import { useEth } from '../../contexts'
 const Lenders = () => {
 
     const [lenders, setLenders] = useState([]);
-    const { state: { contracts, accounts } } = useEth();
+    const { state: { contracts } } = useEth();
 
     useEffect(() => {
         (async () => {
@@ -23,7 +23,7 @@ const Lenders = () => {
                 alert(error.message || "Something went wrong");
             }
         })();
-    }, [])
+    }, [contracts])
 
     return (
         <Layout>

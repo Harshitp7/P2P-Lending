@@ -11,7 +11,8 @@ const initialState = {
   accounts: null,
   networkID: null,
   contracts : {},
-  user : null
+  user : null,
+  loggedIn : false
 };
 
 const reducer = (state, action) => {
@@ -25,11 +26,11 @@ const reducer = (state, action) => {
 
     case actions.setUser:
       localStorage.setItem('user', JSON.stringify(data));
-      return { ...state, user: data };
+      return { ...state, user: data, loggedIn: true };
 
     case actions.logout:
       localStorage.removeItem('user');
-      return { ...state, user: null, accounts: null };
+      return { ...state, user: null, accounts: null, loggedIn: false };
       
     default:
       throw new Error("Undefined reducer action type");

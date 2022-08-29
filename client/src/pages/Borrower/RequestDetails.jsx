@@ -40,7 +40,7 @@ const RequestDetails = () => {
         setLoading(false);
       }
     })()
-  }, [])
+  }, [contracts, requestId])
 
 
   const payBack = async () => {

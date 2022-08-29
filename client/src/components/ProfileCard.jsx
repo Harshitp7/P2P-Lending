@@ -1,14 +1,13 @@
 import { Alert, Avatar, Button, Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useRef } from 'react';
-import { Form, Card } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { useEth } from '../contexts';
 import EditIcon from '@mui/icons-material/Edit';
 import InputField from './InputField';
 
 const ProfileCard = ({ children, setImgDetails, walletAddress, image, spamVotes = 0 }) => {
     const { state: { accounts, web3 } } = useEth();
-    const [loading, setLoading] = useState(true);
     const [balance, setBalance] = useState(0);
     const [previewImg, setPreviewImg] = useState('');
     const ref = useRef(null)
@@ -19,7 +18,6 @@ const ProfileCard = ({ children, setImgDetails, walletAddress, image, spamVotes 
                 const balance = await web3.eth.getBalance(walletAddress);
                 const balanceInEth = web3.utils.fromWei(balance, 'ether');
                 setBalance(balanceInEth);
-                setLoading(false);
             } catch (error) {
                 alert(error.message);
             }

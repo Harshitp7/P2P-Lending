@@ -31,10 +31,10 @@ const RequestDetails = () => {
         // fetch request details
         (async () => {
             try {
-                const details = await contracts.P2pLending.methods.requests(requestId).call();
+                const details = await contracts['P2pLending'].methods.requests(requestId).call();
                 if(details){
                     setReqDetails(details);
-                    const delayRes = await contracts.P2pLending.methods.isRequestDelayed(requestId).call();
+                    const delayRes = await contracts['P2pLending'].methods.isRequestDelayed(requestId).call();
                     console.log({delayRes});
                     setIsPaymentDelayed(delayRes);
                     setLoading(false);
@@ -47,7 +47,7 @@ const RequestDetails = () => {
                 alert(error.message || "Something went wrong");
             }
         })()
-    }, [reload])
+    }, [reload, contracts, requestId])
 
 
     const acceptRequest = async () => {
