@@ -18,7 +18,7 @@ export default function HomePage() {
                
                 <Image
                     src={LandingImg}
-                    style={{ width: '100%', height: '80vh' }}
+                    style={{ width: '100%', height: '90vh' }}
                 />
                 <div className="container mt-5">
                     <div className="card" style={{ borderRadius: '25px', boxShadow: '5px 10px #888888' }}>
