@@ -19,7 +19,7 @@ const RequestCommonDetails = ({children, details}) => {
     (async () => {
       let persn
       if(user?.userType === 'Lender'){
-          persn = await contracts.P2pLending.methods.borrowers(details?.from).call()
+          persn = await contracts['P2pLending'].methods.borrowers(details?.from).call()
           setNavigateRoute(`/lender/borrower-profile/${details?.from}`)
       }else{
           persn = await contracts.P2pLending.methods.getLender(details?.to).call()
@@ -27,7 +27,7 @@ const RequestCommonDetails = ({children, details}) => {
       }
       setPerson(persn)
     })()
-  }, [details])
+  }, [details, user.userType, contracts])
 
   return (
     <Card body className="shadow" style={{ borderRadius: '10px' }}>
@@ -64,6 +64,7 @@ const RequestCommonDetails = ({children, details}) => {
           <div className="d-flex w-100 flex-column justify-content-center align-items-center">
             <iframe
               src={details?.bankStatement}
+              title="Bank Statement"
               width="90%"
               height="500px"
             >

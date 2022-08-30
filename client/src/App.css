@@ -68,7 +68,7 @@ details summary {
   cursor: pointer;
 }
 
-p,
+/* p,
 details code {
   margin-top: 1rem;
   margin-bottom: 1.4rem;
@@ -85,7 +85,7 @@ p span.code {
 
 hr {
   margin: 4rem 0;
-}
+} */
 
 #App .container .welcome h1 {
   padding-top: 7.5rem;

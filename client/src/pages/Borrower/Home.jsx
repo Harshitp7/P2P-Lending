@@ -1,7 +1,6 @@
-import { Avatar, Box, Button, Grid, Paper, TableContainer, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Avatar, Box, Button, Paper, TableContainer, Typography } from '@mui/material'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router'
-import LenderCard from '../../components/Cards/LenderCard'
 import DataTable from '../../components/DataTable'
 import Layout from '../../components/Layout'
 import Loading from '../../components/Loading'
@@ -16,35 +15,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
-
-  useEffect(() => {
-    // fetch lenders requests
-    (async () => {
-      try {
-        const reqDetails = await contracts['P2pLending'].methods.getBorrowerRequests().call({ from: accounts[0] });
-        console.log(reqDetails);
-        const arrObjs = reqDetails.map((req) => Object.assign({}, req));
-
-        const allReqs = Promise.all(arrObjs.map(async (request) => {
-          const lender = await contracts['P2pLending'].methods.getLender(request.to).call();
-          return {
-            ...request,
-            lenderImg: lender.image,
-            lenderName: lender.name,
-          }
-        }))
-
-        const allRows = makeRows(await allReqs)
-        setRows(allRows);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    })()
-  }, [])
-
-  const makeRows = (reqs) => reqs?.map((request) => {
+  const makeRows = useCallback((reqs) => reqs?.map((request) => {
     console.log({ request });
     return {
       Lender: (
@@ -79,7 +50,36 @@ const Home = () => {
         </Button>
       ),
     }
-  })
+  }), [navigate])
+
+
+  useEffect(() => {
+    // fetch lenders requests
+    (async () => {
+      try {
+        const reqDetails = await contracts['P2pLending'].methods.getBorrowerRequests().call({ from: accounts[0] });
+        console.log(reqDetails);
+        const arrObjs = reqDetails.map((req) => Object.assign({}, req));
+
+        const allReqs = Promise.all(arrObjs.map(async (request) => {
+          const lender = await contracts['P2pLending'].methods.getLender(request.to).call();
+          return {
+            ...request,
+            lenderImg: lender.image,
+            lenderName: lender.name,
+          }
+        }))
+
+        const allRows = makeRows(await allReqs)
+        setRows(allRows);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    })()
+  }, [accounts, contracts, makeRows])
+
 
   return (
     

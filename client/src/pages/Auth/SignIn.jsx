@@ -3,8 +3,8 @@ import { Box, Button } from '@mui/material';
 import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import { actions, useEth } from '../../contexts';
 import InputField from '../../components/InputField';
-import {Form, Card} from 'react-bootstrap';
-import NavbarCommon from '../../components/NavbarCommon';
+import { Card } from 'react-bootstrap';
+import Layout from '../../components/Layout';
 import Loading from '../../components/Loading';
 
 const SignIn = () => {
@@ -49,63 +49,64 @@ const SignIn = () => {
     return (
 
         <>
-            <div style={{ position: 'relative' }}>
-                
-                {loading && <Loading backdrop />}
-                <div style={{ paddingBottom: '4rem' }}>
-                   <NavbarCommon />
-                    <div className='container mt-5'>
-                        <h1 className="container px-sm-6" style={{textAlign: 'center'}}>SignIn</h1>
-                    </div>
-                    
-                        <form onSubmit={handleSubmit}>
-                        <div className="container mt-5">
-                        <Card body={true} className="shadow mx-1" style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)'}}>
-                            
-                            <InputField
-                                label='Account'
-                                value={accounts[0]}
-                                readOnly
-                                className='mb-3'
-                            />
-                            <InputField
-                                label='Password'
-                                type='password'
-                                className='mb-3'
-                                value={password}
-                                required
-                                onChange={(e) => setpassword(e.target.value)}
-                            />
+            <Layout>
+                <div style={{ position: 'relative' }}>
 
+                    {loading && <Loading backdrop />}
+                    <div style={{ paddingBottom: '4rem' }}>
 
-                            <Box sx={{ display: "grid", placeItems: 'center' }}>
-                                <Button
-                                    type="submit"
-                                    sx={{ mt: 3, mb: 5}}
-                                    variant="contained"
-                                    endIcon={<LockOpenRoundedIcon />}
-                                >Sign In
-                                </Button>
-                            </Box>
-                          
-                            </Card>
+                        <div className='container mt-5'>
+                            <h1 className="container px-sm-6" style={{ textAlign: 'center' }}>SignIn</h1>
                         </div>
+
+                        <form onSubmit={handleSubmit}>
+                            <div className="container mt-5">
+                                <Card body={true} className="shadow mx-1 mx-lg-4" style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
+
+                                    <InputField
+                                        label='Account'
+                                        value={accounts[0]}
+                                        readOnly
+                                        className='mb-3'
+                                    />
+                                    <InputField
+                                        label='Password'
+                                        type='password'
+                                        className='mb-3'
+                                        value={password}
+                                        required
+                                        onChange={(e) => setpassword(e.target.value)}
+                                    />
+
+
+                                    <Box sx={{ display: "grid", placeItems: 'center' }}>
+                                        <Button
+                                            type="submit"
+                                            sx={{ mt: 3, mb: 5 }}
+                                            variant="contained"
+                                            endIcon={<LockOpenRoundedIcon />}
+                                        >Sign In
+                                        </Button>
+                                    </Box>
+
+                                </Card>
+                            </div>
                         </form>
 
-                   
-                    <footer className="footer mt-6 mb-0 py-3 bg-warning" style={{
-                        position: 'absolute', bottom: '0', width: '100%', textAlign: 'center', transform:
-                            'translateY(280%)'
-                    }}>
-                        <div className="container">
-                            <span>&copy; 2022, All rights reserved.</span>
-                        </div>
-                    </footer>
+
+                        <footer className="footer mt-6 mb-0 py-3" style={{
+                            position: 'absolute', bottom: '0', width: '100%', textAlign: 'center', transform:
+                                'translateY(280%)'
+                        }}>
+                            <div className="container">
+                                <span>&copy; 2022, All rights reserved.</span>
+                            </div>
+                        </footer>
+                    </div>
                 </div>
-            </div>
 
 
-
+            </Layout>
         </>
 
 

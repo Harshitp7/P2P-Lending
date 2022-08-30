@@ -1,4 +1,3 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
@@ -179,8 +178,7 @@ contract P2pLending {
         return myReqs;
     }
 
-
-    function updateBorrower (string memory _name, string memory _image, uint _annualIncome) public onlyBorrower
+    function updateBorrower (string memory _name, string memory _image, uint _annualIncome, string memory _bio) public onlyBorrower
     {
          borrowers[msg.sender].name = _name;
          borrowers[msg.sender].bio = _bio;
@@ -198,9 +196,22 @@ contract P2pLending {
        lenders[lenderIndex[msg.sender]].maxPrincipal = _maxPrincipal;
     }
 
-    function acceptRequest(uint requestIndex) public onlyLender {
+    
+    function isRequestDelayed(uint requestId) public view returns (bool) {
+            // convert durationInMonths in months to seconds
+            uint durationInSec = requests[requestId].durationInMonths * 30 * 24 * 60 * 60;
+            uint _createdAt = requests[requestId].createdAt;
+
+            return (block.timestamp > _createdAt + durationInSec);
+    }
+    
+    function acceptRequest(uint requestIndex) public payable onlyLender  {
         require(requests[requestIndex].status == statuses.PENDING, "Request is no more pending");
+        uint amount = requests[requestIndex].amount;
+        require(msg.value == amount*(10 ** 18), "Required ethers not given either it is lesser or higher than required");
         requests[requestIndex].status = statuses.ACCEPTED;
+        // transfer amount from lender to borrower
+        borrowers[requests[requestIndex].from].wallet.transfer(amount*(10 ** 18));
     }
 
     function rejectRequest(uint requestIndex) public onlyLender {
@@ -209,19 +220,21 @@ contract P2pLending {
     }
     function markAsDelayed(uint requestIndex) public onlyLender {
         require(requests[requestIndex].status == statuses.ACCEPTED, "Request is not yet accepted");
+        require(isRequestDelayed(requestIndex), "Request is not delayed yet");
         // require(requests[requestIndex].statuses == statuses.ACCEPTED, "Request is not yet accepted");
         requests[requestIndex].status = statuses.DELAYED;
     }
 
     function markAsFraud(address _borrower, uint requestIndex) public onlyLender{
-        require(requests[requestIndex].status == statuses.DELAYED, "Request is not yet accepted");
+        require(requests[requestIndex].status == statuses.DELAYED, "Request is not yet delayed");
         require(!hasVoted[msg.sender], "You have already voted as fraud");
         require(keccak256(abi.encodePacked(users[_borrower])) == keccak256(abi.encodePacked("Borrower")), "No user found with this address");
         borrowers[_borrower].spamVotes++;
         hasVoted[msg.sender] = true;
     }
-    
-    function calculatePaybackCost (uint requestId) public view
+
+
+   function calculatePaybackCost (uint requestId) public view
     returns (uint originalAmount,uint totalAmount) 
     {
         uint principalAmount = requests[requestId].amount;
@@ -248,6 +261,8 @@ contract P2pLending {
         }
     }
    
+
+
     function payBack (uint requestId) public payable
     {
        Request memory request = requests[requestId];
@@ -257,6 +272,7 @@ contract P2pLending {
        request.status = statuses.COMPLETED;
        borrowers[msg.sender].approvedLoans++;
     }
+
 }
 
 contract ReceiveEther{

@@ -7,10 +7,16 @@ import Profile from '../../pages/Borrower/Profile'
 import RequestDetails from '../../pages/Borrower/RequestDetails'
 import LenderProfile from '../../pages/Lender/Profile'
 import HomeMain from '../../pages/Auth/Home'
+import NavbarCommon from '../../components/NavbarCommon'
 
 const BorrowerLayout = () => {
   return (
     <>
+    <div className='w-100 h-100 d-flex flex-column'>
+      <div style={{position : 'sticky', left : 0, top : 0, zIndex : 5}}>
+        <NavbarCommon role="BorrowerLayout"/>
+      </div>
+      </div>
     <Routes>
       <Route path="/" element={<HomeMain />} />
       <Route path="/borrower" element={<Home />} />
@@ -21,6 +27,7 @@ const BorrowerLayout = () => {
       <Route path="/borrower/lenders/create-request" element={<CreateRequest />} />
       <Route path='*' element={<Navigate to='/borrower' />} />
     </Routes>
+   
     </>
   )
 }

@@ -1,14 +1,15 @@
+
 import { React, useState } from 'react';
 import { useRef } from 'react';
 import { actions, useEth } from '../../contexts';
 import InputField from '../../components/InputField';
-import { Avatar, Grid, Box, Button, Stack } from '@mui/material';
+import { Avatar, Box, Button, Stack } from '@mui/material';
 import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
 import { uploadFile } from '../../utils/cloudinaryUtils';
-import NavbarCommon from '../../components/NavbarCommon';
 import Loading from '../../components/Loading';
+import Layout from '../../components/Layout';
 export default function SignUpBorrower({ image }) {
 
   const { state: { contracts, accounts }, dispatch } = useEth();
@@ -73,16 +74,13 @@ export default function SignUpBorrower({ image }) {
 
   return (
     <>
-      <div style={{ position: 'relative'}}>
-        {loading && <Loading backdrop />}
-        <div style={{ paddingBottom: '4rem' }}>
-          <div className='w-100 h-100 d-flex flex-column'>
-            <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }} className="shadow">
-                <NavbarCommon />
-            </div>
-           
+      <Layout>
+        <div style={{ position: 'relative' }}>
+          {loading && <Loading backdrop />}
+          <div style={{ paddingBottom: '4rem' }}>
+
             <div className='container my-5'>
-              <h1 className="container px-sm-6" style={{textAlign: 'center'}}>Borrower SignUp</h1>
+              <h1 style={{ padding: '0 35%', }}>Borrower SignUp</h1>
             </div>
 
 
@@ -105,7 +103,7 @@ export default function SignUpBorrower({ image }) {
                 </Button>
               </div>
 
-              <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(21%)' }}>
+              <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
                 <Form onSubmit={handleClick}>
                   <InputField
                     label='Account'
@@ -123,7 +121,7 @@ export default function SignUpBorrower({ image }) {
                   />
 
                   <InputField
-                    label='Password'
+                    label='Password (In Bytes32)'
                     type='password'
                     value={password}
                     required
@@ -153,17 +151,22 @@ export default function SignUpBorrower({ image }) {
               </Card>
             </Stack>
 
+
+
+
+
+
+
             <br /> <br />
           </div>
-          <footer className="footer mt-5 mb-0 py-3 bg-warning" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
+          <footer className="footer mt-5 mb-0 py-3" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
             <div className="container">
               <span>&copy; 2022, All rights reserved.</span>
             </div>
           </footer>
         </div>
-      </div>
+      </Layout>
     </>
-
   )
 
 
