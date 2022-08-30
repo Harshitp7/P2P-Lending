@@ -8,6 +8,7 @@ import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
 import { uploadFile } from '../../utils/cloudinaryUtils';
 import NavbarCommon from '../../components/NavbarCommon';
+import Loading from '../../components/Loading';
 
 const SignUpLender = () => {
 
@@ -83,7 +84,7 @@ const SignUpLender = () => {
                         <NavbarCommon />
                     </div>
                     <div className='container my-5'>
-                        <h1 style={{ padding: '0 38%' }}>Lender SignUp</h1>
+                        <h1 className="container px-sm-6" style={{ textAlign: 'center' }}>Borrower SignUp</h1>
                     </div>
 
                     <Stack>
@@ -103,7 +104,7 @@ const SignUpLender = () => {
                                 <EditIcon />
                             </Button>
                         </div>
-                        <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '50%', transform: 'translateX(50%)' }}>
+                        <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '50%', transform: 'translateX(50%)', backgroundColor: '#eeeeee' }}>
                             <Form onSubmit={handleClick}>
                                 <InputField
                                     label='Account'
@@ -121,7 +122,7 @@ const SignUpLender = () => {
                                 />
 
                                 <InputField
-                                    label='Password (In Bytes32)'
+                                    label='Password'
                                     type='password'
                                     value={password}
                                     required

@@ -8,7 +8,7 @@ import { actions, useEth } from '../../contexts';
 import { deleteFile, uploadFile } from '../../utils/cloudinaryUtils';
 import InputField from '../../components/InputField';
 import NavbarCommon from '../../components/NavbarCommon';
-
+import Loading from '../../components/Loading';
 const Profile = () => {
     const { state: { accounts, user, contracts }, dispatch } = useEth();
     const [lenderData, setLenderData] = useState({});

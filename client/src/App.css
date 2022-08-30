@@ -148,3 +148,14 @@ hr {
 .active{
   font-weight: bold;
 }
+
+.nav-links{
+  transform: translateX(40%);
+}
+
+/* @media screen and (max-width: 992px){
+  .navbar-brand{
+    margin-left: 5%;
+  }
+  
+} */

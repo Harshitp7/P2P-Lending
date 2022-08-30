@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useEth } from '../contexts';
 import LogoutIcon from '@mui/icons-material/Logout';
+import '../App.css';
 
 function NavbarCommon(props) {
   let { role } = props;
@@ -51,15 +52,15 @@ console.log(navArray);
     </li>
   );
   return (
-    <nav className="navbar navbar-expand-lg navbar-warning bg-warning" style={{ position: 'sticky', top: '0', zIndex: '1' }}>
+    <nav className="navbar navbar-expand-lg navbar-light" style={{ position: 'sticky', top: '0', zIndex: '1', backgroundColor: '#FFC107' }}>
       <div className="container-fluid">
         <img src="https://cdn.vectorstock.com/i/1000x1000/05/91/blockchain-cube-colorful-line-icon-or-logo-vector-22330591.webp" alt="" style={{ width: '4%', height: '4%', marginRight: '1%' }} />
-        <Link className="navbar-brand" to="/" style={{ fontSize: 'large', color: 'black', fontWeight: 'bold' }}>LendDefi</Link>
+        <Link className="navbar-brand ms-5" to="/" style={{ fontSize: 'large', color: 'black', fontWeight: 'bold'}}>LendDefi</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul className="navbar-nav mx-5 px-5">
+          <ul className="navbar-nav mx-5" style={{textAlign: 'center'}}>
             <li className="nav-item">
               <Link className="nav-link active" aria-current="page" to="/Home">Home</Link>
             </li>
@@ -73,7 +74,7 @@ console.log(navArray);
             <li className="nav-item">
 
               <div className="btn-group">
-                <button type="button" className="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: 'purple', fontSize: 'large' }}>
+                <button type="button" className="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: 'purple', fontSize: 'large', padding: '' }}>
                   SignUp
                 </button>
                 <ul className="dropdown-menu" style={{ backgroundColor: '#FFC107' }}>

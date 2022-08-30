@@ -8,7 +8,7 @@ import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
 import { uploadFile } from '../../utils/cloudinaryUtils';
 import NavbarCommon from '../../components/NavbarCommon';
-
+import Loading from '../../components/Loading';
 export default function SignUpBorrower({ image }) {
 
   const { state: { contracts, accounts }, dispatch } = useEth();
@@ -73,7 +73,7 @@ export default function SignUpBorrower({ image }) {
 
   return (
     <>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative'}}>
         {loading && <Loading backdrop />}
         <div style={{ paddingBottom: '4rem' }}>
           <div className='w-100 h-100 d-flex flex-column'>
@@ -82,7 +82,7 @@ export default function SignUpBorrower({ image }) {
             </div>
            
             <div className='container my-5'>
-              <h1 style={{ padding: '0 35%', }}>Borrower SignUp</h1>
+              <h1 className="container px-sm-6" style={{textAlign: 'center'}}>Borrower SignUp</h1>
             </div>
 
 
@@ -105,7 +105,7 @@ export default function SignUpBorrower({ image }) {
                 </Button>
               </div>
 
-              <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
+              <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(21%)' }}>
                 <Form onSubmit={handleClick}>
                   <InputField
                     label='Account'
@@ -123,7 +123,7 @@ export default function SignUpBorrower({ image }) {
                   />
 
                   <InputField
-                    label='Password (In Bytes32)'
+                    label='Password'
                     type='password'
                     value={password}
                     required

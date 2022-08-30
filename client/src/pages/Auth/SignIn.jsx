@@ -50,16 +50,17 @@ const SignIn = () => {
 
         <>
             <div style={{ position: 'relative' }}>
+                
                 {loading && <Loading backdrop />}
                 <div style={{ paddingBottom: '4rem' }}>
                    <NavbarCommon />
                     <div className='container mt-5'>
-                        <h1 style={{ padding: '0 45%' }}>SignIn</h1>
+                        <h1 className="container px-sm-6" style={{textAlign: 'center'}}>SignIn</h1>
                     </div>
                     
                         <form onSubmit={handleSubmit}>
-                        <div className="container mt-5" style={{ width: '50%' }}>
-                        <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)'}}>
+                        <div className="container mt-5">
+                        <Card body={true} className="shadow mx-1" style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)'}}>
                             
                             <InputField
                                 label='Account'
@@ -69,6 +70,7 @@ const SignIn = () => {
                             />
                             <InputField
                                 label='Password'
+                                type='password'
                                 className='mb-3'
                                 value={password}
                                 required

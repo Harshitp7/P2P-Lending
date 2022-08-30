@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { useEth } from '../../contexts';
 import { useNavigate, useParams } from 'react-router';
 import NavbarCommon from '../../components/NavbarCommon';
-
+import Loading from '../../components/Loading';
 const RequestDetails = () => {
     const { requestId } = useParams();
     const navigate = useNavigate();

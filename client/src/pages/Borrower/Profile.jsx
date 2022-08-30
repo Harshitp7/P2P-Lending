@@ -8,7 +8,7 @@ import { uploadFile, deleteFile } from '../../utils/cloudinaryUtils';
 import UpdateIcon from '@mui/icons-material/Update';
 import InputField from '../../components/InputField';
 import NavbarCommon from '../../components/NavbarCommon';
-
+import Loading from '../../components/Loading';
 const Profile = () => {
     const { state: { accounts, user, contracts }, dispatch } = useEth();
     const [borrowerData, setBorrowerData] = useState({});

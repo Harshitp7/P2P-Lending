@@ -229,7 +229,7 @@ contract P2pLending {
         uint time = requests[requestId].durationInMonths;
         uint _createdAt = requests[requestId].createdAt;
 
-        uint interest = (principalAmount*rate*time)/1200;
+        uint interest = ((principalAmount*rate*time))*10**18)/1200;
         
         originalAmount = (principalAmount + interest);
         uint unitAmount = originalAmount/time;
@@ -252,7 +252,7 @@ contract P2pLending {
     {
        Request memory request = requests[requestId];
        (uint amount, uint totalAmount) = calculatePaybackCost(requestId);
-       (bool sent, bytes memory data) = (request.to).call{value: (totalAmount/121950)}("");   //convert to ether
+       (bool sent, bytes memory data) = (request.to).call{value: (totalAmount)}("");   //convert to ether
        require(sent, "Failed to send money");
        request.status = statuses.COMPLETED;
        borrowers[msg.sender].approvedLoans++;

@@ -8,7 +8,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { useLocation, useNavigate } from 'react-router'
 import {uploadFile} from '../../utils/cloudinaryUtils'
 import NavbarCommon from '../../components/NavbarCommon'
-
+import Loading from '../../components/Loading'
 const CreateRequest = () => {
 
     const location = useLocation()
