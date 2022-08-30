@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap');
+
 html {
-  font-family: sans-serif;
+  font-family: 'Lato', sans-serif;
 }
 
 * {
@@ -21,6 +23,37 @@ html {
 .form-control:focus{
   border : 2px solid #673ab7;
   box-shadow: none;
+}
+
+/* bootstrap button */
+.bg-warning{
+  background-color: #fed25d !important;
+}
+
+.btn-warning{
+  background-color: #fed25d !important;
+  border-color: #fed25d !important;
+}
+
+.btn:focus{
+  box-shadow: none !important;
+}
+
+/* bootstrap dropdown */
+.dropdown-item:hover{
+  background-color: #f5c85f;
+  color: #605902;
+}
+
+/* bootstrap navbar */
+.navbar-light .navbar-toggler {
+    color: rgba(0,0,0,.55);
+    border-color: transparent;
+}
+.navbar-toggler:focus {
+    text-decoration: none;
+    outline: 0;
+    box-shadow: none;
 }
 
 /* material ui avatar image */

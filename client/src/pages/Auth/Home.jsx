@@ -15,11 +15,21 @@ export default function HomePage() {
     return (
         <div style={{ position: 'relative' }}>
             <div style={{ paddingBottom: '5rem' }}>
-              <NavbarCommon />
-                <Image
-                    src={LandingImg}
-                    style={{ width: '100%', height: '80vh' }}
-                />
+
+                {/* -----------hero section ------------------------- */}
+               <div className='heroSection' >
+                <div className='imgTopContent'>
+                    <div className='textContainer'>
+                        <h1 className='heroTitle' >P2P Lending</h1>
+                        <p className='heroText' >Lend and Borrow  money without the need for a middleman.</p>
+                    </div>
+                </div>
+
+                <div className="imgContainer"></div>
+               </div>
+                {/* -----------hero section ------------------------- */}
+
+
                 <div className="container mt-5">
                     <div className="card" style={{ borderRadius: '25px', boxShadow: '5px 10px #888888' }}>
                         <div className="container card-body" style={{textAlign: 'center'}}>
@@ -79,7 +89,7 @@ export default function HomePage() {
 
             <br /> <br />
 
-            <footer className="footer mt-auto mb-0 py-3 bg-warning" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
+            <footer className="footer mt-auto mb-0 py-3" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
                 <div className="container">
                     <span>&copy; 2022, All rights reserved.</span>
                 </div>

@@ -8,9 +8,11 @@ import RequestDetails from '../../pages/Lender/RequestDetails'
 
 const LenderLayout = () => {
   return (
-    <>
-   <Routes>
-        <Route path="/" element={<HomeMain />} />
+    <div className='w-100 h-100 d-flex flex-column'>
+      <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }}>
+        <NavbarCommon role="LenderLayout" />
+      </div>
+      <Routes>
         <Route path="/lender" element={<Home />} />
         <Route path="/lender/profile/:lenderAddress" element={<Profile />} />
         <Route path="/lender/borrower-profile/:borrowerAddress" element={<BorrowerProfile />} />

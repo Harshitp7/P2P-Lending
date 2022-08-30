@@ -9,13 +9,13 @@ import ReportIcon from '@mui/icons-material/Report';
 import { useEffect } from 'react';
 import { useEth } from '../../contexts';
 import { useNavigate, useParams } from 'react-router';
-import NavbarCommon from '../../components/NavbarCommon';
+import Loading from '../../components/Loading';
 
 const RequestDetails = () => {
     const { requestId } = useParams();
     const navigate = useNavigate();
 
-    if (!requestId) {
+    if(!requestId){
         navigate('/lender');
     }
 
@@ -31,14 +31,14 @@ const RequestDetails = () => {
         // fetch request details
         (async () => {
             try {
-                const details = await contracts.P2pLending.methods.requests(requestId).call();
-                if (details) {
+                const details = await contracts['P2pLending'].methods.requests(requestId).call();
+                if(details){
                     setReqDetails(details);
-                    const delayRes = await contracts.P2pLending.methods.isRequestDelayed(requestId).call();
-                    console.log({ delayRes });
+                    const delayRes = await contracts['P2pLending'].methods.isRequestDelayed(requestId).call();
+                    console.log({delayRes});
                     setIsPaymentDelayed(delayRes);
                     setLoading(false);
-                } else {
+                }else{
                     throw new Error('Request not found')
                 }
 
@@ -47,21 +47,21 @@ const RequestDetails = () => {
                 alert(error.message || "Something went wrong");
             }
         })()
-    }, [reload])
+    }, [reload, contracts, requestId])
 
 
     const acceptRequest = async () => {
         try {
             setBackdropLoading(true);
-            const res = await contracts.P2pLending.methods.acceptRequest(requestId).send({
-                from: accounts[0],
+            const res = await contracts.P2pLending.methods.acceptRequest(requestId).send({ 
+                from: accounts[0], 
                 value: web3.utils.toWei(reqDetails.amount, 'ether'),
             });
-            if (res?.status) {
+            if(res?.status){
                 setBackdropLoading(false);
                 alert('Request accepted successfully')
                 setReload(prev => !prev);
-            } else {
+            }else{
                 throw new Error('Request acceptance failed')
             }
         } catch (error) {
@@ -123,77 +123,70 @@ const RequestDetails = () => {
     }
 
     return (
-        <>
-            <div className='w-100 h-100 d-flex flex-column'>
-                <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }} className="shadow">
-                    <NavbarCommon role="LenderLayout" />
-                </div>
-                <Layout>
-                    {loading ? <Loading /> : (
-                        <RequestCommonDetails details={reqDetails}>
-                            {backdropLoading && <Loading backdrop />}
-                            <Divider>
-                                <Chip label="Take an action" />
-                            </Divider>
-
-                            {/* PENDING */}
-                            {reqDetails?.status === "0" && (
-                                <div className="d-flex justify-content-evenly align-items-center mt-5">
-                                    <Button
-                                        variant="contained"
-                                        size="large"
-                                        color="success"
-                                        onClick={acceptRequest}
-                                        endIcon={<CheckCircleIcon />}
-                                    >
-                                        Accept
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        size="large"
-                                        color="error"
-                                        onClick={rejectRequest}
-                                        endIcon={<CancelIcon />}
-                                    >
-                                        Reject
-                                    </Button>
-                                </div>
-                            )}
-
-                            {/* ACCEPTED */}
-                            {(reqDetails?.status === "1" && isPaymentDelayed) && (
-                                <div className="d-flex justify-content-evenly align-items-center mt-5">
-                                    <Button
-                                        variant="contained"
-                                        size="large"
-                                        color="warning"
-                                        onClick={markAsDelayed}
-                                        endIcon={<WarningIcon />}
-                                    >
-                                        Mark as Delayed
-                                    </Button>
-                                </div>
-                            )}
-                            {/* DELAYED */}
-                            {(reqDetails?.status === "3" && isPaymentDelayed) && (
-                                <div className="d-flex justify-content-evenly align-items-center mt-5">
-                                    <Button
-                                        variant="contained"
-                                        size="large"
-                                        color="error"
-                                        onClick={markAsFraud}
-                                        endIcon={<ReportIcon />}
-                                    >
-                                        Mark as Fraud
-                                    </Button>
-                                </div>
-                            )}
-
-                        </RequestCommonDetails>
+        <Layout>
+            {loading ? <Loading /> : (
+                <RequestCommonDetails details={reqDetails}>
+                    {backdropLoading && <Loading backdrop />}
+                    <Divider>
+                        <Chip label="Take an action" />
+                    </Divider>
+                    
+                    {/* PENDING */}
+                    {reqDetails?.status === "0" && (
+                        <div className="d-flex justify-content-evenly align-items-center mt-5">
+                            <Button
+                                variant="contained"
+                                size="large"
+                                color="success"
+                                onClick={acceptRequest}
+                                endIcon={<CheckCircleIcon />}
+                            >
+                                Accept
+                            </Button>
+                            <Button
+                                variant="contained"
+                                size="large"
+                                color="error"
+                                onClick={rejectRequest}
+                                endIcon={<CancelIcon />}
+                            >
+                                Reject
+                            </Button>
+                        </div>
                     )}
-                </Layout>
-            </div>
-        </>
+
+                    {/* ACCEPTED */}
+                    {(reqDetails?.status === "1" && isPaymentDelayed) && (
+                        <div className="d-flex justify-content-evenly align-items-center mt-5">
+                            <Button
+                                variant="contained"
+                                size="large"
+                                color="warning"
+                                onClick={markAsDelayed}
+                                endIcon={<WarningIcon />}
+                            >
+                                Mark as Delayed
+                            </Button>
+                        </div>
+                    )}
+                    {/* DELAYED */}
+                    {(reqDetails?.status === "3" && isPaymentDelayed) && (
+                        <div className="d-flex justify-content-evenly align-items-center mt-5">
+                            <Button
+                                variant="contained"
+                                size="large"
+                                color="error"
+                                onClick={markAsFraud}
+                                endIcon={<ReportIcon />}
+                            >
+                                Mark as Fraud
+                            </Button>
+                        </div>
+                    )}
+
+                </RequestCommonDetails>
+            )}
+        </Layout>
     )
 }
 
