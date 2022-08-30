@@ -4,6 +4,7 @@ import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import { actions, useEth } from '../../contexts';
 import InputField from '../../components/InputField';
 import { Card} from 'react-bootstrap';
+
 import Loading from '../../components/Loading';
 
 const SignIn = () => {
@@ -51,7 +52,7 @@ const SignIn = () => {
             <div style={{ position: 'relative' }}>
                 {loading && <Loading backdrop />}
                 <div style={{ paddingBottom: '4rem' }}>
-                   
+                   <NavbarCommon />
                     <div className='container mt-5'>
                         <h1 style={{ padding: '0 45%' }}>SignIn</h1>
                     </div>

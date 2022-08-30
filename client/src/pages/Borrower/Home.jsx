@@ -7,6 +7,7 @@ import Loading from '../../components/Loading'
 import Status from '../../components/Status'
 import { useEth } from '../../contexts'
 import { unixToUTCTimestamp } from '../../utils/dateTimeUtils'
+import NavbarCommon from '../../components/NavbarCommon'
 
 const Home = () => {
   const { state: { contracts, accounts } } = useEth();
@@ -81,8 +82,11 @@ const Home = () => {
 
 
   return (
-
+    
+  <>
+   <NavbarCommon role="BorrowerLayout"/>
     <Layout>
+      
       {loading ? <Loading  /> : (
         <>
         {
@@ -106,6 +110,8 @@ const Home = () => {
       )}
 
     </Layout>
+    </>
+    
   )
 }
 

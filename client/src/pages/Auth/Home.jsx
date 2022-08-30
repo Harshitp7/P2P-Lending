@@ -7,11 +7,11 @@ import bankImg from "../../Images/bankImg.jpg";
 import howItWorks from "../../Images/howItWorks.png";
 import { Link } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
+import NavbarCommon from '../../components/NavbarCommon';
 
 
 export default function HomePage() {
     
-   
     return (
         <div style={{ position: 'relative' }}>
             <div style={{ paddingBottom: '5rem' }}>
@@ -28,6 +28,7 @@ export default function HomePage() {
                 <div className="imgContainer"></div>
                </div>
                 {/* -----------hero section ------------------------- */}
+
 
                 <div className="container mt-5">
                     <div className="card" style={{ borderRadius: '25px', boxShadow: '5px 10px #888888' }}>

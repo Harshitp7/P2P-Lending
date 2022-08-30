@@ -6,7 +6,6 @@ import logo from '../Images/ethereum.png'
 function NavbarCommon(props) {
   let { role } = props;
   const { state: { accounts }, dispatch } = useEth();
-
   const BorrowerLayout = [
     {
       id: 0,
@@ -35,7 +34,7 @@ function NavbarCommon(props) {
       id: 1,
       name: 'Profile',
       ref: `/lender/profile/${accounts[0]}`
-    },
+    }
   ];
 
 

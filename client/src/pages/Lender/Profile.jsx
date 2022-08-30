@@ -7,7 +7,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 import { actions, useEth } from '../../contexts';
 import { deleteFile, uploadFile } from '../../utils/cloudinaryUtils';
 import InputField from '../../components/InputField';
-import Loading from '../../components/Loading';
+import NavbarCommon from '../../components/NavbarCommon';
 
 const Profile = () => {
     const { state: { accounts, user, contracts }, dispatch } = useEth();
@@ -24,7 +24,7 @@ const Profile = () => {
 
     const [backdropLoading, setBackdropLoading] = useState(false);
 
-    console.log({lenderAddress})
+    console.log({ lenderAddress })
     useEffect(() => {
         const getData = async () => {
             try {
@@ -88,9 +88,14 @@ const Profile = () => {
 
 
     return (
-        <Layout>
-            {loading ? <Loading /> : (
-                <ProfileCard setImgDetails={setImgDetails} walletAddress={lenderAddress} image={lenderData?.image}>
+        <div className='w-100 h-100 d-flex flex-column'>
+            <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }} className="shadow">
+                <NavbarCommon role="LenderLayout" />
+            </div>
+
+            <Layout>
+                {loading ? <Loading /> : (
+                    <ProfileCard setImgDetails={setImgDetails} walletAddress={lenderAddress} image={lenderData?.image}>
                         {backdropLoading && <Loading backdrop />}
                         <InputField
                             className="mb-2"
@@ -99,7 +104,7 @@ const Profile = () => {
                             value={name}
                             readOnly={lenderAddress !== accounts[0]}
                         />
-                        
+
                         <InputField
                             className="mb-2"
                             type="number"
@@ -126,19 +131,20 @@ const Profile = () => {
                             readOnly={lenderAddress !== accounts[0]}
                         />
 
-                    {lenderAddress === accounts[0] && (
-                        <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
-                    )}
-                    {lenderAddress !== accounts[0] && (
-                        <Button 
-                            variant="contained"
-                            onClick={() => navigate(`/borrower/lenders/create-request`, { state: { lenderAddress, lenderImage : lenderData?.image } })}
-                        >Request Loan
-                        </Button>
-                    )}
-                </ProfileCard>
-            )}
-        </Layout>
+                        {lenderAddress === accounts[0] && (
+                            <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
+                        )}
+                        {lenderAddress !== accounts[0] && (
+                            <Button
+                                variant="contained"
+                                onClick={() => navigate(`/borrower/lenders/create-request`, { state: { lenderAddress, lenderImage: lenderData?.image } })}
+                            >Request Loan
+                            </Button>
+                        )}
+                    </ProfileCard>
+                )}
+            </Layout>
+        </div>
     )
 }
 

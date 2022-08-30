@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router"
 import Home from '../../pages/Lender/Home'
 import Profile from '../../pages/Lender/Profile'
 import BorrowerProfile from '../../pages/Borrower/Profile'
-import NavbarCommon from '../../components/NavbarCommon'
+import HomeMain from '../../pages/Auth/Home'
 import RequestDetails from '../../pages/Lender/RequestDetails'
 
 const LenderLayout = () => {
@@ -18,8 +18,8 @@ const LenderLayout = () => {
         <Route path="/lender/borrower-profile/:borrowerAddress" element={<BorrowerProfile />} />
         <Route path="/lender/request-details/:requestId" element={<RequestDetails />} />
         <Route path='*' element={<Navigate to='/lender' />} />
-      </Routes>
-    </div>
+    </Routes>
+    </>
   )
 }
 
