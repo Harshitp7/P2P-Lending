@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { actions, useEth } from '../contexts';
 import LogoutIcon from '@mui/icons-material/Logout';
+import logo from '../Images/ethereum.png'
 
 function NavbarCommon(props) {
   let { role } = props;
@@ -51,9 +52,9 @@ function NavbarCommon(props) {
     </li>
   );
   return (
-    <nav className="navbar navbar-expand-lg navbar-warning bg-warning" style={{ position: 'sticky', top: '0', zIndex: '5' }}>
+    <nav className="navbar navbar-light navbar-expand-lg navbar-warning bg-warning" style={{ position: 'sticky', top: '0', zIndex: '5' }}>
       <div className="container-fluid">
-        <img src="https://cdn.vectorstock.com/i/1000x1000/05/91/blockchain-cube-colorful-line-icon-or-logo-vector-22330591.webp" alt="" style={{ width: '4%', height: '4%', marginRight: '1%' }} />
+        <img src={logo} alt="" style={{ width: '40px', marginRight: '1%', borderRadius : '50%'}} />
         <Link className="navbar-brand" to="/" style={{ fontSize: 'larger', color: '#605902', fontWeight: 'bold' }}>LendDefi</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
@@ -70,17 +71,17 @@ function NavbarCommon(props) {
 
             {navArray.length === 0 && (
               <li className="nav-item">
-                <Link className="nav-link active" aria-current="page" to="/">Home</Link>
+                <Link className="nav-link active" style={{color: '#605902'}} aria-current="page" to="/">Home</Link>
               </li>
             )}
             {(navArray.length === 0) && (<><li className="nav-item">
-              <Link className="nav-link" to="/Signin">Signin</Link>
+              <Link className="nav-link" to="/Signin" style={{color: '#605902'}}>Signin</Link>
             </li>
 
               <li className="nav-item">
 
                 <div className="btn-group">
-                  <button type="button" className="btn btn-warning dropdown-toggle ps-md-0 ps-lg-1" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: '#605902', fontSize: 'large', fontWeight : 500 }}>
+                  <button type="button" className="btn btn-warning dropdown-toggle ps-0 ps-lg-1" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: '#605902', fontSize: 'large', fontWeight : 500 }}>
                     SignUp
                   </button>
                   <ul className="dropdown-menu" style={{ backgroundColor: '#fed25d' }}>

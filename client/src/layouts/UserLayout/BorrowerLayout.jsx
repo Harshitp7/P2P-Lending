@@ -11,7 +11,7 @@ import NavbarCommon from '../../components/NavbarCommon'
 const BorrowerLayout = () => {
   return (
     <div className='w-100 h-100 d-flex flex-column'>
-      <div style={{position : 'sticky', left : 0, top : 0, zIndex : 5}} className="shadow">
+      <div style={{position : 'sticky', left : 0, top : 0, zIndex : 5}}>
         <NavbarCommon role="BorrowerLayout"/>
       </div>
         

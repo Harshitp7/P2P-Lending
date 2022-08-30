@@ -45,6 +45,17 @@ html {
   color: #605902;
 }
 
+/* bootstrap navbar */
+.navbar-light .navbar-toggler {
+    color: rgba(0,0,0,.55);
+    border-color: transparent;
+}
+.navbar-toggler:focus {
+    text-decoration: none;
+    outline: 0;
+    box-shadow: none;
+}
+
 /* material ui avatar image */
 .css-1pqm26d-MuiAvatar-img {
   object-position: top;

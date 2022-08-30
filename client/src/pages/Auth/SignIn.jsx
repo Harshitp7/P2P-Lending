@@ -90,7 +90,7 @@ const SignIn = () => {
                         </form>
 
                    
-                    <footer className="footer mt-6 mb-0 py-3 bg-warning" style={{
+                    <footer className="footer mt-6 mb-0 py-3" style={{
                         position: 'absolute', bottom: '0', width: '100%', textAlign: 'center', transform:
                             'translateY(280%)'
                     }}>

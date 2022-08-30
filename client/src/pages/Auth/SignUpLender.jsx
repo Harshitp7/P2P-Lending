@@ -161,7 +161,7 @@ const SignUpLender = () => {
 
                 <br /> <br />
             </div>
-            <footer className="footer mt-5 mb-0 py-3 bg-warning" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
+            <footer className="footer mt-5 mb-0 py-3 " style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
                 <div className="container">
                     <span>&copy; 2022, All rights reserved.</span>
                 </div>
