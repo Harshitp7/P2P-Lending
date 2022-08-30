@@ -24,9 +24,6 @@ const LenderCard = ({ details }) => {
                         Interset Rate : {details?.interestRate}%
                     </Typography>
                     <Typography fontWeight={'bold'}>
-                        Interset Rate : {details?.interestRate}%
-                    </Typography>
-                    <Typography fontWeight={'bold'}>
                         Max Principal : {details?.maxPrincipal} ETH
                     </Typography>
                 </CardContent>

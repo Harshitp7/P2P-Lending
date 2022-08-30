@@ -23,6 +23,7 @@ const RequestDetails = () => {
   const [paymentDetails, setPaymentDetails] = useState({});
   const { state: { contracts, accounts, web3 } } = useEth();
   const [loading, setLoading] = useState(true);
+  const [reload, setReload] = useState(false);
   console.log({paymentDetails})
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const RequestDetails = () => {
         setLoading(false);
       }
     })()
-  }, [contracts, requestId])
+  }, [contracts, requestId, reload])
 
 
   const payBack = async () => {
@@ -50,6 +51,7 @@ const RequestDetails = () => {
         value : paymentDetails.totalAmount 
       });
       if(res?.status){
+        setReload(prev => !prev);
         alert("Payment sent successfully");
       }else{
         throw new Error('Payment failed')
@@ -63,8 +65,8 @@ const RequestDetails = () => {
     <Layout>
       {loading ? <Loading /> : (
         <RequestCommonDetails details={reqDetails}>
-          {/* ACCEPTED */}
-          {reqDetails?.status === "1" && (
+          {/* ACCEPTED or COMPLETED */}
+          {(reqDetails?.status === "1"  || reqDetails?.status === "4" ) && (
             <>
               <Divider>
                 <Chip label="Payment Details" />
@@ -86,6 +88,8 @@ const RequestDetails = () => {
                 left="Total amount to be paid"
                 right={`${web3.utils.fromWei(paymentDetails?.totalAmount, 'ether')} ETH`}
               />
+
+            {reqDetails?.status === "1" && (
               <Box sx={{ mt: 3, display: 'grid', placeItems: 'center' }}>
                 <Button
                   variant="contained"
@@ -96,6 +100,13 @@ const RequestDetails = () => {
                   Payback
                 </Button>
               </Box>
+            )}
+            {/* COMPLETED */}
+            {reqDetails?.status === "4" && (
+              <Box sx={{ mt: 3, display: 'grid', placeItems: 'center' }}>
+                <Chip label="Request Completed" />
+              </Box>
+            )}
             </>
           )}
         </RequestCommonDetails>

@@ -258,26 +258,27 @@ contract P2pLending {
             uint delayAmount = (unitAmount*delayTime*5)/(4*30); 
             totalAmount = originalAmount + delayAmount;
 
-            return (originalAmount, totalAmount);
+            return (originalAmount, totalAmount); // both in wei
         }
         else
         {
             totalAmount = originalAmount;
-            return (originalAmount, totalAmount);
+            return (originalAmount, totalAmount); //both in wei
         }
     }
    
 
 
-    function payBack (uint requestId) public payable onlyBorrower
+    function payBack (uint requestId) public payable 
     {
         require(requests[requestId].status == statuses.ACCEPTED, "Request is not yet accepted");
+        require(requests[requestId].from == msg.sender, "You are not the borrower of this request");
 
        (uint amount, uint totalAmount) = calculatePaybackCost(requestId);
 
        require(msg.value == totalAmount, "Required ethers not given either it is lesser or more than required");
 
-       (bool sent, bytes memory data) = (requests[requestId].to).call{value: (totalAmount)}("");   //convert to ether
+       (bool sent, bytes memory data) = (requests[requestId].to).call{value: (totalAmount)}("");
        require(sent, "Failed to send money");
        requests[requestId].status = statuses.COMPLETED;
        borrowers[msg.sender].approvedLoans++;
