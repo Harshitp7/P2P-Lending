@@ -75,16 +75,11 @@ export default function SignUpBorrower({ image }) {
   return (
     <>
       <Layout>
-        <div style={{ position: 'relative' }}>
           {loading && <Loading backdrop />}
-          <div style={{ paddingBottom: '4rem' }}>
-
-            <div className='container my-5'>
-              <h1 style={{ padding: '0 35%', }}>Borrower SignUp</h1>
-            </div>
-
-
+              <h1 style={{ padding: '20px 35%', textAlign : 'center' }}>Borrower SignUp</h1>
+         
             <Stack>
+
               <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
               <Avatar
                 sx={{ width: 250, height: 250, mx: 'auto' }}
@@ -102,7 +97,6 @@ export default function SignUpBorrower({ image }) {
                   <EditIcon />
                 </Button>
               </div>
-
               <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
                 <Form onSubmit={handleClick}>
                   <InputField
@@ -150,21 +144,7 @@ export default function SignUpBorrower({ image }) {
                 </Form>
               </Card>
             </Stack>
-
-
-
-
-
-
-
-            <br /> <br />
-          </div>
-          <footer className="footer mt-5 mb-0 py-3" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
-            <div className="container">
-              <span>&copy; 2022, All rights reserved.</span>
-            </div>
-          </footer>
-        </div>
+       
       </Layout>
     </>
   )

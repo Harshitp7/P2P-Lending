@@ -8,10 +8,11 @@ import NavbarCommon from '../../components/NavbarCommon'
 
 const AuthLayout = () => {
   return (
-    <>
-
-      <NavbarCommon />
-
+    <div className='w-100 h-100 d-flex flex-column'>
+      <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }}>
+        <NavbarCommon />
+      </div>
+    
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
@@ -19,7 +20,7 @@ const AuthLayout = () => {
         <Route path="/SignUpLender" element={<SignUpLender />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
-    </>
+    </div>
   )
 }
 

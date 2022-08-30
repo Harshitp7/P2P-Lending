@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useEth } from '../../contexts'
 import Loading from '../../components/Loading'
-import NavbarCommon from '../../components/NavbarCommon'
+
 
 const RequestDetails = () => {
 
@@ -21,7 +21,7 @@ const RequestDetails = () => {
 
   const [reqDetails, setReqDetails] = useState({});
   const [paymentDetails, setPaymentDetails] = useState({});
-  const { state: { contracts, accounts } } = useEth();
+  const { state: { contracts, accounts, web3 } } = useEth();
   const [loading, setLoading] = useState(true);
   console.log({paymentDetails})
 
@@ -44,20 +44,22 @@ const RequestDetails = () => {
 
 
   const payBack = async () => {
-    // try {
-    //   await contracts['P2pLending'].methods.payback(requestId).send({ 
-    //     from: accounts[0], 
-    //     value : paymentDetails.totalAmount 
-    //   });
-    //   alert("Payment sent successfully");
-    // } catch (error) {
-    //   alert(error.message || "Something went wrong");
-    // }
+    try {
+      const res = await contracts['P2pLending'].methods.payBack(requestId).send({ 
+        from: accounts[0], 
+        value : paymentDetails.totalAmount 
+      });
+      if(res?.status){
+        alert("Payment sent successfully");
+      }else{
+        throw new Error('Payment failed')
+      }
+    } catch (error) {
+      alert(error.message || "Something went wrong");
+    }
   }
 
   return (
-    <>
-    <NavbarCommon role="BorrowerLayout"/>
     <Layout>
       {loading ? <Loading /> : (
         <RequestCommonDetails details={reqDetails}>
@@ -70,11 +72,11 @@ const RequestDetails = () => {
 
               <Pair
                 left="Amount calculated with interest"
-                right={`${paymentDetails?.originalAmount} ETH`}
+                right={`${web3.utils.fromWei(paymentDetails?.originalAmount, 'ether')} ETH`}
               />
               <Pair
                 left="Delay cost"
-                right={`${paymentDetails?.totalAmount - paymentDetails?.originalAmount} ETH`}
+                right={`${web3.utils.fromWei(paymentDetails?.totalAmount, 'ether') - web3.utils.fromWei(paymentDetails?.originalAmount, 'ether')} ETH`}
                 border={false}
               />
               <Divider>
@@ -82,7 +84,7 @@ const RequestDetails = () => {
               </Divider>
               <Pair
                 left="Total amount to be paid"
-                right={`${paymentDetails?.totalAmount} ETH`}
+                right={`${web3.utils.fromWei(paymentDetails?.totalAmount, 'ether')} ETH`}
               />
               <Box sx={{ mt: 3, display: 'grid', placeItems: 'center' }}>
                 <Button
@@ -99,7 +101,6 @@ const RequestDetails = () => {
         </RequestCommonDetails>
       )}
     </Layout>
-    </>
   )
 }
 

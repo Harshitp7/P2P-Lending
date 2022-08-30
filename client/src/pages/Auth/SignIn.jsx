@@ -6,6 +6,7 @@ import InputField from '../../components/InputField';
 import { Card } from 'react-bootstrap';
 import Layout from '../../components/Layout';
 import Loading from '../../components/Loading';
+import "../../index.css"
 
 const SignIn = () => {
 
@@ -47,22 +48,16 @@ const SignIn = () => {
 
 
     return (
-
-        <>
-            <Layout>
-                <div style={{ position: 'relative' }}>
-
-                    {loading && <Loading backdrop />}
-                    <div style={{ paddingBottom: '4rem' }}>
-
-                        <div className='container mt-5'>
-                            <h1 className="container px-sm-6" style={{ textAlign: 'center' }}>SignIn</h1>
-                        </div>
+        <Layout>
+            {loading && <Loading backdrop />}
+            {/* <div className="mx-lg-5 px-lg-4 px-md-1">
+                <div className="mx-lg-5 px-lg-5 mx-md-5 px-md-5 "> */}
+                    <div className='px-lg-5 mx-lg-5'>
+                        <h1 style={{ textAlign: 'center' }}>SignIn</h1>
 
                         <form onSubmit={handleSubmit}>
-                            <div className="container mt-5">
-                                <Card body={true} className="shadow mx-1 mx-lg-4" style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
-
+                            <div className="mt-3">
+                                <Card body={true} className="shadow" style={{ borderRadius: '10px', }}>
                                     <InputField
                                         label='Account'
                                         value={accounts[0]}
@@ -92,24 +87,10 @@ const SignIn = () => {
                                 </Card>
                             </div>
                         </form>
-
-
-                        <footer className="footer mt-6 mb-0 py-3" style={{
-                            position: 'absolute', bottom: '0', width: '100%', textAlign: 'center', transform:
-                                'translateY(280%)'
-                        }}>
-                            <div className="container">
-                                <span>&copy; 2022, All rights reserved.</span>
-                            </div>
-                        </footer>
                     </div>
-                </div>
-
-
-            </Layout>
-        </>
-
-
+                {/* </div>
+            </div> */}
+        </Layout>
     )
 }
 

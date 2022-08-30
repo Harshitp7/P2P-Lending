@@ -7,8 +7,8 @@ import { useParams } from 'react-router';
 import { uploadFile, deleteFile } from '../../utils/cloudinaryUtils';
 import UpdateIcon from '@mui/icons-material/Update';
 import InputField from '../../components/InputField';
-import NavbarCommon from '../../components/NavbarCommon';
 import Loading from '../../components/Loading';
+
 const Profile = () => {
     const { state: { accounts, user, contracts }, dispatch } = useEth();
     const [borrowerData, setBorrowerData] = useState({});
@@ -82,58 +82,51 @@ const Profile = () => {
     }
 
     return (
-        <>
-            <div className='w-100 h-100 d-flex flex-column'>
-                <div style={{ position: 'sticky', left: 0, top: 0, zIndex: 5 }} className="shadow">
-                    <NavbarCommon role='BorrowerLayout' />
-                </div>
-                <Layout>
-                    {loading ? <Loading /> : (
-                        <ProfileCard
-                            spamVotes={borrowerData?.spamVotes || 10}
-                            image={borrowerData?.image}
-                            setImgDetails={setImgDetails}
-                            walletAddress={borrowerAddress}
-                        >
-                            {backdropLoading && <Loading backdrop />}
-                            <InputField
-                                className="mb-2"
-                                label="Approved Loans"
-                                value={borrowerData?.approvedLoans}
-                                readOnly
-                            />
-                            <InputField
-                                className="mb-2"
-                                label="Name"
-                                onChange={(e) => setName(e.target.value)}
-                                value={name}
-                                readOnly={borrowerAddress !== accounts[0]}
-                            />
+        <Layout>
+            {loading ? <Loading /> : (
+                <ProfileCard
+                    spamVotes={borrowerData?.spamVotes || 10}
+                    image={borrowerData?.image}
+                    setImgDetails={setImgDetails}
+                    walletAddress={borrowerAddress}
+                >
+                    {backdropLoading && <Loading backdrop />}
+                    <InputField
+                        className="mb-2"
+                        label="Approved Loans"
+                        value={borrowerData?.approvedLoans}
+                        readOnly
+                    />
+                    <InputField
+                        className="mb-2"
+                        label="Name"
+                        onChange={(e) => setName(e.target.value)}
+                        value={name}
+                        readOnly={borrowerAddress !== accounts[0]}
+                    />
 
-                            <InputField
-                                className="mb-2"
-                                label="Annual Income"
-                                type="number"
-                                onChange={(e) => setAnnualIncome(e.target.value)}
-                                value={annualIncome}
-                                readOnly={borrowerAddress !== accounts[0]}
-                            />
-                            <InputField
-                                className="mb-3"
-                                label="Bio"
-                                as="textarea"
-                                onChange={(e) => setBio(e.target.value)}
-                                value={bio}
-                                readOnly={borrowerAddress !== accounts[0]}
-                            />
-                            {borrowerAddress === accounts[0] && (
-                                <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
-                            )}
-                        </ProfileCard>
+                    <InputField
+                        className="mb-2"
+                        label="Annual Income"
+                        type="number"
+                        onChange={(e) => setAnnualIncome(e.target.value)}
+                        value={annualIncome}
+                        readOnly={borrowerAddress !== accounts[0]}
+                    />
+                    <InputField
+                        className="mb-3"
+                        label="Bio"
+                        as="textarea"
+                        onChange={(e) => setBio(e.target.value)}
+                        value={bio}
+                        readOnly={borrowerAddress !== accounts[0]}
+                    />
+                    {borrowerAddress === accounts[0] && (
+                        <Button variant='contained' onClick={updateProfile}>Update &nbsp;<UpdateIcon /></Button>
                     )}
-                </Layout>
-            </div>
-        </>
+                </ProfileCard>
+            )}
+        </Layout>
     )
 }
 

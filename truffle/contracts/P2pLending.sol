@@ -208,7 +208,7 @@ contract P2pLending {
     function acceptRequest(uint requestIndex) public payable onlyLender  {
         require(requests[requestIndex].status == statuses.PENDING, "Request is no more pending");
         uint amount = requests[requestIndex].amount;
-        require(msg.value == amount*(10 ** 18), "Required ethers not given either it is lesser or higher than required");
+        require(msg.value == amount*(10 ** 18), "Required ethers not given either it is lesser or more than required");
         requests[requestIndex].status = statuses.ACCEPTED;
         // transfer amount from lender to borrower
         borrowers[requests[requestIndex].from].wallet.transfer(amount*(10 ** 18));
@@ -242,14 +242,20 @@ contract P2pLending {
         uint time = requests[requestId].durationInMonths;
         uint _createdAt = requests[requestId].createdAt;
 
-        uint interest = ((principalAmount*rate*time))*10**18)/1200;
+        uint interest = (((principalAmount*rate*time))*10**18)/1200; // interset in wei
         
-        originalAmount = (principalAmount + interest);
-        uint unitAmount = originalAmount/time;
+        originalAmount = (principalAmount*10**18) + interest; // in wei
+
         if(block.timestamp > (time*30*24*60*60) + _createdAt)
         {
-            uint delayTime = block.timestamp - ((time*30*24*60*60) + _createdAt);
-            uint delayAmount = ((unitAmount*(delayTime))*5)/4; 
+            uint unitAmount = originalAmount/time;
+            uint delayTime = block.timestamp - ((time*30*24*60*60) + _createdAt); // delay in seconds
+
+            delayTime = delayTime/60/60/24; // delay in no of days
+
+            // for 30 days of delay 1.25 times of unit amount will be charged
+            // example if unit amount is 2.5 ether then for 30 days delay 3.125 ether will be charged
+            uint delayAmount = (unitAmount*delayTime*5)/(4*30); 
             totalAmount = originalAmount + delayAmount;
 
             return (originalAmount, totalAmount);
@@ -263,13 +269,17 @@ contract P2pLending {
    
 
 
-    function payBack (uint requestId) public payable
+    function payBack (uint requestId) public payable onlyBorrower
     {
-       Request memory request = requests[requestId];
+        require(requests[requestId].status == statuses.ACCEPTED, "Request is not yet accepted");
+
        (uint amount, uint totalAmount) = calculatePaybackCost(requestId);
-       (bool sent, bytes memory data) = (request.to).call{value: (totalAmount)}("");   //convert to ether
+
+       require(msg.value == totalAmount, "Required ethers not given either it is lesser or more than required");
+
+       (bool sent, bytes memory data) = (requests[requestId].to).call{value: (totalAmount)}("");   //convert to ether
        require(sent, "Failed to send money");
-       request.status = statuses.COMPLETED;
+       requests[requestId].status = statuses.COMPLETED;
        borrowers[msg.sender].approvedLoans++;
     }
 
