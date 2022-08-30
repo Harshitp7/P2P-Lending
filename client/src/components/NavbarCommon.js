@@ -54,7 +54,7 @@ function NavbarCommon(props) {
     <nav className="navbar navbar-expand-lg navbar-warning bg-warning" style={{ position: 'sticky', top: '0', zIndex: '5' }}>
       <div className="container-fluid">
         <img src="https://cdn.vectorstock.com/i/1000x1000/05/91/blockchain-cube-colorful-line-icon-or-logo-vector-22330591.webp" alt="" style={{ width: '4%', height: '4%', marginRight: '1%' }} />
-        <Link className="navbar-brand" to="/" style={{ fontSize: 'large', color: 'black', fontWeight: 'bold' }}>LendDefi</Link>
+        <Link className="navbar-brand" to="/" style={{ fontSize: 'larger', color: '#605902', fontWeight: 'bold' }}>LendDefi</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -80,10 +80,10 @@ function NavbarCommon(props) {
               <li className="nav-item">
 
                 <div className="btn-group">
-                  <button type="button" className="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: 'purple', fontSize: 'large' }}>
+                  <button type="button" className="btn btn-warning dropdown-toggle ps-md-0 ps-lg-1" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: '#605902', fontSize: 'large', fontWeight : 500 }}>
                     SignUp
                   </button>
-                  <ul className="dropdown-menu" style={{ backgroundColor: '#FFC107' }}>
+                  <ul className="dropdown-menu" style={{ backgroundColor: '#fed25d' }}>
                     <li><Link className="dropdown-item" to="/SignUpBorrower">Borrower</Link></li>
                     <li><Link className="dropdown-item" to="/SignUpLender">Lender</Link></li>
                   </ul>

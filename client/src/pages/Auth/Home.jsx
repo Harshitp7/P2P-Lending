@@ -18,8 +18,8 @@ export default function HomePage() {
                <div className='heroSection' >
                 <div className='imgTopContent'>
                     <div className='textContainer'>
-                        <h1 className='heroTitle'>P2P Lending</h1>
-                        <p className='heroText'>Lend and Borrow is a decentralized lending platform that allows users to lend and borrow money without the need for a middleman.</p>
+                        <h1 className='heroTitle' >P2P Lending</h1>
+                        <p className='heroText' >Lend and Borrow  money without the need for a middleman.</p>
                     </div>
                 </div>
 
