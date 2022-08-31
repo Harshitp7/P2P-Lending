@@ -39,9 +39,8 @@ function EthProvider({ children }) {
   useEffect(() => {
     const tryInit = async () => {
       try {
-        const artifact1 = require("../contracts/First.json");
-        const artifact2 = require("../contracts/P2pLending.json");
-        init([artifact1, artifact2]);
+        const artifact1 = require("../contracts/P2pLending.json");
+        init([artifact1]);
       } catch (err) {
         console.error(err);
       }

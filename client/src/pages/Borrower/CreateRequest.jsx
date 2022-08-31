@@ -98,7 +98,7 @@ const CreateRequest = () => {
                     <Row>
                         <Col lg={6}>
                             <InputField
-                                label='Request amount'
+                                label='Request amount (ETH)'
                                 type='number'
                                 className='mb-3'
                                 value={amount}

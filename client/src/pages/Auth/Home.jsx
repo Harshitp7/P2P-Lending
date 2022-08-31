@@ -1,12 +1,10 @@
 import React from 'react'
 import "./style.css";
-import lendLogo from "./icons8-lend-96.png";
-import borrowLogo from './icons8-borrow-64.png';
-import LandingImg from "../../Images/LandingImg.png";
+import lendLogo from "../../Images/lendLogo.png";
+import borrowLogo from '../../Images/borrowLogo.png';
 import bankImg from "../../Images/bankImg.jpg";
 import howItWorks from "../../Images/howItWorks.png";
 import { Link } from 'react-router-dom';
-import { Image } from 'react-bootstrap';
 
 
 
