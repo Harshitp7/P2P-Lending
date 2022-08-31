@@ -1,4 +1,4 @@
-import { Button, Chip, Divider } from '@mui/material'
+import { Box, Button, Chip, Divider, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import RequestCommonDetails from '../../components/Cards/RequestCommonDetails'
 import Layout from '../../components/Layout'
@@ -10,12 +10,13 @@ import { useEffect } from 'react';
 import { useEth } from '../../contexts';
 import { useNavigate, useParams } from 'react-router';
 import Loading from '../../components/Loading';
+import Pair from '../../components/Pair';
 
 const RequestDetails = () => {
     const { requestId } = useParams();
     const navigate = useNavigate();
 
-    if(!requestId){
+    if (!requestId) {
         navigate('/lender');
     }
 
@@ -25,6 +26,7 @@ const RequestDetails = () => {
     const [loading, setLoading] = useState(true);
     const [backdropLoading, setBackdropLoading] = useState(false);
     const [isPaymentDelayed, setIsPaymentDelayed] = useState(false);
+    const [paymentDetails, setPaymentDetails] = useState({});
 
 
     useEffect(() => {
@@ -32,13 +34,15 @@ const RequestDetails = () => {
         (async () => {
             try {
                 const details = await contracts['P2pLending'].methods.requests(requestId).call();
-                if(details){
+                if (details) {
                     setReqDetails(details);
                     const delayRes = await contracts['P2pLending'].methods.isRequestDelayed(requestId).call();
-                    console.log({delayRes});
+                    console.log({ delayRes });
+                    const paymentInfo = await contracts['P2pLending'].methods.calculatePaybackCost(requestId).call();
+                    setPaymentDetails(paymentInfo);
                     setIsPaymentDelayed(delayRes);
                     setLoading(false);
-                }else{
+                } else {
                     throw new Error('Request not found')
                 }
 
@@ -53,15 +57,15 @@ const RequestDetails = () => {
     const acceptRequest = async () => {
         try {
             setBackdropLoading(true);
-            const res = await contracts.P2pLending.methods.acceptRequest(requestId).send({ 
-                from: accounts[0], 
+            const res = await contracts.P2pLending.methods.acceptRequest(requestId).send({
+                from: accounts[0],
                 value: web3.utils.toWei(reqDetails.amount, 'ether'),
             });
-            if(res?.status){
+            if (res?.status) {
                 setBackdropLoading(false);
                 alert('Request accepted successfully')
                 setReload(prev => !prev);
-            }else{
+            } else {
                 throw new Error('Request acceptance failed')
             }
         } catch (error) {
@@ -127,10 +131,54 @@ const RequestDetails = () => {
             {loading ? <Loading /> : (
                 <RequestCommonDetails details={reqDetails}>
                     {backdropLoading && <Loading backdrop />}
-                    <Divider>
-                        <Chip label="Take an action" />
-                    </Divider>
-                    
+                    {reqDetails?.status !== '0' && (
+                        <>
+                            <Divider>
+                                <Chip label="Payment Details" />
+                            </Divider>
+                            <Pair
+                                left="Amount calculated with interest"
+                                right={
+                                    <Typography variant='h6'>
+                                        {`${web3.utils.fromWei(paymentDetails?.originalAmount, 'ether')} ETH`}
+                                    </Typography>
+                                }
+                            />
+                            <Pair
+                                left="Delay cost"
+                                right={
+                                    <Typography variant='h6'>
+                                        {`${web3.utils.fromWei(paymentDetails?.totalAmount, 'ether') - web3.utils.fromWei(paymentDetails?.originalAmount, 'ether')} ETH`}
+                                    </Typography>
+                                }
+                                border={false}
+                            />
+                            <Divider>
+                                <Chip label="Total" />
+                            </Divider>
+                            <Pair
+                                left="Total amount to be paid by Borrower"
+                                right={
+                                    <Typography variant='h6'>
+                                        {`${web3.utils.fromWei(paymentDetails?.totalAmount, 'ether')} ETH`}
+                                    </Typography>
+                                }
+                                border={false}
+                            />
+                        </>
+                    )}
+                    {reqDetails?.status !== '4' && (
+                        <Divider>
+                            <Chip label="Take an action" />
+                        </Divider>
+                    )}
+
+                    {!isPaymentDelayed && reqDetails?.status === '1' && (
+                        <Typography align='center' sx={{ my: 3 }}>
+                            You will be able to mark delayed if the payment is delayed from borrower side
+                        </Typography>
+                    )}
+
                     {/* PENDING */}
                     {reqDetails?.status === "0" && (
                         <div className="d-flex justify-content-evenly align-items-center mt-5">
@@ -155,7 +203,7 @@ const RequestDetails = () => {
                         </div>
                     )}
 
-                    {/* ACCEPTED */}
+                    {/* ACCEPTED and delayed */}
                     {(reqDetails?.status === "1" && isPaymentDelayed) && (
                         <div className="d-flex justify-content-evenly align-items-center mt-5">
                             <Button
@@ -169,7 +217,7 @@ const RequestDetails = () => {
                             </Button>
                         </div>
                     )}
-                    {/* DELAYED */}
+                    {/* DELAYED  and marked delayed*/}
                     {(reqDetails?.status === "3" && isPaymentDelayed) && (
                         <div className="d-flex justify-content-evenly align-items-center mt-5">
                             <Button
@@ -182,6 +230,13 @@ const RequestDetails = () => {
                                 Mark as Fraud
                             </Button>
                         </div>
+                    )}
+
+                    {/* COMPLETED */}
+                    {reqDetails?.status === "4" && (
+                        <Divider>
+                            <Chip color='success' label="Request Completed" />
+                        </Divider>
                     )}
 
                 </RequestCommonDetails>

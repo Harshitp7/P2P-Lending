@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Divider } from '@mui/material'
+import { Box, Button, Chip, Divider, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import RequestCommonDetails from '../../components/Cards/RequestCommonDetails'
 import Layout from '../../components/Layout'
@@ -87,11 +87,19 @@ const RequestDetails = () => {
 
               <Pair
                 left="Amount calculated with interest"
-                right={`${web3.utils.fromWei(paymentDetails?.originalAmount, 'ether')} ETH`}
+                right={
+                  <Typography variant='h6'>
+                    {`${web3.utils.fromWei(paymentDetails?.originalAmount, 'ether')} ETH`}
+                  </Typography>
+                }
               />
               <Pair
                 left="Delay cost"
-                right={`${web3.utils.fromWei(paymentDetails?.totalAmount, 'ether') - web3.utils.fromWei(paymentDetails?.originalAmount, 'ether')} ETH`}
+                right={
+                  <Typography variant='h6'>
+                    {`${web3.utils.fromWei(paymentDetails?.totalAmount, 'ether') - web3.utils.fromWei(paymentDetails?.originalAmount, 'ether')} ETH`}
+                  </Typography>
+                }
                 border={false}
               />
               <Divider>
@@ -99,7 +107,11 @@ const RequestDetails = () => {
               </Divider>
               <Pair
                 left="Total amount to be paid"
-                right={`${web3.utils.fromWei(paymentDetails?.totalAmount, 'ether')} ETH`}
+                right={
+                  <Typography variant='h6'>
+                    {`${web3.utils.fromWei(paymentDetails?.totalAmount, 'ether')} ETH`}
+                  </Typography>
+                }
               />
 
               {reqDetails?.status === "1" && (
@@ -117,7 +129,7 @@ const RequestDetails = () => {
               {/* COMPLETED */}
               {reqDetails?.status === "4" && (
                 <Box sx={{ mt: 3, display: 'grid', placeItems: 'center' }}>
-                  <Chip label="Request Completed" />
+                  <Chip color='success'  label="Request Completed" />
                 </Box>
               )}
             </>

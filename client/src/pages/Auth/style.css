@@ -19,7 +19,7 @@
 /* -------------------Hero section----------------------- */
 .heroSection{
     /* background-color: #662c7a; */
-    background: linear-gradient(-90deg, #e23d72, #973899);
+    background: linear-gradient(-45deg, #e23d72, #7b1fa2);
     height: 95vh;
     width: 100%;
     display: flex;

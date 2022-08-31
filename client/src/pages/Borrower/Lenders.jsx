@@ -27,7 +27,7 @@ const Lenders = () => {
 
     return (
         <Layout>
-            <Typography align='center' sx={{ mb: 4 }}>Lenders</Typography>
+                <Typography align='center' color='primary' variant='h3' fontSize={'1.5rem'} sx={{my : 3}}>Lenders</Typography>
             <Grid container spacing={3}>
                 {lenders.map((lender, i) => (
                     <Grid item md={6} lg={4} key={i}>

@@ -3,7 +3,7 @@ import { React, useState } from 'react';
 import { useRef } from 'react';
 import { actions, useEth } from '../../contexts';
 import InputField from '../../components/InputField';
-import { Avatar, Box, Button, Stack } from '@mui/material';
+import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
 import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
@@ -75,11 +75,11 @@ export default function SignUpBorrower({ image }) {
   return (
     <>
       <Layout>
-          {loading && <Loading backdrop />}
-              <h1 style={{ padding: '20px 35%', textAlign : 'center' }}>Borrower SignUp</h1>
-         
+        {loading && <Loading backdrop />}
+        <div className='w-100 h-100 d-flex justify-content-center align-items-cente flex-column'>
+          <Typography align='center' color='primary' variant='h3' fontSize={'2rem'}>Signup as Borrower</Typography>
+          <div className='w-lg-50 w-sm-75 w-xs-100 mt-3 mx-auto'>
             <Stack>
-
               <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
               <Avatar
                 sx={{ width: 250, height: 250, mx: 'auto' }}
@@ -97,7 +97,7 @@ export default function SignUpBorrower({ image }) {
                   <EditIcon />
                 </Button>
               </div>
-              <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '70%', transform: 'translateX(20%)' }}>
+              <Card body={true} className="shadow " style={{ borderRadius: '10px' }}>
                 <Form onSubmit={handleClick}>
                   <InputField
                     label='Account'
@@ -115,7 +115,7 @@ export default function SignUpBorrower({ image }) {
                   />
 
                   <InputField
-                    label='Password (In Bytes32)'
+                    label='Password'
                     type='password'
                     value={password}
                     required
@@ -135,7 +135,7 @@ export default function SignUpBorrower({ image }) {
                   <Box sx={{ display: "grid", placeItems: 'center' }}>
                     <Button
                       type="submit"
-                      sx={{ mt: 3, mb: 5 }}
+                      sx={{ my: 2 }}
                       variant="contained"
                       endIcon={<HowToRegRoundedIcon />}
                     >Sign Up
@@ -144,7 +144,8 @@ export default function SignUpBorrower({ image }) {
                 </Form>
               </Card>
             </Stack>
-       
+          </div>
+        </div>
       </Layout>
     </>
   )

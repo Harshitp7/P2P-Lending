@@ -2,7 +2,7 @@ import { React, useState } from 'react';
 import { useRef } from 'react';
 import { actions, useEth } from '../../contexts';
 import InputField from '../../components/InputField';
-import { Avatar, Box, Button, Stack } from '@mui/material';
+import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
 import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
 import { Form, Card } from 'react-bootstrap';
 import EditIcon from '@mui/icons-material/Edit';
@@ -28,10 +28,10 @@ const SignUpLender = () => {
         try {
             const imgUrl = await uploadFile(imgDetails)
             const res = await contracts['P2pLending'].methods.signUpLender(
-                name, 
-                imgUrl, 
-                password, 
-                Number(interestRate), 
+                name,
+                imgUrl,
+                password,
+                Number(interestRate),
                 Number(maximumPrincipal)
             ).send({ from: accounts[0] });
             console.log({ res });
@@ -74,101 +74,90 @@ const SignUpLender = () => {
 
 
     return (
-<>
-<Layout>
-        <div style={{ position: 'relative' }}>
-            {loading && <Loading backdrop />}
-            <div style={{ paddingBottom: '4rem' }}>
+        <>
+            <Layout>
+                {loading && <Loading backdrop />}
+                <div className='w-100 h-100 d-flex justify-content-center align-items-cente flex-column'>
 
-                <div className='container my-5'>
-                    <h1 style={{ padding: '0 38%' }}>Lender SignUp</h1>
-                </div>
+                    <Typography align='center' color='primary' variant='h3' fontSize={'2rem'}>Signup as Lender</Typography>
+                    
+                    <div className='w-lg-50 w-sm-75 w-xs-100 mt-3 mx-auto'>
+                        <Stack>
+                            <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
+                            <Avatar
+                                sx={{ width: 250, height: 250, mx: 'auto' }}
+                                src={previewImg}
+                            />
+                            <div className='d-flex w-100 justify-content-center align-items-center mb-5'>
 
-               <Stack>
-                    <input ref={ref} type="file" accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
-                    <Avatar
-                        sx={{ width: 250, height: 250, mx: 'auto' }}
-                        src={previewImg}
-                    />
-                    <div className='d-flex w-100 justify-content-center align-items-center mb-5'>
+                                <Button
+                                    sx={{ mt: 2 }}
+                                    variant="outlined"
+                                    onClick={() => ref.current.click()}
+                                >
+                                    Select Image&nbsp;
+                                    <EditIcon />
+                                </Button>
+                            </div>
+                            <Card body={true} className="shadow " style={{ borderRadius: '10px'}}>
+                                <Form onSubmit={handleClick}>
+                                    <InputField
+                                        label='Account'
+                                        value={accounts[0]}
+                                        readOnly
+                                        className='mb-3'
+                                    />
 
-                        <Button
-                            sx={{ mt: 2 }}
-                            variant="outlined"
-                            onClick={() => ref.current.click()}
-                        >
-                            Select Image&nbsp;
-                            <EditIcon />
-                        </Button>
+                                    <InputField
+                                        label='Name'
+                                        value={name}
+                                        required
+                                        className='mb-3'
+                                        onChange={(e) => setname(e.target.value)}
+                                    />
+
+                                    <InputField
+                                        label='Password'
+                                        type='password'
+                                        value={password}
+                                        required
+                                        className='mb-3'
+                                        onChange={(e) => setpassword(e.target.value)}
+                                    />
+
+                                    <InputField
+                                        label='Rate of Interest (% per month)'
+                                        type='number'
+                                        value={interestRate}
+                                        required
+                                        className='mb-3'
+                                        onChange={(e) => setInterestRate(e.target.value)}
+                                    />
+
+                                    <InputField
+                                        label='Maximum Principal Amount you can give (ETH)'
+                                        type='number'
+                                        value={maximumPrincipal}
+                                        required
+                                        className='mb-3'
+                                        onChange={(e) => setMaximumPrincipal(e.target.value)}
+                                    />
+
+                                    <Box sx={{ display: "grid", placeItems: 'center' }}>
+                                        <Button
+                                            type="submit"
+                                            sx={{ my: 2, }}
+                                            variant="contained"
+                                            endIcon={<HowToRegRoundedIcon />}
+                                        >Sign Up
+                                        </Button>
+                                    </Box>
+                                </Form>
+                            </Card>
+                        </Stack>
                     </div>
-                    <Card body={true} className="shadow " style={{ borderRadius: '10px', width: '50%', transform: 'translateX(50%)' }}>
-                    <Form onSubmit={handleClick}>
-                        <InputField
-                            label='Account'
-                            value={accounts[0]}
-                            readOnly
-                            className='mb-3'
-                        />
-
-                        <InputField
-                            label='Name'
-                            value={name}
-                            required
-                            className='mb-3'
-                            onChange={(e) => setname(e.target.value)}
-                        />
-
-                        <InputField
-                            label='Password (In Bytes32)'
-                            type='password'
-                            value={password}
-                            required
-                            className='mb-3'
-                            onChange={(e) => setpassword(e.target.value)}
-                        />
-
-                        <InputField
-                            label='Rate of Interest (% per annum)'
-                            type='number'
-                            value={interestRate}
-                            required
-                            className='mb-3'
-                            onChange={(e) => setInterestRate(e.target.value)}
-                        />
-
-                        <InputField
-                            label='Maximum Principal Amount (INR)'
-                            type='number'
-                            value={maximumPrincipal}
-                            required
-                            className='mb-3'
-                            onChange={(e) => setMaximumPrincipal(e.target.value)}
-                        />
-
-                        <Box sx={{ display: "grid", placeItems: 'center' }}>
-                            <Button
-                                type="submit"
-                                sx={{ mt: 3, mb: 5 }}
-                                variant="contained"
-                                endIcon={<HowToRegRoundedIcon />}
-                            >Sign Up
-                            </Button>
-                        </Box>
-                    </Form>
-                    </Card>
-                    {/* </Grid> */}
-                </Stack>
-                
-
-                <br /> <br />
-            </div>
-            <footer className="footer mt-5 mb-0 py-3 " style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
-                <div className="container">
-                    <span>&copy; 2022, All rights reserved.</span>
                 </div>
-            </footer>
-        </div>
-        </Layout>
+            </Layout>
         </>
     )
 }

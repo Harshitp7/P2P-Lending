@@ -86,14 +86,6 @@ export default function HomePage() {
 
                 </div>
             </div>
-
-            <br /> <br />
-
-            <footer className="footer mt-auto mb-0 py-3" style={{ position: 'absolute', bottom: '0', width: '100%', textAlign: 'center' }}>
-                <div className="container">
-                    <span>&copy; 2022, All rights reserved.</span>
-                </div>
-            </footer>
         </div>
     );
 }

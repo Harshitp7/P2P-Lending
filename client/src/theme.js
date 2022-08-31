@@ -4,7 +4,7 @@ import { grey, deepPurple, purple } from '@mui/material/colors';
 const theme = createTheme({
     palette : {
         primary : {
-            main :  purple[700], //'#800080',
+            main :  purple[700],
         },
         secondary : {
             main : deepPurple[50]

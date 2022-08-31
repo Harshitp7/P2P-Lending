@@ -1,5 +1,5 @@
 import { React, useState } from 'react'
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import { actions, useEth } from '../../contexts';
 import InputField from '../../components/InputField';
@@ -50,45 +50,44 @@ const SignIn = () => {
     return (
         <Layout>
             {loading && <Loading backdrop />}
-            {/* <div className="mx-lg-5 px-lg-4 px-md-1">
-                <div className="mx-lg-5 px-lg-5 mx-md-5 px-md-5 "> */}
-                    <div className='px-lg-5 mx-lg-5'>
-                        <h1 style={{ textAlign: 'center' }}>SignIn</h1>
-
-                        <form onSubmit={handleSubmit}>
-                            <div className="mt-3">
-                                <Card body={true} className="shadow" style={{ borderRadius: '10px', }}>
-                                    <InputField
-                                        label='Account'
-                                        value={accounts[0]}
-                                        readOnly
-                                        className='mb-3'
-                                    />
-                                    <InputField
-                                        label='Password'
-                                        type='password'
-                                        className='mb-3'
-                                        value={password}
-                                        required
-                                        onChange={(e) => setpassword(e.target.value)}
-                                    />
+            <div className='w-100 h-100 d-flex justify-content-center align-items-cente flex-column'>
+                <Typography align='center' color='primary' variant='h3' fontSize={'2rem'}>Sign In</Typography>
+                <div className='w-lg-50 w-sm-75 w-xs-100 mt-3 mx-auto'>
+                    <form onSubmit={handleSubmit}>
+                        <div className="">
+                            <Card body={true} className="shadow" style={{ borderRadius: '10px', }}>
+                                <InputField
+                                    label='Account'
+                                    value={accounts[0]}
+                                    readOnly
+                                    className='mb-3'
+                                />
+                                <InputField
+                                    label='Password'
+                                    type='password'
+                                    className='mb-3'
+                                    value={password}
+                                    required
+                                    onChange={(e) => setpassword(e.target.value)}
+                                />
 
 
-                                    <Box sx={{ display: "grid", placeItems: 'center' }}>
-                                        <Button
-                                            type="submit"
-                                            sx={{ mt: 3, mb: 5 }}
-                                            variant="contained"
-                                            endIcon={<LockOpenRoundedIcon />}
-                                        >Sign In
-                                        </Button>
-                                    </Box>
+                                <Box sx={{ display: "grid", placeItems: 'center' }}>
+                                    <Button
+                                        type="submit"
+                                        sx={{ mt: 3, mb: 5 }}
+                                        variant="contained"
+                                        endIcon={<LockOpenRoundedIcon />}
+                                    >Sign In
+                                    </Button>
+                                </Box>
 
-                                </Card>
-                            </div>
-                        </form>
-                    </div>
-                {/* </div>
+                            </Card>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {/* </div>
             </div> */}
         </Layout>
     )

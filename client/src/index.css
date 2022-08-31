@@ -62,7 +62,8 @@ html {
   object-position: top;
 }
 
-@media (max-width: 575.98px) {
+
+@media (max-width: 576px) {
   .w-xs-25 {
     width: 25% !important;
   }
@@ -118,6 +119,20 @@ html {
     width: 75% !important;
   }
   .w-lg-100 {
+    width: 100% !important;
+  }
+}
+@media (min-width: 1200px) {
+  .w-xl-25 {
+    width: 25% !important;
+  }
+  .w-xl-50 {
+    width: 50% !important;
+  }
+  .w-xl-75 {
+    width: 75% !important;
+  }
+  .w-xl-100 {
     width: 100% !important;
   }
 }
