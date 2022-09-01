@@ -26,6 +26,11 @@ const SignUpLender = () => {
         e.preventDefault()
         setLoading(true)
         try {
+            const role = await contracts['P2pLending'].methods.getRole().call({ from: accounts[0] });
+            console.log({ role });
+            if(role){
+              throw new Error('User already exists');
+            }
             const imgUrl = await uploadFile(imgDetails)
             const res = await contracts['P2pLending'].methods.signUpLender(
                 name,
@@ -126,7 +131,7 @@ const SignUpLender = () => {
                                     />
 
                                     <InputField
-                                        label='Rate of Interest (% per month)'
+                                        label='Rate of Interest (% per annum)'
                                         type='number'
                                         value={interestRate}
                                         required

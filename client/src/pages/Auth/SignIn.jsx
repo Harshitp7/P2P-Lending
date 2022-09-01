@@ -40,7 +40,9 @@ const SignIn = () => {
             }
         } catch (error) {
             setLoading(false);
-            alert(error.message || "something went wrong")
+            console.log({code : error?.code, message : error?.message, data : error?.data});
+            const msg = error?.message?.split('.')[0] === 'Internal JSON-RPC error' ? 'Password is incorrect' : error?.message;
+            alert(msg || "something went wrong")
         }
     }
 

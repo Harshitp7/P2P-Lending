@@ -131,7 +131,7 @@ const RequestDetails = () => {
             {loading ? <Loading /> : (
                 <RequestCommonDetails details={reqDetails}>
                     {backdropLoading && <Loading backdrop />}
-                    {reqDetails?.status !== '0' && (
+                    {(reqDetails?.status !== '0' && reqDetails?.status !== '2') && (
                         <>
                             <Divider>
                                 <Chip label="Payment Details" />
