@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/P2P-Lending/static/css/main.76f859ac.chunk.css",
-    "main.js": "/P2P-Lending/static/js/main.620342e1.chunk.js",
-    "main.js.map": "/P2P-Lending/static/js/main.620342e1.chunk.js.map",
+    "main.js": "/P2P-Lending/static/js/main.ff32c4e3.chunk.js",
+    "main.js.map": "/P2P-Lending/static/js/main.ff32c4e3.chunk.js.map",
     "runtime-main.js": "/P2P-Lending/static/js/runtime-main.370002bf.js",
     "runtime-main.js.map": "/P2P-Lending/static/js/runtime-main.370002bf.js.map",
     "static/js/2.7793d6e0.chunk.js": "/P2P-Lending/static/js/2.7793d6e0.chunk.js",
@@ -19,6 +19,6 @@
     "static/js/runtime-main.370002bf.js",
     "static/js/2.7793d6e0.chunk.js",
     "static/css/main.76f859ac.chunk.css",
-    "static/js/main.620342e1.chunk.js"
+    "static/js/main.ff32c4e3.chunk.js"
   ]
 }
