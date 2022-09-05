@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/P2P-Lending/static/css/main.269b4393.chunk.css",
+    "main.js": "/P2P-Lending/static/js/main.0df4e40f.chunk.js",
+    "main.js.map": "/P2P-Lending/static/js/main.0df4e40f.chunk.js.map",
+    "runtime-main.js": "/P2P-Lending/static/js/runtime-main.370002bf.js",
+    "runtime-main.js.map": "/P2P-Lending/static/js/runtime-main.370002bf.js.map",
+    "static/js/2.862c37a4.chunk.js": "/P2P-Lending/static/js/2.862c37a4.chunk.js",
+    "static/js/2.862c37a4.chunk.js.map": "/P2P-Lending/static/js/2.862c37a4.chunk.js.map",
+    "index.html": "/P2P-Lending/index.html",
+    "static/css/main.269b4393.chunk.css.map": "/P2P-Lending/static/css/main.269b4393.chunk.css.map",
+    "static/js/2.862c37a4.chunk.js.LICENSE.txt": "/P2P-Lending/static/js/2.862c37a4.chunk.js.LICENSE.txt",
+    "static/media/style.css": "/P2P-Lending/static/media/Landing2.63e341a3.png",
+    "static/media/bankImg.48fffa5c.jpg": "/P2P-Lending/static/media/bankImg.48fffa5c.jpg",
+    "static/media/ethereum.1c0e1836.png": "/P2P-Lending/static/media/ethereum.1c0e1836.png",
+    "static/media/howItWorks.4f1242c1.png": "/P2P-Lending/static/media/howItWorks.4f1242c1.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.370002bf.js",
+    "static/js/2.862c37a4.chunk.js",
+    "static/css/main.269b4393.chunk.css",
+    "static/js/main.0df4e40f.chunk.js"
+  ]
+}
