@@ -12,7 +12,7 @@ function EthProvider({ children }) {
       if (artifacts.length > 0) {
         try {
           if(!Web3.givenProvider) {
-            throw new Error("Please enable MetaMask to use this app");
+            throw new Error("Please install MetaMask to use this application");
           }
           const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
           const accounts = await web3.eth.requestAccounts();
@@ -20,7 +20,6 @@ function EthProvider({ children }) {
           const networkType = await web3.eth.net.getNetworkType();
 
           const hostedNetworkType = process.env.NODE_ENV === "production" ? "goerli" : "private";
-
           if(networkType !== hostedNetworkType) {
             throw new Error(`Please connect to ${hostedNetworkType} network and refresh the page`);
           }
@@ -65,9 +64,9 @@ function EthProvider({ children }) {
       console.log("changed");
     };
 
-    events.forEach(e => window.ethereum.on(e, handleChange));
+    events.forEach(e => window?.ethereum?.on(e, handleChange));
     return () => {
-      events.forEach(e => window.ethereum.removeListener(e, handleChange));
+      events.forEach(e => window?.ethereum?.removeListener(e, handleChange));
     };
   }, [init, state.artifacts]);
 
