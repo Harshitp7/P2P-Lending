@@ -10,14 +10,20 @@ function EthProvider({ children }) {
     async artifacts => {
       console.log({ artifacts });
       if (artifacts.length > 0) {
-        if(!Web3.givenProvider) {
-          alert("Please enable MetaMask to use this app");
-          return;
-        }
-        const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
-        const accounts = await web3.eth.requestAccounts();
-        const networkID = await web3.eth.net.getId();
         try {
+          if(!Web3.givenProvider) {
+            throw new Error("Please enable MetaMask to use this app");
+          }
+          const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+          const accounts = await web3.eth.requestAccounts();
+          const networkID = await web3.eth.net.getId();
+          const networkType = await web3.eth.net.getNetworkType();
+
+          const hostedNetworkType = process.env.NODE_ENV === "production" ? "goerli" : "private";
+
+          if(networkType !== hostedNetworkType) {
+            throw new Error(`Please connect to ${hostedNetworkType} network and refresh the page`);
+          }
           artifacts.forEach(artifact => {
             const contract = new web3.eth.Contract(artifact.abi, artifact.networks[networkID].address);
             dispatch({

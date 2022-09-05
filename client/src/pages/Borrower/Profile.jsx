@@ -85,7 +85,7 @@ const Profile = () => {
         <Layout>
             {loading ? <Loading /> : (
                 <ProfileCard
-                    spamVotes={borrowerData?.spamVotes || 10}
+                    spamVotes={borrowerData?.spamVotes}
                     image={borrowerData?.image}
                     setImgDetails={setImgDetails}
                     walletAddress={borrowerAddress}

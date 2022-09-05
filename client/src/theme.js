@@ -22,6 +22,15 @@ const theme = createTheme({
                 main : '#e9ecef'
             }
         }
+    },
+    components : {
+        MuiAvatar : {
+            styleOverrides : {
+                img : {
+                    objectPosition : 'top',
+                }
+            }
+        }
     }
 })
 

@@ -57,12 +57,6 @@ html {
   box-shadow: none;
 }
 
-/* material ui avatar image */
-.css-1pqm26d-MuiAvatar-img {
-  object-position: top;
-}
-
-
 @media (max-width: 576px) {
   .w-xs-25 {
     width: 25% !important;

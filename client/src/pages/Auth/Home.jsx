@@ -29,9 +29,9 @@ export default function HomePage() {
 
 
                 <div className="container mt-5">
-                    <div className="card" style={{ borderRadius: '25px', boxShadow: '5px 10px #888888' }}>
+                    <div>
                         <div className="container card-body" style={{textAlign: 'center'}}>
-                            <h2>Welcome to the Peer-to-Peer Blockchain Based Application</h2>
+                            <h2 style={{color : '#e23d72'}}>Welcome to the Peer-to-Peer Blockchain Based Application</h2>
                             <h5>Here, you can borrow and lend money with your choice without any centralization of the process!</h5>
                         </div>
                     </div>
