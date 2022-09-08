@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { EthProvider } from "./contexts";
 import './index.css';
 import App from './App';
@@ -12,9 +12,9 @@ root.render(
   <React.StrictMode>
     <EthProvider>
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
+        <HashRouter>
           <App />
-        </BrowserRouter>
+        </HashRouter>
       </ThemeProvider>
     </EthProvider>
   </React.StrictMode>
